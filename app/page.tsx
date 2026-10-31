@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 import { revalidatePath } from "next/cache";
 
 async function createOrder(formData: FormData) {
@@ -13,6 +13,7 @@ async function createOrder(formData: FormData) {
   const orderCode = "NOVAS-" + Math.floor(1000 + Math.random() * 9000);
 
   try {
+    const sql = neon(process.env.DATABASE_URL!);
     await sql`
       INSERT INTO orders (order_code, full_name, phone, age, client_name, service, status, created_at)
       VALUES (${orderCode}, ${fullName}, ${phone}, ${age}, ${clientName}, ${service}, 'pending', NOW())
