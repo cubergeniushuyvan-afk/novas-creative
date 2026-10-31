@@ -53,7 +53,7 @@ export default function Home() {
 
     const message = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
     
-    // Copy nội dung vào bộ nhớ tạm trước khi chuyển hướng
+    // Tự động sao chép vào bộ nhớ tạm
     navigator.clipboard.writeText(message);
 
     // Mở Messenger trực tiếp
@@ -220,24 +220,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="reveal mobile-padding" style={{ padding: '20px 24px', maxWidth: '1000px', margin: '0 auto 60px' }}>
-        <div className="card-cyber grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '32px', borderRadius: '24px', textAlign: 'center', gap: '20px' }}>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>48 Giờ</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HOÀN THÀNH SIÊU TỐC</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>100%</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HIỆU ỨNG MƯỢT MÀ</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>ĐIỂM 10 THUYẾT TRÌNH</div>
-          </div>
-        </div>
-      </section>
-
       {/* Services Section */}
       <section id="services" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
@@ -264,28 +246,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Guide Section (Phần Hướng Dẫn Mới) */}
+      {/* Detailed Guide Section (Cầm tay chỉ việc cho Điện thoại & Laptop) */}
       <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
-          📖 HƯỚNG DẪN ĐẶT HÀNG SIÊU NHANH
+          📖 HƯỚNG DẪN DÀNH CHO KHÁCH HÀNG
         </h2>
-        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Dành cho mọi khách hàng, cực kỳ đơn giản và linh hoạt.</p>
+        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Chọn thiết bị bạn đang sử dụng để xem cách gửi đơn nhanh nhất:</p>
 
-        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 1</div>
-            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Điền Thông Tin</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Nhập họ tên, số điện thoại và yêu cầu bài thuyết trình của bạn vào form bên dưới.</p>
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' }}>
+          {/* Hướng dẫn trên Điện thoại */}
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
+            <div style={{ fontSize: '30px', marginBottom: '16px' }}>📱 Dành cho Điện Thoại</div>
+            <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
+              <li><strong>Bước 1:</strong> Điền đầy đủ Họ tên, SĐT và yêu cầu vào bảng bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Web sẽ tự động lưu thông tin vào bộ nhớ điện thoại.</li>
+              <li><strong>Bước 3:</strong> Khi ứng dụng Messenger mở lên, bạn chỉ cần <strong>chạm và giữ tay 1 giây</strong> vào khung nhắn tin rồi bấm nút <strong>"Dán" (Paste)</strong> xuất hiện trên màn hình, sau đó bấm gửi là xong!</li>
+            </ul>
           </div>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 2</div>
-            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Bấm Gửi & Tự Động Lưu</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Hệ thống tự động sao chép nội dung đơn hàng và mở khung chat Messenger ngay lập tức.</p>
-          </div>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 3</div>
-            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Dán Vào Khung Chat</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Chỉ cần nhấn giữ màn hình (hoặc nhấn Ctrl+V) để <strong>Dán (Paste)</strong> đoạn vừa copy rồi gửi cho Novas Studio!</p>
+
+          {/* Hướng dẫn trên Laptop / Máy tính */}
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
+            <div style={{ fontSize: '30px', marginBottom: '16px' }}>💻 Dành cho Laptop / Máy Tính</div>
+            <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
+              <li><strong>Bước 1:</strong> Điền đầy đủ thông tin yêu cầu thiết kế vào form đặt hàng bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Nội dung đã được máy tính tự động copy ngầm.</li>
+              <li><strong>Bước 3:</strong> Khi cửa sổ chat mở ra, bạn chỉ cần bấm tổ hợp phím <strong style={{ color: '#fff' }}>Ctrl + V</strong> (hoặc nhấn chuột phải chọn <strong>Paste / Dán</strong>) vào ô nhập tin nhắn rồi nhấn <strong>Enter</strong> là hoàn tất!</li>
+            </ul>
           </div>
         </div>
       </section>
