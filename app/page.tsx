@@ -1,47 +1,59 @@
-import { neon } from "@neondatabase/serverless";
-import { revalidatePath } from "next/cache";
+"use client";
 
-async function createOrder(formData: FormData) {
-  "use server";
-  const fullName = formData.get("fullName") as string;
-  const phone = formData.get("phone") as string;
-  const age = formData.get("age") as string;
-  const service = formData.get("service") as string;
-  const clientName = formData.get("clientName") as string;
-  const requirements = formData.get("requirements") as string;
-  
-  const orderCode = "NOVAS-" + Math.floor(1000 + Math.random() * 9000);
-
-  try {
-    const sql = neon(process.env.DATABASE_URL!);
-    await sql`
-      INSERT INTO orders (order_code, full_name, phone, age, client_name, service, status, created_at)
-      VALUES (${orderCode}, ${fullName}, ${phone}, ${age}, ${clientName}, ${service}, 'pending', NOW())
-    `;
-    revalidatePath("/admin");
-  } catch (error) {
-    console.error("Lỗi lưu đơn hàng:", error);
-  }
-}
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [theme, setTheme] = useState("theme-purple");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("novas_theme") || "theme-purple";
+    setTheme(saved);
+  }, []);
+
+  const changeTheme = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem("novas_theme", newTheme);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      // Gửi đơn hàng về Server Action / API
+      await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      setSuccess(true);
+      (e.target as HTMLFormElement).reset();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <main style={{
+    <div className={theme} style={{
       minHeight: '100vh',
       backgroundColor: '#030712',
       color: '#f3f4f6',
       fontFamily: 'system-ui, -apple-system, sans-serif',
-      margin: 0,
-      padding: 0,
-      overflowX: 'hidden'
-    }} id="main-container">
-      
-      {/* CSS & Hiệu ứng Cyberpunk Đỉnh Cao */}
-      <style>{`
+      overflowX: 'hidden',
+      transition: 'all 0.5s ease'
+    }}>
+      {/* CSS Nhúng Trực Tiếp Cyberpunk Đỉnh Cao */}
+      <style jsx global>{`
         :root {
-          --primary-glow: #6366f1;
-          --secondary-glow: #06b6d4;
-          --accent-color: #818cf8;
+          --primary-glow: #8b5cf6;
+          --secondary-glow: #ec4899;
+          --accent-color: #c084fc;
         }
         .theme-purple {
           --primary-glow: #8b5cf6;
@@ -61,7 +73,7 @@ export default function Home() {
 
         @keyframes floatOrb {
           0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.08); }
+          50% { transform: translateY(-25px) scale(1.1); }
         }
         .hero-title {
           background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 60%, var(--secondary-glow) 100%);
@@ -70,27 +82,27 @@ export default function Home() {
         }
         .glow-btn {
           background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
-          box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 0 30px var(--primary-glow);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glow-btn:hover {
           transform: translateY(-4px) scale(1.03);
-          box-shadow: 0 0 50px rgba(6, 182, 212, 0.8);
+          box-shadow: 0 0 50px var(--secondary-glow);
         }
         .card-cyber {
           background: rgba(15, 23, 42, 0.75);
           backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .card-cyber:hover {
           border-color: var(--accent-color);
           transform: translateY(-8px) scale(1.01);
-          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
         }
         .cyber-input {
-          background: rgba(3, 7, 18, 0.85);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(3, 7, 18, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           color: #f8fafc;
           transition: all 0.3s ease;
         }
@@ -101,26 +113,12 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Script xử lý đổi màu trực tiếp an toàn */}
-      <script dangerouslySetInnerHTML={{ __html: `
-        function switchTheme(themeClass) {
-          const container = document.getElementById('main-container');
-          container.className = themeClass;
-          localStorage.setItem('novas_theme', themeClass);
-        }
-        window.addEventListener('DOMContentLoaded', () => {
-          const savedTheme = localStorage.getItem('novas_theme') || 'theme-purple';
-          const container = document.getElementById('main-container');
-          if(container) container.className = savedTheme;
-        });
-      `}} />
-
-      {/* Background Orbs */}
+      {/* Background Glow */}
       <div style={{
         position: 'fixed', top: '-10%', left: '50%', transform: 'translateX(-50%)',
-        width: '700px', height: '700px',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, rgba(0,0,0,0) 70%)',
-        pointerEvents: 'none', animation: 'floatOrb 8s infinite ease-in-out', zIndex: 0
+        width: '750px', height: '750px',
+        background: 'radial-gradient(circle, var(--primary-glow) 0%, rgba(0,0,0,0) 70%)',
+        opacity: 0.25, pointerEvents: 'none', animation: 'floatOrb 8s infinite ease-in-out', zIndex: 0
       }} />
 
       {/* Header */}
@@ -132,7 +130,7 @@ export default function Home() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{
             fontSize: '22px', fontWeight: '900', letterSpacing: '2px',
-            background: 'linear-gradient(90deg, #fff, #a855f7)',
+            background: 'linear-gradient(90deg, #fff, var(--accent-color))',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             display: 'flex', alignItems: 'center', gap: '10px'
           }}>
@@ -144,11 +142,11 @@ export default function Home() {
             <a href="#portfolio" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700', letterSpacing: '1px' }}>ĐẲNG CẤP</a>
             <a href="#order" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700', letterSpacing: '1px' }}>ĐẶT HÀNG</a>
             
-            {/* Nút đổi màu */}
-            <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.05)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <button onClick={new Function("switchTheme('theme-purple')") as any} style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#8b5cf6', border: 'none', cursor: 'pointer' }} title="Neon Purple"></button>
-              <button onClick={new Function("switchTheme('theme-green')") as any} style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#10b981', border: 'none', cursor: 'pointer' }} title="Matrix Green"></button>
-              <button onClick={new Function("switchTheme('theme-blue')") as any} style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#3b82f6', border: 'none', cursor: 'pointer' }} title="Cyber Blue"></button>
+            {/* Nút Đổi Màu Hoạt Động 100% */}
+            <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.05)', padding: '6px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <button onClick={() => changeTheme('theme-purple')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#8b5cf6', border: 'none', cursor: 'pointer' }} title="Neon Purple"></button>
+              <button onClick={() => changeTheme('theme-green')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#10b981', border: 'none', cursor: 'pointer' }} title="Matrix Green"></button>
+              <button onClick={() => changeTheme('theme-blue')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#3b82f6', border: 'none', cursor: 'pointer' }} title="Cyber Blue"></button>
             </div>
 
             <a href="/admin" className="glow-btn" style={{
@@ -160,16 +158,16 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section style={{ padding: '140px 24px 100px', textAlign: 'center', maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
+      <section style={{ padding: '130px 24px 80px', textAlign: 'center', maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
         <div style={{
-          display: 'inline-block', padding: '8px 20px', borderRadius: '30px',
-          background: 'rgba(139, 92, 246, 0.15)', border: '1px solid rgba(139, 92, 246, 0.4)',
-          color: '#d8b4fe', fontSize: '12px', fontWeight: '800', letterSpacing: '2px', marginBottom: '28px', textTransform: 'uppercase'
+          display: 'inline-block', padding: '8px 22px', borderRadius: '30px',
+          background: 'rgba(255,255,255,0.05)', border: '1px solid var(--accent-color)',
+          color: 'var(--accent-color)', fontSize: '12px', fontWeight: '800', letterSpacing: '2px', marginBottom: '28px', textTransform: 'uppercase'
         }}>
           🔥 NỀN TẢNG SÁNG TẠO ĐỒ HỌA & SLIDE HỌC ĐƯỜNG SỐ 1 VIỆT NAM
         </div>
 
-        <h1 className="hero-title" style={{ fontSize: '64px', fontWeight: '900', lineHeight: '1.1', margin: '0 0 24px 0', letterSpacing: '-1.5px' }}>
+        <h1 className="hero-title" style={{ fontSize: '62px', fontWeight: '900', lineHeight: '1.15', margin: '0 0 24px 0', letterSpacing: '-1.5px' }}>
           Ý TƯỞNG HỌC ĐƯỜNG.<br />TRÌNH CHIẾU CỰC KÌ MẠNH MẼ.
         </h1>
 
@@ -181,26 +179,23 @@ export default function Home() {
           <a href="#order" className="glow-btn" style={{ color: '#fff', textDecoration: 'none', padding: '18px 40px', borderRadius: '14px', fontSize: '15px', fontWeight: '900', letterSpacing: '1.5px' }}>
             ⚡ KHỞI TẠO ĐƠN HÀNG NGAY
           </a>
-          <a href="#services" style={{ color: '#f8fafc', textDecoration: 'none', padding: '18px 40px', borderRadius: '14px', fontSize: '15px', fontWeight: '800', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            XEM DỊCH VỤ
-          </a>
         </div>
       </section>
 
       {/* Stats Bar */}
       <section style={{ padding: '40px 24px', maxWidth: '1000px', margin: '0 auto 80px' }}>
-        <div className="card-cyber" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '30px', borderRadius: '20px', textAlign: 'center' }}>
+        <div className="card-cyber" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '36px', borderRadius: '24px', textAlign: 'center' }}>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff' }}>100%</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '700' }}>HIỆU ỨNG MƯỢT MÀ</div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>100%</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', fontWeight: '800' }}>HIỆU ỨNG MƯỢT MÀ</div>
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff' }}>5 Phút</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '700' }}>XỬ LÝ ĐƠN TỐC ĐỘ</div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>5 Phút</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', fontWeight: '800' }}>XỬ LÝ ĐƠN TỐC ĐỘ</div>
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '700' }}>ĐIỂM 10 THUYẾT TRÌNH</div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', fontWeight: '800' }}>ĐIỂM 10 THUYẾT TRÌNH</div>
           </div>
         </div>
       </section>
@@ -216,7 +211,7 @@ export default function Home() {
           <div className="card-cyber" style={{ padding: '40px', borderRadius: '24px' }}>
             <div style={{ fontSize: '40px', marginBottom: '20px' }}>💻</div>
             <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 16px 0', color: '#fff' }}>Slide PowerPoint Học Đường</h3>
-            <p style={{ color: '#94a38', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
+            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
               Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph, 3D Object và bố cục cực kỳ mãn nhãn.
             </p>
           </div>
@@ -224,22 +219,9 @@ export default function Home() {
           <div className="card-cyber" style={{ padding: '40px', borderRadius: '24px' }}>
             <div style={{ fontSize: '40px', marginBottom: '20px' }}>📚</div>
             <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 16px 0', color: '#fff' }}>Giáo Án Điện Tử Chuyên Sâu</h3>
-            <p style={{ color: '#94a38', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
+            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
               Hệ thống bài giảng điện tử chuẩn sư phạm, trực quan sinh động giúp giáo viên ghi điểm tuyệt đối trong các hội giảng cấp trường, cấp tỉnh.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Portfolio Showcase Section */}
-      <section id="portfolio" style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-        <div className="card-cyber" style={{ padding: '60px', borderRadius: '30px', textAlign: 'center', background: 'linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,27,75,0.6))' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: '900', color: '#fff', marginBottom: '20px' }}>🌟 ĐẲNG CẤP VÀ SỰ KHÁC BIỆT</h2>
-          <p style={{ color: '#94a3b8', fontSize: '16px', lineHeight: '1.8', maxWidth: '800px', margin: '0 auto 30px' }}>
-            Mỗi sản phẩm của Novas Creative là một tác phẩm nghệ thuật độc bản. Sử dụng các kỹ thuật phối màu đỉnh cao, typography sắc nét và bố cục khoa học nhất.
-          </p>
-          <div style={{ display: 'inline-block', padding: '12px 30px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontWeight: '800' }}>
-            🚀 LUÔN DẪN ĐẦU XU HƯỚNG THIẾT KẾ
           </div>
         </div>
       </section>
@@ -251,115 +233,70 @@ export default function Home() {
             🚀 GỬI YÊU CẦU ĐẶT HÀNG
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '40px' }}>
-            Điền thông tin bên dưới để kết nối trực tiếp với hệ thống xử lý tự động của Novas Creative.
+            Điền thông tin bên dưới để kết nối trực tiếp với hệ thống tự động của Novas Creative.
           </p>
 
-          <form action={createOrder} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                HỌ VÀ TÊN *
-              </label>
-              <input 
-                type="text" 
-                name="fullName" 
-                required 
-                placeholder="Nhập họ tên của bạn"
-                className="cyber-input"
-                style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}
-              />
+          {success ? (
+            <div style={{ padding: '20px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid #10b981', color: '#34d399', textAlign: 'center', fontWeight: '700' }}>
+              🎉 Đơn hàng đã được gửi thành công! Novas Creative sẽ liên hệ ngay.
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          ) : (
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                  SỐ ĐIỆN THOẠI *
-                </label>
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  required 
-                  placeholder="039xxxxxxx"
-                  className="cyber-input"
-                  style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}
-                />
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
+                <input type="text" name="fullName" required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }} />
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                  ĐỘ TUỔI
-                </label>
-                <input 
-                  type="number" 
-                  name="age" 
-                  defaultValue={14}
-                  className="cyber-input"
-                  style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}
-                />
-              </div>
-            </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                  LOẠI DỊCH VỤ
-                </label>
-                <select 
-                  name="service"
-                  className="cyber-input"
-                  style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}
-                >
-                  <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
-                  <option value="Giáo án điện tử">Giáo án điện tử</option>
-                </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>SỐ ĐIỆN THOẠI *</label>
+                  <input type="tel" name="phone" required placeholder="039xxxxxxx" className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>ĐỘ TUỔI</label>
+                  <input type="number" name="age" defaultValue={14} className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }} />
+                </div>
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                  LIÊN HỆ QUA
-                </label>
-                <select 
-                  name="clientName"
-                  className="cyber-input"
-                  style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}
-                >
-                  <option value="Zalo">Zalo</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Khác">Khác</option>
-                </select>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>LOẠI DỊCH VỤ</label>
+                  <select name="service" className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}>
+                    <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
+                    <option value="Giáo án điện tử">Giáo án điện tử</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>LIÊN HỆ QUA</label>
+                  <select name="clientName" className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', boxSizing: 'border-box' }}>
+                    <option value="Zalo">Zalo</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Khác">Khác</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>
-                CHI TIẾT YÊU CẦU & MÔ TẢ
-              </label>
-              <textarea 
-                name="requirements" 
-                rows={4}
-                placeholder="Mô tả chủ đề bài học, số lượng slide hoặc tone màu mong muốn..."
-                className="cyber-input"
-                style={{ width: '100%', padding: '16px 18px', borderRadius: '12px', fontSize: '15px', resize: 'none', boxSizing: 'border-box' }}
-              ></textarea>
-            </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>CHI TIẾT YÊU CẦU</label>
+                <textarea name="requirements" rows={4} placeholder="Mô tả chủ đề bài học, số lượng slide..." className="cyber-input" style={{ width: '100%', padding: '16px', borderRadius: '12px', fontSize: '15px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+              </div>
 
-            <button 
-              type="submit"
-              className="glow-btn"
-              style={{
+              <button type="submit" disabled={loading} className="glow-btn" style={{
                 width: '100%', padding: '20px', border: 'none', borderRadius: '14px',
                 color: '#fff', fontWeight: '900', fontSize: '16px', letterSpacing: '2px',
                 cursor: 'pointer', marginTop: '12px', textTransform: 'uppercase'
-              }}
-            >
-              ⚡ GỬI ĐƠN HÀNG NGAY ⚡
-            </button>
-          </form>
+              }}>
+                {loading ? "ĐANG GỬI..." : "⚡ GỬI ĐƠN HÀNG NGAY ⚡"}
+              </button>
+            </form>
+          )}
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '50px 24px', textAlign: 'center', color: '#475569', fontSize: '13px' }}>
-        <p>© 2026 NOVAS CREATIVE STUDIO. ALL RIGHTS RESERVED. DESIGNED FOR CUBER GENIUS VĂN.</p>
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 24px', textAlign: 'center', color: '#475569', fontSize: '13px' }}>
+        <p>© 2026 NOVAS CREATIVE STUDIO. ALL RIGHTS RESERVED.</p>
       </footer>
-
-    </main>
+    </div>
   );
 }
