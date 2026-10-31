@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [theme, setTheme] = useState("theme-purple");
+  const [copiedAlert, setCopiedAlert] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -11,6 +12,8 @@ export default function Home() {
     service: "Slide PowerPoint học đường",
     requirements: ""
   });
+
+  const MY_PHONE = "0399641646";
 
   useEffect(() => {
     const saved = localStorage.getItem("novas_theme") || "theme-purple";
@@ -44,17 +47,7 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const openAppMessenger = () => {
-    // Thử kích hoạt mở thẳng App Messenger bằng Deep Link
-    window.location.href = "fb-messenger://";
-    
-    // Nếu trong 1.5s không bật được App (do laptop không có app), tự động chuyển sang bản Web
-    setTimeout(() => {
-      window.open("https://m.me/", "_blank");
-    }, 1500);
-  };
-
-  const handleSendMessenger = (e: React.FormEvent) => {
+  const handleSendZalo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.phone) {
       alert("Vui lòng điền Họ tên và Số điện thoại!");
@@ -63,11 +56,27 @@ export default function Home() {
 
     const message = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
     
-    // Tự động sao chép vào bộ nhớ tạm
-    navigator.clipboard.writeText(message);
+    try {
+      navigator.clipboard.writeText(message);
+      setCopiedAlert(true);
+    } catch (err) {
+      console.log(err);
+    }
 
-    // Kích hoạt mở App Messenger
-    openAppMessenger();
+    // Mở trực tiếp link Zalo theo số điện thoại (1 chạm mở thẳng app Zalo không cần đăng nhập)
+    setTimeout(() => {
+      window.open(`https://zalo.me/${MY_PHONE}`, "_blank", "noopener,noreferrer");
+    }, 500);
+  };
+
+  const handleDirectZalo = () => {
+    const defaultMsg = "Xin chào Novas Creative! Mình muốn tư vấn thiết kế Slide.";
+    try {
+      navigator.clipboard.writeText(defaultMsg);
+    } catch (err) {
+      console.log(err);
+    }
+    window.open(`https://zalo.me/${MY_PHONE}`, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -121,6 +130,19 @@ export default function Home() {
         .glow-btn:hover {
           transform: translateY(-4px) scale(1.03);
           box-shadow: 0 0 50px var(--secondary-glow);
+        }
+
+        .direct-chat-btn {
+          background: rgba(255, 255, 255, 0.08);
+          border: 2px solid var(--accent-color);
+          box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+          transition: all 0.3s ease;
+        }
+        .direct-chat-btn:hover {
+          background: var(--accent-color);
+          color: #000 !important;
+          box-shadow: 0 0 35px var(--accent-color);
+          transform: translateY(-2px);
         }
 
         .card-cyber {
@@ -259,28 +281,26 @@ export default function Home() {
       {/* Detailed Guide Section */}
       <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
-          📖 HƯỚNG DẪN DÀNH CHO KHÁCH HÀNG
+          📖 HƯỚNG DẪN GỬI ĐƠN CỰC KỲ DỄ
         </h2>
-        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Chọn thiết bị bạn đang sử dụng để xem cách gửi đơn nhanh nhất:</p>
+        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Chỉ 1 chạm trên cùng một thiết bị là kết nối ngay với Văn:</p>
 
         <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' }}>
-          {/* Hướng dẫn trên Điện thoại */}
           <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
             <div style={{ fontSize: '30px', marginBottom: '16px' }}>📱 Dành cho Điện Thoại</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
-              <li><strong>Bước 1:</strong> Điền đầy đủ Họ tên, SĐT và yêu cầu vào bảng bên dưới.</li>
-              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Ứng dụng Messenger sẽ tự động bật lên lập tức.</li>
-              <li><strong>Bước 3:</strong> Bạn chỉ cần <strong>chạm và giữ tay 1 giây</strong> vào khung nhắn tin rồi bấm <strong>"Dán" (Paste)</strong> để gửi đơn!</li>
+              <li><strong>Bước 1:</strong> Điền thông tin yêu cầu vào form bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA ZALO"</strong>. Nội dung được tự động lưu vào máy.</li>
+              <li><strong>Bước 3:</strong> Ứng dụng Zalo tự bật lên trang của Văn, bạn chỉ cần <strong>Dán (Paste)</strong> gửi đơn là xong!</li>
             </ul>
           </div>
 
-          {/* Hướng dẫn trên Laptop / Máy tính */}
           <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
-            <div style={{ fontSize: '30px', marginBottom: '16px' }}>💻 Dành cho Laptop / Máy Tính</div>
+            <div style={{ fontSize: '30px', marginBottom: '16px' }}>💻 Dành cho Máy Tính</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
-              <li><strong>Bước 1:</strong> Điền đầy đủ thông tin yêu cầu thiết kế vào form đặt hàng bên dưới.</li>
-              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Nội dung được copy ngầm vào máy.</li>
-              <li><strong>Bước 3:</strong> Khi ô chat hiện lên, bấm tổ hợp phím <strong style={{ color: '#fff' }}>Ctrl + V</strong> (hoặc nhấn chuột phải chọn <strong>Dán</strong>) rồi nhấn <strong>Enter</strong> là xong!</li>
+              <li><strong>Bước 1:</strong> Điền thông tin vào form đặt hàng bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA ZALO"</strong>. Máy tự động copy ngầm nội dung.</li>
+              <li><strong>Bước 3:</strong> Khi Zalo mở ra, bấm <strong style={{ color: '#fff' }}>Ctrl + V</strong> để dán và gửi cho Văn nhé!</li>
             </ul>
           </div>
         </div>
@@ -289,14 +309,38 @@ export default function Home() {
       {/* Order Form & Direct Chat Section */}
       <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px', maxWidth: '680px', margin: '0 auto' }}>
         <div className="card-cyber" style={{ padding: '40px', borderRadius: '28px', boxShadow: '0 25px 60px rgba(0,0,0,0.8)' }}>
-          <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', letterSpacing: '1px' }}>
-            🚀 GỬI YÊU CẦU ĐẶT HÀNG (48H)
-          </h2>
-          <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '36px' }}>
-            Điền thông tin bên dưới hoặc trò chuyện trực tiếp với chúng tôi mà không cần qua form!
-          </p>
+          
+          {/* PHẦN CHAT TRỰC TIẾP NỔI BẬT IN ĐẬM */}
+          <div style={{
+            background: 'rgba(192, 132, 252, 0.08)',
+            border: '2px solid var(--accent-color)',
+            padding: '24px',
+            borderRadius: '20px',
+            textAlign: 'center',
+            marginBottom: '36px'
+          }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '900', color: '#fff', margin: '0 0 8px 0', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              ⚡ NHẮN TIN ZALO TRỰC TIẾP (0399.641.646)
+            </h3>
+            <p style={{ color: '#cbd5e1', fontSize: '14px', margin: '0 0 16px 0', fontWeight: '600' }}>
+              Không cần điền form? Bấm nút bên dưới để mở thẳng Zalo của Văn!
+            </p>
+            <button onClick={handleDirectZalo} className="direct-chat-btn" style={{
+              width: '100%', padding: '16px', borderRadius: '14px',
+              color: '#fff', fontWeight: '900', fontSize: '16px', letterSpacing: '1px',
+              cursor: 'pointer', textTransform: 'uppercase'
+            }}>
+              💬 CHAT TRỰC TIẾP QUA ZALO (1 CHẠM)
+            </button>
+          </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', margin: '30px 0', gap: '16px' }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: '#64748b', letterSpacing: '1.5px' }}>HOẶC ĐIỀN ĐƠN ĐẶT HÀNG (48H)</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+          </div>
+
+          <form onSubmit={handleSendZalo} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
               <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
@@ -326,27 +370,26 @@ export default function Home() {
               <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
             </div>
 
-            <button onClick={handleSendMessenger} className="glow-btn" style={{
+            <button type="submit" className="glow-btn" style={{
               width: '100%', padding: '18px', border: 'none', borderRadius: '12px',
               color: '#fff', fontWeight: '900', fontSize: '15px', letterSpacing: '1px',
               cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase',
               background: 'linear-gradient(135deg, #00c6ff, #0072ff)'
             }}>
-              💬 GỬI ĐƠN QUA MESSENGER
+              📋 SAO CHÉP & GỬI ĐƠN QUA ZALO
             </button>
+          </form>
 
-            {/* Lựa chọn phụ cho khách thích chat thẳng */}
-            <div style={{ textAlign: 'center', marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '20px' }}>
-              <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '12px' }}>Hoặc nếu bạn muốn trao đổi trực tiếp ngay lập tức:</p>
-              <button onClick={openAppMessenger} style={{
-                display: 'inline-block', padding: '12px 24px', borderRadius: '10px',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)',
-                color: '#fff', fontSize: '13px', fontWeight: '800', cursor: 'pointer', transition: 'all 0.3s ease'
-              }}>
-                💬 CHAT TRỰC TIẾP KHÔNG CẦN FORM
-              </button>
+          {copiedAlert && (
+            <div style={{
+              marginTop: '20px', padding: '16px', borderRadius: '12px',
+              background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#34d399',
+              textAlign: 'center', fontSize: '14px', fontWeight: '700', lineHeight: '1.6'
+            }}>
+              🎉 ĐÃ SAO CHÉP ĐƠN HÀNG THÀNH CÔNG!<br />
+              Zalo của Văn đang được mở lên, bạn chỉ cần Dán (Paste) nội dung vào khung chat là xong!
             </div>
-          </div>
+          )}
         </div>
       </section>
 
