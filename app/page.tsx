@@ -26,131 +26,315 @@ async function createOrder(formData: FormData) {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
-      {/* Header / Nav */}
-      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="font-extrabold text-xl tracking-wider bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-            NOVAS CREATIVE
+    <main style={{
+      minHeight: '100vh',
+      backgroundColor: '#030712',
+      color: '#f3f4f6',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      margin: 0,
+      padding: 0,
+      boxSizing: 'border-box'
+    }}>
+      {/* CSS Nhúng trực tiếp để đảm bảo Hiệu ứng & Đồ họa Hầm hố 100% */}
+      <style>{`
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        @keyframes borderGradient {
+          0% { border-color: #6366f1; }
+          50% { border-color: #06b6d4; }
+          100% { border-color: #a855f7; }
+        }
+        .hero-title {
+          background: linear-gradient(135deg, #ffffff 0%, #818cf8 50%, #38bdf8 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .glow-btn {
+          background: linear-gradient(90deg, #4f46e5, #0891b2);
+          box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-btn:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 0 40px rgba(8, 145, 178, 0.8);
+        }
+        .card-cyber {
+          background: rgba(15, 23, 42, 0.75);
+          backdrop-filter: blur(16px);
+          border: 1px solid rgba(99, 102, 241, 0.3);
+          transition: all 0.4s ease;
+        }
+        .card-cyber:hover {
+          border-color: #38bdf8;
+          transform: translateY(-5px);
+          box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.3);
+        }
+        .cyber-input {
+          background: rgba(3, 7, 18, 0.9);
+          border: 1px solid #1e293b;
+          color: #f8fafc;
+          transition: all 0.3s ease;
+        }
+        .cyber-input:focus {
+          outline: none;
+          border-color: #6366f1;
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+      `}</style>
+
+      {/* Background Glow Orbs */}
+      <div style={{
+        position: 'fixed',
+        top: '-10%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(0,0,0,0) 70%)',
+        pointerEvents: 'none',
+        animation: 'pulseGlow 6s infinite ease-in-out',
+        zIndex: 0
+      }} />
+
+      {/* Header */}
+      <header style={{
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        background: 'rgba(3, 7, 18, 0.8)',
+        backdropFilter: 'blur(12px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        padding: '0 24px'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          height: '70px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <div style={{
+            fontSize: '24px',
+            fontWeight: '900',
+            letterSpacing: '2px',
+            background: 'linear-gradient(90deg, #818cf8, #38bdf8)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            ⚡ NOVAS CREATIVE
           </div>
-          <nav className="flex items-center gap-6">
-            <a href="#services" className="text-sm font-medium text-slate-300 hover:text-indigo-400 transition-colors">Dịch vụ</a>
-            <a href="#order" className="text-sm font-medium text-slate-300 hover:text-indigo-400 transition-colors">Đặt thiết kế</a>
-            <a href="/admin" className="px-4 py-2 text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-all shadow-lg shadow-indigo-500/25">Quản trị</a>
+          <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <a href="#services" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>DỊCH VỤ</a>
+            <a href="#order" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>ĐẶT HÀNG</a>
+            <a href="/admin" className="glow-btn" style={{
+              color: '#fff',
+              textDecoration: 'none',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: '700',
+              letterSpacing: '1px'
+            }}>QUẢN TRỊ ADMIN</a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-24 px-6 border-b border-slate-800/60">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.15),rgba(255,255,255,0))]"></div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <span className="inline-block px-3 py-1 mb-6 text-xs font-semibold tracking-wider text-indigo-400 uppercase bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-            ✨ Sáng tạo không giới hạn - Đỉnh cao thị giác
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-            Ý TƯỞNG HỌC ĐƯỜNG.<br />
-            <span className="bg-gradient-to-r from-indigo-400 via-sky-400 to-cyan-400 bg-clip-text text-transparent">
-              TRÌNH CHIẾU CÓ CHẤT.
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Biến kiến thức thành trải nghiệm thị giác đỉnh cao. Dịch vụ thiết kế slide PowerPoint & Giáo án điện tử hàng đầu dành cho học sinh và giáo viên.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href="#order" className="px-8 py-3.5 text-base font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all shadow-xl shadow-indigo-600/30">
-              Đặt đơn ngay
-            </a>
-            <a href="#services" className="px-8 py-3.5 text-base font-semibold bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-xl transition-all">
-              Khám phá dịch vụ
-            </a>
-          </div>
+      <section style={{
+        padding: '100px 24px 80px',
+        textAlign: 'center',
+        position: 'relative',
+        maxWidth: '900px',
+        margin: '0 auto'
+      }}>
+        <div style={{
+          display: 'inline-block',
+          padding: '6px 16px',
+          borderRadius: '20px',
+          background: 'rgba(99, 102, 241, 0.15)',
+          border: '1px solid rgba(99, 102, 241, 0.3)',
+          color: '#a5b4fc',
+          fontSize: '12px',
+          fontWeight: '700',
+          letterSpacing: '1.5px',
+          marginBottom: '24px',
+          textTransform: 'uppercase'
+        }}>
+          🔥 ĐỈNH CAO THIẾT KẾ SLIDE & GIÁO ÁN ĐIỆN TỬ
+        </div>
+
+        <h1 className="hero-title" style={{
+          fontSize: '52px',
+          fontWeight: '900',
+          lineHeight: '1.15',
+          margin: '0 0 24px 0',
+          letterSpacing: '-1px'
+        }}>
+          Ý TƯỞNG HỌC ĐƯỜNG.<br />
+          TRÌNH CHIẾU CỰC CHẤT.
+        </h1>
+
+        <p style={{
+          color: '#94a3b8',
+          fontSize: '18px',
+          lineHeight: '1.6',
+          marginBottom: '40px',
+          maxWidth: '700px',
+          margin: '0 auto 40px'
+        }}>
+          Biến bài thuyết trình khô khan thành một kiệt tác thị giác mạnh mẽ. Đạt điểm tối đa mọi môn học cùng Novas Creative.
+        </p>
+
+        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+          <a href="#order" className="glow-btn" style={{
+            color: '#fff',
+            textDecoration: 'none',
+            padding: '16px 36px',
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '800',
+            letterSpacing: '1px'
+          }}>ĐẶT THIẾT KẾ NGAY</a>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">
-          Dịch Vụ Chuyên Sâu
+      <section id="services" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <h2 style={{
+          fontSize: '28px',
+          fontWeight: '800',
+          textAlign: 'center',
+          marginBottom: '48px',
+          letterSpacing: '1px',
+          color: '#f8fafc'
+        }}>
+          ⚡ DỊCH VỤ CHUYÊN SÂU
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 text-xl group-hover:scale-110 transition-transform">
-              💻
-            </div>
-            <h3 className="text-xl font-bold mb-3 text-slate-100">A. Slide PowerPoint Học Đường</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Bao gồm tất cả các môn: Toán, Ngữ văn, Lịch sử, Địa lý, Lý, Hóa, Sinh, Tiếng Anh, Tin học... Thiết kế trực quan, hiệu ứng chuyển động mượt mà, thu hút mọi ánh nhìn.
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px'
+        }}>
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '20px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '16px' }}>💻</div>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', margin: '0 0 12px 0', color: '#38bdf8' }}>
+              Slide PowerPoint Học Đường
+            </h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.6', margin: 0, fontSize: '14px' }}>
+              Toán, Ngữ Văn, Lịch Sử, Địa Lý, Lý, Hóa, Sinh, Tiếng Anh... Thiết kế hiệu ứng Morph mượt mà, chuyển động 3D thu hút từng giây.
             </p>
           </div>
-          <div className="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-sky-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-xl bg-sky-600/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-6 text-xl group-hover:scale-110 transition-transform">
-              📚
-            </div>
-            <h3 className="text-xl font-bold mb-3 text-slate-100">B. Giáo Án Điện Tử</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Bài giảng điện tử, slide trình chiếu chuẩn giảng dạy trực quan, giúp giáo viên truyền đạt kiến thức sinh động và đạt hiệu quả cao nhất trên lớp.
+
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '20px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '16px' }}>📚</div>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', margin: '0 0 12px 0', color: '#a855f7' }}>
+              Giáo Án Điện Tử
+            </h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.6', margin: 0, fontSize: '14px' }}>
+              Bài giảng chuẩn sư phạm trực quan, hệ thống hóa kiến thức logic dành riêng cho giáo viên đạt chuẩn giảng dạy chất lượng cao.
             </p>
           </div>
         </div>
       </section>
 
       {/* Order Form Section */}
-      <section id="order" className="py-20 px-6 max-w-2xl mx-auto">
-        <div className="p-8 md:p-10 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-xl">
-          <h2 className="text-2xl font-bold mb-2 text-center text-slate-100">GỬI YÊU CẦU ĐẶT HÀNG</h2>
-          <p className="text-sm text-slate-400 text-center mb-8">Điền thông tin bên dưới, Novas Creative sẽ liên hệ lại ngay lập tức.</p>
+      <section id="order" style={{ padding: '80px 24px', maxWidth: '650px', margin: '0 auto' }}>
+        <div className="card-cyber" style={{
+          padding: '40px',
+          borderRadius: '24px',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+        }}>
+          <h2 style={{
+            fontSize: '24px',
+            fontWeight: '900',
+            textAlign: 'center',
+            margin: '0 0 8px 0',
+            letterSpacing: '1px',
+            color: '#fff'
+          }}>
+            🚀 GỬI YÊU CẦU ĐẶT HÀNG
+          </h2>
+          <p style={{
+            color: '#64748b',
+            fontSize: '13px',
+            textAlign: 'center',
+            marginBottom: '32px'
+          }}>
+            Điền thông tin bên dưới, Novas Creative sẽ xử lý đơn hàng trong 5 phút!
+          </p>
 
-          <form action={createOrder} className="space-y-6">
+          <form action={createOrder} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Họ và tên *</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                Họ và tên *
+              </label>
               <input 
                 type="text" 
                 name="fullName" 
                 required 
                 placeholder="Nhập họ tên của bạn"
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="cyber-input"
+                style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}
               />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Số điện thoại (VN) *</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                  Số điện thoại *
+                </label>
                 <input 
                   type="tel" 
                   name="phone" 
                   required 
                   placeholder="039xxxxxxx"
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="cyber-input"
+                  style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Độ tuổi</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                  Độ tuổi
+                </label>
                 <input 
                   type="number" 
                   name="age" 
                   defaultValue={14}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="cyber-input"
+                  style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}
                 />
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Dịch vụ</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                  Loại dịch vụ
+                </label>
                 <select 
                   name="service"
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="cyber-input"
+                  style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}
                 >
                   <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
                   <option value="Giáo án điện tử">Giáo án điện tử</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Liên hệ qua</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                  Liên hệ qua
+                </label>
                 <select 
                   name="clientName"
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="cyber-input"
+                  style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}
                 >
                   <option value="Zalo">Zalo</option>
                   <option value="Facebook">Facebook</option>
@@ -160,28 +344,50 @@ export default function Home() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Yêu cầu chi tiết</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#cbd5e1', marginBottom: '8px' }}>
+                Chi tiết yêu cầu
+              </label>
               <textarea 
                 name="requirements" 
                 rows={4}
-                placeholder="Mô tả nội dung, số lượng slide hoặc yêu cầu đặc biệt..."
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                placeholder="Mô tả chủ đề bài học, số lượng slide hoặc tone màu mong muốn..."
+                className="cyber-input"
+                style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}
               ></textarea>
             </div>
 
             <button 
               type="submit"
-              className="w-full py-4 font-bold bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white rounded-xl transition-all shadow-xl shadow-indigo-600/25 tracking-wider uppercase text-sm"
+              className="glow-btn"
+              style={{
+                width: '100%',
+                padding: '18px',
+                border: 'none',
+                borderRadius: '12px',
+                color: '#fff',
+                fontWeight: '900',
+                fontSize: '15px',
+                letterSpacing: '2px',
+                cursor: 'pointer',
+                marginTop: '10px',
+                textTransform: 'uppercase'
+              }}
             >
-              Gửi Đơn Hàng Ngay
+              🔥 GỬI ĐƠN HÀNG NGAY 🔥
             </button>
           </form>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-8 px-6 text-center text-sm text-slate-500">
-        <p>© 2026 Novas Creative. All rights reserved.</p>
+      <footer style={{
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        padding: '32px 24px',
+        textAlign: 'center',
+        color: '#475569',
+        fontSize: '13px'
+      }}>
+        <p>© 2026 NOVAS CREATIVE STUDIO. ALL RIGHTS RESERVED.</p>
       </footer>
     </main>
   );
