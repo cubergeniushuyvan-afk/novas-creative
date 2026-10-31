@@ -4,14 +4,18 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [theme, setTheme] = useState("theme-purple");
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    phone: "",
+    age: "14",
+    service: "Slide PowerPoint học đường",
+    requirements: ""
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("novas_theme") || "theme-purple";
     setTheme(saved);
 
-    // Xử lý hiệu ứng lướt xuất hiện & biến mất lặp đi lặp lại
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -36,25 +40,44 @@ export default function Home() {
     localStorage.setItem("novas_theme", newTheme);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    try {
-      await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      setSuccess(true);
-      (e.target as HTMLFormElement).reset();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const generateOrderMessage = () => {
+    return `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
+  };
+
+  const handleSendZalo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.fullName || !formData.phone) {
+      alert("Vui lòng điền Họ tên và Số điện thoại!");
+      return;
     }
+
+    const message = generateOrderMessage();
+    // Copy tin nhắn tự động vào bộ nhớ tạm
+    navigator.clipboard.writeText(message);
+    alert("✅ Đã sao chép nội dung đơn hàng! Hệ thống sẽ chuyển bạn sang Zalo, bạn chỉ cần dán (Paste) nội dung vào khung chat và bấm gửi nhé.");
+    
+    // Mở trang Zalo của Văn (SĐT: 0399641646)
+    window.location.href = `https://zalo.me/0399641646`;
+  };
+
+  const handleSendMessenger = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.fullName || !formData.phone) {
+      alert("Vui lòng điền Họ tên và Số điện thoại!");
+      return;
+    }
+
+    const message = generateOrderMessage();
+    // Copy tin nhắn tự động vào bộ nhớ tạm
+    navigator.clipboard.writeText(message);
+    alert("✅ Đã sao chép nội dung đơn hàng! Hệ thống sẽ chuyển bạn sang Messenger, bạn chỉ cần dán (Paste) nội dung vào khung chat và bấm gửi nhé.");
+    
+    // Mở liên kết Messenger
+    window.location.href = `https://m.me/`;
   };
 
   return (
@@ -66,7 +89,6 @@ export default function Home() {
       overflowX: 'hidden',
       transition: 'all 0.5s ease'
     }}>
-      {/* CSS & Hiệu ứng Cyberpunk Responsive */}
       <style jsx global>{`
         :root {
           --primary-glow: #8b5cf6;
@@ -134,7 +156,6 @@ export default function Home() {
           box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        /* Hiệu ứng lướt tới hiện ra, lướt đi ẩn mất liên tục */
         .reveal {
           opacity: 0;
           transform: translateY(50px) scale(0.96);
@@ -145,7 +166,6 @@ export default function Home() {
           transform: translateY(0) scale(1);
         }
 
-        /* Responsive Layout cho Mobile */
         @media (max-width: 768px) {
           .hero-title { font-size: 38px !important; }
           .grid-responsive { grid-template-columns: 1fr !important; }
@@ -190,7 +210,6 @@ export default function Home() {
               <a href="#services" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>DỊCH VỤ</a>
               <a href="#process" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>QUY TRÌNH</a>
               <a href="#order" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>ĐẶT HÀNG</a>
-              <a href="/admin" className="glow-btn" style={{ color: '#fff', textDecoration: 'none', padding: '8px 18px', borderRadius: '8px', fontSize: '12px', fontWeight: '800' }}>ADMIN</a>
             </nav>
           </div>
         </div>
@@ -211,7 +230,7 @@ export default function Home() {
         </h1>
 
         <p style={{ color: '#94a3b8', fontSize: '18px', lineHeight: '1.6', maxWidth: '720px', margin: '0 auto 40px' }}>
-          Biến những trang bài giảng khô khan thành kiệt tác đồ họa 3D sống động. Tối ưu hóa điểm số và trải nghiệm thuyết trình đỉnh cao.
+          Biến những trang bài giảng khô khan thành kiệt tác đồ họa sống động. Tối ưu hóa điểm số và trải nghiệm thuyết trình đỉnh cao.
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -251,7 +270,7 @@ export default function Home() {
             <div style={{ fontSize: '36px', marginBottom: '16px' }}>💻</div>
             <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: '#fff' }}>Slide PowerPoint Học Đường</h3>
             <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
-              Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph, 3D Object chuẩn xu hướng đồ họa mới nhất.
+              Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph chuẩn xu hướng đồ họa mới nhất.
             </p>
           </div>
 
@@ -276,7 +295,7 @@ export default function Home() {
           <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 1</div>
             <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Gửi Yêu Cầu</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Điền thông tin và yêu cầu thiết kế vào form bên dưới.</p>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Điền thông tin và chọn kênh gửi Zalo/Messenger.</p>
           </div>
           <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 2</div>
@@ -285,8 +304,8 @@ export default function Home() {
           </div>
           <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 3</div>
-            <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Bàn Giao & Tối Ưu</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Nhận file PowerPoint hoàn chỉnh và hỗ trợ chỉnh sửa theo ý muốn.</p>
+            <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Bàn Giao</h4>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Nhận file PowerPoint hoàn chỉnh chất lượng cao.</p>
           </div>
         </div>
       </section>
@@ -298,63 +317,56 @@ export default function Home() {
             🚀 GỬI YÊU CẦU ĐẶT HÀNG (48H)
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '36px' }}>
-            Gửi yêu cầu ngay hôm nay để nhận sản phẩm slide hoàn chỉnh trong vòng 48 giờ!
+            Điền thông tin bên dưới và chọn gửi trực tiếp qua Zalo hoặc Messenger của Văn!
           </p>
 
-          {success ? (
-            <div style={{ padding: '20px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid #10b981', color: '#34d399', textAlign: 'center', fontWeight: '700' }}>
-              🎉 Đơn hàng đã gửi thành công! Novas Creative sẽ liên hệ ngay trong thời gian sớm nhất.
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
+              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
-                <input type="text" name="fullName" required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>SỐ ĐIỆN THOẠI *</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
               </div>
-
-              <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>SỐ ĐIỆN THOẠI *</label>
-                  <input type="tel" name="phone" required placeholder="039xxxxxxx" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>ĐỘ TUỔI</label>
-                  <input type="number" name="age" defaultValue={14} className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
-                </div>
-              </div>
-
-              <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>LOẠI DỊCH VỤ</label>
-                  <select name="service" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}>
-                    <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
-                    <option value="Giáo án điện tử">Giáo án điện tử</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>LIÊN HỆ QUA</label>
-                  <select name="clientName" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}>
-                    <option value="Zalo">Zalo</option>
-                    <option value="Facebook">Facebook</option>
-                    <option value="Khác">Khác</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>MÔ TẢ CHI TIẾT YÊU CẦU</label>
-                <textarea name="requirements" rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>ĐỘ TUỔI</label>
+                <input type="number" name="age" value={formData.age} onChange={handleChange} className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
               </div>
+            </div>
 
-              <button type="submit" disabled={loading} className="glow-btn" style={{
-                width: '100%', padding: '18px', border: 'none', borderRadius: '12px',
-                color: '#fff', fontWeight: '900', fontSize: '15px', letterSpacing: '2px',
-                cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>LOẠI DỊCH VỤ</label>
+              <select name="service" value={formData.service} onChange={handleChange} className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }}>
+                <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
+                <option value="Giáo án điện tử">Giáo án điện tử</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>MÔ TẢ CHI TIẾT YÊU CẦU</label>
+              <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+            </div>
+
+            {/* Nút Gửi qua Zalo & Messenger */}
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '10px' }}>
+              <button onClick={handleSendZalo} style={{
+                padding: '16px', border: 'none', borderRadius: '12px', background: '#0068ff',
+                color: '#fff', fontWeight: '900', fontSize: '14px', cursor: 'pointer', letterSpacing: '1px', textTransform: 'uppercase'
               }}>
-                {loading ? "ĐANG XỬ LÝ..." : "⚡ GỬI ĐƠN HÀNG NGAY (48H) ⚡"}
+                💬 GỬI QUA ZALO
               </button>
-            </form>
-          )}
+
+              <button onClick={handleSendMessenger} style={{
+                padding: '16px', border: 'none', borderRadius: '12px', background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
+                color: '#fff', fontWeight: '900', fontSize: '14px', cursor: 'pointer', letterSpacing: '1px', textTransform: 'uppercase'
+              }}>
+                🌐 GỬI QUA MESSENGER
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
