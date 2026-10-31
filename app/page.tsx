@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [theme, setTheme] = useState("theme-purple");
-  const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -45,18 +44,20 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCopyOrder = (e: React.FormEvent) => {
+  const handleSendMessenger = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.phone) {
       alert("Vui lòng điền Họ tên và Số điện thoại!");
       return;
     }
 
-    const orderText = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
+    const message = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
     
-    navigator.clipboard.writeText(orderText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 5000);
+    // Copy nội dung vào bộ nhớ tạm trước để phòng hờ trường hợp trình duyệt chặn
+    navigator.clipboard.writeText(message);
+
+    // Mở trực tiếp Messenger chuẩn xác qua đường dẫn m.me/
+    window.open(`https://m.me/`, "_blank");
   };
 
   return (
@@ -178,7 +179,6 @@ export default function Home() {
           </div>
 
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            {/* Nút Đổi Màu */}
             <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.05)', padding: '5px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
               <button onClick={() => changeTheme('theme-purple')} style={{ width: '18px', height: '18px', borderRadius: '50%', background: '#8b5cf6', border: 'none', cursor: 'pointer' }} title="Neon Purple"></button>
               <button onClick={() => changeTheme('theme-green')} style={{ width: '18px', height: '18px', borderRadius: '50%', background: '#10b981', border: 'none', cursor: 'pointer' }} title="Matrix Green"></button>
@@ -219,32 +219,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
-          ⚡ DỊCH VỤ THIẾT KẾ DẪN ĐẦU
-        </h2>
-        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Thiết kế chuẩn phong cách hiện đại, phối màu sắc nét.</p>
-
-        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' }}>
-          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
-            <div style={{ fontSize: '36px', marginBottom: '16px' }}>💻</div>
-            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: '#fff' }}>Slide PowerPoint Học Đường</h3>
-            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
-              Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph chuẩn xu hướng đồ họa mới nhất.
-            </p>
-          </div>
-
-          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
-            <div style={{ fontSize: '36px', marginBottom: '16px' }}>📚</div>
-            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: '#fff' }}>Giáo Án Điện Tử Sư Phạm</h3>
-            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
-              Bài giảng trực quan sinh động dành riêng cho giáo viên. Tối ưu bố cục logic giúp tạo ấn tượng sâu sắc trong các buổi thi giảng.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Order Form Section */}
       <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px', maxWidth: '680px', margin: '0 auto' }}>
         <div className="card-cyber" style={{ padding: '40px', borderRadius: '28px', boxShadow: '0 25px 60px rgba(0,0,0,0.8)' }}>
@@ -252,10 +226,10 @@ export default function Home() {
             🚀 GỬI YÊU CẦU ĐẶT HÀNG (48H)
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '36px' }}>
-            Điền thông tin bên dưới và bấm nút sao chép để gửi nhanh qua Zalo/Messenger!
+            Điền thông tin và bấm nút bên dưới để chuyển trực tiếp qua Messenger!
           </p>
 
-          <form onSubmit={handleCopyOrder} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
               <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
@@ -285,25 +259,15 @@ export default function Home() {
               <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
             </div>
 
-            <button type="submit" className="glow-btn" style={{
+            <button onClick={handleSendMessenger} className="glow-btn" style={{
               width: '100%', padding: '18px', border: 'none', borderRadius: '12px',
               color: '#fff', fontWeight: '900', fontSize: '15px', letterSpacing: '1px',
-              cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
+              cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase',
+              background: 'linear-gradient(135deg, #00c6ff, #0072ff)'
             }}>
-              📋 SAO CHÉP ĐƠN HÀNG NGAY
+              💬 GỬI NGAY QUA MESSENGER
             </button>
-          </form>
-
-          {copied && (
-            <div style={{
-              marginTop: '20px', padding: '16px', borderRadius: '12px',
-              background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#34d399',
-              textAlign: 'center', fontSize: '14px', fontWeight: '700', lineHeight: '1.6'
-            }}>
-              🎉 ĐÃ SAO CHÉP THÀNH CÔNG!<br />
-              Mời bạn mở Zalo (SĐT: <strong style={{ color: '#fff' }}>0399641646</strong>) hoặc Messenger để Dán (Paste) nội dung gửi cho Novas Creative nhé!
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
