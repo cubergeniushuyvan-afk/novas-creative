@@ -44,6 +44,16 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const openAppMessenger = () => {
+    // Thử kích hoạt mở thẳng App Messenger bằng Deep Link
+    window.location.href = "fb-messenger://";
+    
+    // Nếu trong 1.5s không bật được App (do laptop không có app), tự động chuyển sang bản Web
+    setTimeout(() => {
+      window.open("https://m.me/", "_blank");
+    }, 1500);
+  };
+
   const handleSendMessenger = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.phone) {
@@ -56,8 +66,8 @@ export default function Home() {
     // Tự động sao chép vào bộ nhớ tạm
     navigator.clipboard.writeText(message);
 
-    // Mở Messenger trực tiếp
-    window.open(`https://m.me/`, "_blank");
+    // Kích hoạt mở App Messenger
+    openAppMessenger();
   };
 
   return (
@@ -246,7 +256,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Detailed Guide Section (Cầm tay chỉ việc cho Điện thoại & Laptop) */}
+      {/* Detailed Guide Section */}
       <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
           📖 HƯỚNG DẪN DÀNH CHO KHÁCH HÀNG
@@ -259,8 +269,8 @@ export default function Home() {
             <div style={{ fontSize: '30px', marginBottom: '16px' }}>📱 Dành cho Điện Thoại</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
               <li><strong>Bước 1:</strong> Điền đầy đủ Họ tên, SĐT và yêu cầu vào bảng bên dưới.</li>
-              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Web sẽ tự động lưu thông tin vào bộ nhớ điện thoại.</li>
-              <li><strong>Bước 3:</strong> Khi ứng dụng Messenger mở lên, bạn chỉ cần <strong>chạm và giữ tay 1 giây</strong> vào khung nhắn tin rồi bấm nút <strong>"Dán" (Paste)</strong> xuất hiện trên màn hình, sau đó bấm gửi là xong!</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Ứng dụng Messenger sẽ tự động bật lên lập tức.</li>
+              <li><strong>Bước 3:</strong> Bạn chỉ cần <strong>chạm và giữ tay 1 giây</strong> vào khung nhắn tin rồi bấm <strong>"Dán" (Paste)</strong> để gửi đơn!</li>
             </ul>
           </div>
 
@@ -269,8 +279,8 @@ export default function Home() {
             <div style={{ fontSize: '30px', marginBottom: '16px' }}>💻 Dành cho Laptop / Máy Tính</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
               <li><strong>Bước 1:</strong> Điền đầy đủ thông tin yêu cầu thiết kế vào form đặt hàng bên dưới.</li>
-              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Nội dung đã được máy tính tự động copy ngầm.</li>
-              <li><strong>Bước 3:</strong> Khi cửa sổ chat mở ra, bạn chỉ cần bấm tổ hợp phím <strong style={{ color: '#fff' }}>Ctrl + V</strong> (hoặc nhấn chuột phải chọn <strong>Paste / Dán</strong>) vào ô nhập tin nhắn rồi nhấn <strong>Enter</strong> là hoàn tất!</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA MESSENGER"</strong>. Nội dung được copy ngầm vào máy.</li>
+              <li><strong>Bước 3:</strong> Khi ô chat hiện lên, bấm tổ hợp phím <strong style={{ color: '#fff' }}>Ctrl + V</strong> (hoặc nhấn chuột phải chọn <strong>Dán</strong>) rồi nhấn <strong>Enter</strong> là xong!</li>
             </ul>
           </div>
         </div>
@@ -325,16 +335,16 @@ export default function Home() {
               💬 GỬI ĐƠN QUA MESSENGER
             </button>
 
-            {/* Lựa chọn phụ cho khách thích chat thẳng không cần điền form */}
+            {/* Lựa chọn phụ cho khách thích chat thẳng */}
             <div style={{ textAlign: 'center', marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '20px' }}>
               <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '12px' }}>Hoặc nếu bạn muốn trao đổi trực tiếp ngay lập tức:</p>
-              <a href="https://m.me/" target="_blank" rel="noopener noreferrer" style={{
+              <button onClick={openAppMessenger} style={{
                 display: 'inline-block', padding: '12px 24px', borderRadius: '10px',
                 background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)',
-                color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '800', transition: 'all 0.3s ease'
+                color: '#fff', fontSize: '13px', fontWeight: '800', cursor: 'pointer', transition: 'all 0.3s ease'
               }}>
                 💬 CHAT TRỰC TIẾP KHÔNG CẦN FORM
-              </a>
+              </button>
             </div>
           </div>
         </div>
