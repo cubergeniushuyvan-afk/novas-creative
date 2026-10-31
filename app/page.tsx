@@ -53,10 +53,10 @@ export default function Home() {
 
     const message = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
     
-    // Copy nội dung vào bộ nhớ tạm trước để phòng hờ trường hợp trình duyệt chặn
+    // Copy nội dung vào bộ nhớ tạm trước khi chuyển hướng
     navigator.clipboard.writeText(message);
 
-    // Mở trực tiếp Messenger chuẩn xác qua đường dẫn m.me/
+    // Mở Messenger trực tiếp
     window.open(`https://m.me/`, "_blank");
   };
 
@@ -93,23 +93,24 @@ export default function Home() {
 
         @keyframes floatOrb {
           0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-30px) scale(1.12); }
+          50% { transform: translateY(-35px) scale(1.15); }
         }
 
         .hero-title {
           background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 50%, var(--secondary-glow) 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 0 35px rgba(192, 132, 252, 0.4));
         }
 
         .glow-btn {
           background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
-          box-shadow: 0 0 25px var(--primary-glow);
+          box-shadow: 0 0 30px var(--primary-glow);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glow-btn:hover {
           transform: translateY(-4px) scale(1.03);
-          box-shadow: 0 0 45px var(--secondary-glow);
+          box-shadow: 0 0 50px var(--secondary-glow);
         }
 
         .card-cyber {
@@ -121,7 +122,7 @@ export default function Home() {
         .card-cyber:hover {
           border-color: var(--accent-color);
           transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.9), 0 0 20px var(--primary-glow);
         }
 
         .cyber-input {
@@ -154,10 +155,10 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Background Orb */}
+      {/* Background Orbs */}
       <div style={{
         position: 'fixed', top: '-10%', left: '50%', transform: 'translateX(-50%)',
-        width: '750px', height: '750px',
+        width: '800px', height: '800px',
         background: 'radial-gradient(circle, var(--primary-glow) 0%, rgba(0,0,0,0) 70%)',
         opacity: 0.25, pointerEvents: 'none', animation: 'floatOrb 8s infinite ease-in-out', zIndex: 0
       }} />
@@ -187,7 +188,7 @@ export default function Home() {
 
             <nav className="header-nav" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
               <a href="#services" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>DỊCH VỤ</a>
-              <a href="#process" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>QUY TRÌNH</a>
+              <a href="#guide" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>HƯỚNG DẪN</a>
               <a href="#order" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>ĐẶT HÀNG</a>
             </nav>
           </div>
@@ -219,14 +220,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Order Form Section */}
+      {/* Stats Section */}
+      <section className="reveal mobile-padding" style={{ padding: '20px 24px', maxWidth: '1000px', margin: '0 auto 60px' }}>
+        <div className="card-cyber grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '32px', borderRadius: '24px', textAlign: 'center', gap: '20px' }}>
+          <div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>48 Giờ</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HOÀN THÀNH SIÊU TỐC</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>100%</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HIỆU ỨNG MƯỢT MÀ</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
+            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>ĐIỂM 10 THUYẾT TRÌNH</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
+          ⚡ DỊCH VỤ THIẾT KẾ DẪN ĐẦU
+        </h2>
+        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Thiết kế chuẩn phong cách hiện đại, phối màu sắc nét.</p>
+
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' }}>
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '16px' }}>💻</div>
+            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: '#fff' }}>Slide PowerPoint Học Đường</h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
+              Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph chuẩn xu hướng đồ họa mới nhất.
+            </p>
+          </div>
+
+          <div className="card-cyber" style={{ padding: '36px', borderRadius: '24px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '16px' }}>📚</div>
+            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: '#fff' }}>Giáo Án Điện Tử Sư Phạm</h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.7', fontSize: '15px', margin: 0 }}>
+              Bài giảng trực quan sinh động dành riêng cho giáo viên. Tối ưu bố cục logic giúp tạo ấn tượng sâu sắc trong các buổi thi giảng.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Guide Section (Phần Hướng Dẫn Mới) */}
+      <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
+          📖 HƯỚNG DẪN ĐẶT HÀNG SIÊU NHANH
+        </h2>
+        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Dành cho mọi khách hàng, cực kỳ đơn giản và linh hoạt.</p>
+
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
+            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 1</div>
+            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Điền Thông Tin</h4>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Nhập họ tên, số điện thoại và yêu cầu bài thuyết trình của bạn vào form bên dưới.</p>
+          </div>
+          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
+            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 2</div>
+            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Bấm Gửi & Tự Động Lưu</h4>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Hệ thống tự động sao chép nội dung đơn hàng và mở khung chat Messenger ngay lập tức.</p>
+          </div>
+          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px' }}>
+            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 3</div>
+            <h4 style={{ fontSize: '18px', fontWeight: '900', margin: '0 0 8px 0', color: '#fff' }}>Dán Vào Khung Chat</h4>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Chỉ cần nhấn giữ màn hình (hoặc nhấn Ctrl+V) để <strong>Dán (Paste)</strong> đoạn vừa copy rồi gửi cho Novas Studio!</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Order Form & Direct Chat Section */}
       <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px', maxWidth: '680px', margin: '0 auto' }}>
         <div className="card-cyber" style={{ padding: '40px', borderRadius: '28px', boxShadow: '0 25px 60px rgba(0,0,0,0.8)' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', letterSpacing: '1px' }}>
             🚀 GỬI YÊU CẦU ĐẶT HÀNG (48H)
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '36px' }}>
-            Điền thông tin và bấm nút bên dưới để chuyển trực tiếp qua Messenger!
+            Điền thông tin bên dưới hoặc trò chuyện trực tiếp với chúng tôi mà không cần qua form!
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -265,8 +336,20 @@ export default function Home() {
               cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase',
               background: 'linear-gradient(135deg, #00c6ff, #0072ff)'
             }}>
-              💬 GỬI NGAY QUA MESSENGER
+              💬 GỬI ĐƠN QUA MESSENGER
             </button>
+
+            {/* Lựa chọn phụ cho khách thích chat thẳng không cần điền form */}
+            <div style={{ textAlign: 'center', marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '20px' }}>
+              <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '12px' }}>Hoặc nếu bạn muốn trao đổi trực tiếp ngay lập tức:</p>
+              <a href="https://m.me/" target="_blank" rel="noopener noreferrer" style={{
+                display: 'inline-block', padding: '12px 24px', borderRadius: '10px',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)',
+                color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '800', transition: 'all 0.3s ease'
+              }}>
+                💬 CHAT TRỰC TIẾP KHÔNG CẦN FORM
+              </a>
+            </div>
           </div>
         </div>
       </section>
