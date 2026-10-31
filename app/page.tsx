@@ -1,4 +1,27 @@
-import { createOrder } from "@/actions";
+import { sql } from "@vercel/postgres";
+import { revalidatePath } from "next/cache";
+
+async function createOrder(formData: FormData) {
+  "use server";
+  const fullName = formData.get("fullName") as string;
+  const phone = formData.get("phone") as string;
+  const age = formData.get("age") as string;
+  const service = formData.get("service") as string;
+  const clientName = formData.get("clientName") as string;
+  const requirements = formData.get("requirements") as string;
+  
+  const orderCode = "NOVAS-" + Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    await sql`
+      INSERT INTO orders (order_code, full_name, phone, age, client_name, service, status, created_at)
+      VALUES (${orderCode}, ${fullName}, ${phone}, ${age}, ${clientName}, ${service}, 'pending', NOW())
+    `;
+    revalidatePath("/admin");
+  } catch (error) {
+    console.error("Lỗi lưu đơn hàng:", error);
+  }
+}
 
 export default function Home() {
   return (
