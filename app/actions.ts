@@ -5,29 +5,30 @@ import { orders } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 
 export async function createOrder(formData: FormData) {
-  const fullName = formData.get('fullName') as string;
-  const phone = formData.get('phone') as string;
-  const age = Number(formData.get('age'));
-  const serviceType = formData.get('serviceType') as string;
-  const contactMethod = formData.get('contactMethod') as string;
-  const requirements = formData.get('requirements') as string;
+  try {
+    const fullName = formData.get('fullName')?.toString() || '';
+    const phone = formData.get('phone')?.toString() || '';
+    const age = formData.get('age')?.toString() || '';
+    const clientName = formData.get('clientName')?.toString() || '';
+    const service = formData.get('service')?.toString() || '';
 
-  if (!fullName || !phone) return { error: 'Vui lòng nhập đủ thông tin!' };
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const orderCode = `NOVAS-${randomNum}`;
 
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  const orderCode = `NOVAS-${randomNum}`;
+    await db.insert(orders).values({
+      orderCode,
+      fullName,
+      phone,
+      age,
+      clientName,
+      service,
+      status: 'pending',
+    });
 
-  await db.insert(orders).values({
-    orderCode,
-    fullName,
-    phone,
-    age,
-    serviceType,
-    contactMethod,
-    requirements,
-    status: 'Mới nhận',
-  });
-
-  revalidatePath('/admin');
-  return { success: true, orderCode };
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to create order:', error);
+    return { success: false, error: 'Failed to create order' };
+  }
 }
