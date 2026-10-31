@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [theme, setTheme] = useState("theme-purple");
+  const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -44,40 +45,18 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const generateOrderMessage = () => {
-    return `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
-  };
-
-  const handleSendZalo = (e: React.FormEvent) => {
+  const handleCopyOrder = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.phone) {
       alert("Vui lòng điền Họ tên và Số điện thoại!");
       return;
     }
 
-    const message = generateOrderMessage();
-    // Copy tin nhắn tự động vào bộ nhớ tạm
-    navigator.clipboard.writeText(message);
-    alert("✅ Đã sao chép nội dung đơn hàng! Hệ thống sẽ chuyển bạn sang Zalo, bạn chỉ cần dán (Paste) nội dung vào khung chat và bấm gửi nhé.");
+    const orderText = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
     
-    // Mở trang Zalo của Văn (SĐT: 0399641646)
-    window.location.href = `https://zalo.me/0399641646`;
-  };
-
-  const handleSendMessenger = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.fullName || !formData.phone) {
-      alert("Vui lòng điền Họ tên và Số điện thoại!");
-      return;
-    }
-
-    const message = generateOrderMessage();
-    // Copy tin nhắn tự động vào bộ nhớ tạm
-    navigator.clipboard.writeText(message);
-    alert("✅ Đã sao chép nội dung đơn hàng! Hệ thống sẽ chuyển bạn sang Messenger, bạn chỉ cần dán (Paste) nội dung vào khung chat và bấm gửi nhé.");
-    
-    // Mở liên kết Messenger
-    window.location.href = `https://m.me/`;
+    navigator.clipboard.writeText(orderText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 5000);
   };
 
   return (
@@ -240,24 +219,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="reveal mobile-padding" style={{ padding: '30px 24px', maxWidth: '1000px', margin: '0 auto 60px' }}>
-        <div className="card-cyber grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '32px', borderRadius: '24px', textAlign: 'center', gap: '20px' }}>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>48 Giờ</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HOÀN THÀNH SIÊU TỐC</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>100%</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>HIỆU ỨNG MƯỢT MÀ</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', fontWeight: '800' }}>ĐIỂM 10 THUYẾT TRÌNH</div>
-          </div>
-        </div>
-      </section>
-
       {/* Services Section */}
       <section id="services" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
@@ -284,32 +245,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 48H Process Section */}
-      <section id="process" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
-          🚀 QUY TRÌNH XỬ LÝ ĐƠN HÀNG TRONG 48H
-        </h2>
-        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Nhanh chóng - Chuyên nghiệp - Cam kết đúng hạn.</p>
-
-        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 1</div>
-            <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Gửi Yêu Cầu</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Điền thông tin và chọn kênh gửi Zalo/Messenger.</p>
-          </div>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 2</div>
-            <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Dựng Sáng Tạo (48H)</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Novas Studio lên ý tưởng, dựng slide và canh chỉnh hiệu ứng.</p>
-          </div>
-          <div className="card-cyber" style={{ padding: '28px', borderRadius: '20px', textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--accent-color)', marginBottom: '8px' }}>BƯỚC 3</div>
-            <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', color: '#fff' }}>Bàn Giao</h4>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Nhận file PowerPoint hoàn chỉnh chất lượng cao.</p>
-          </div>
-        </div>
-      </section>
-
       {/* Order Form Section */}
       <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px', maxWidth: '680px', margin: '0 auto' }}>
         <div className="card-cyber" style={{ padding: '40px', borderRadius: '28px', boxShadow: '0 25px 60px rgba(0,0,0,0.8)' }}>
@@ -317,10 +252,10 @@ export default function Home() {
             🚀 GỬI YÊU CẦU ĐẶT HÀNG (48H)
           </h2>
           <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginBottom: '36px' }}>
-            Điền thông tin bên dưới và chọn gửi trực tiếp qua Zalo hoặc Messenger của Văn!
+            Điền thông tin bên dưới và bấm nút sao chép để gửi nhanh qua Zalo/Messenger!
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <form onSubmit={handleCopyOrder} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '800', color: '#cbd5e1', marginBottom: '8px' }}>HỌ VÀ TÊN *</label>
               <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
@@ -350,23 +285,25 @@ export default function Home() {
               <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input" style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
             </div>
 
-            {/* Nút Gửi qua Zalo & Messenger */}
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '10px' }}>
-              <button onClick={handleSendZalo} style={{
-                padding: '16px', border: 'none', borderRadius: '12px', background: '#0068ff',
-                color: '#fff', fontWeight: '900', fontSize: '14px', cursor: 'pointer', letterSpacing: '1px', textTransform: 'uppercase'
-              }}>
-                💬 GỬI QUA ZALO
-              </button>
+            <button type="submit" className="glow-btn" style={{
+              width: '100%', padding: '18px', border: 'none', borderRadius: '12px',
+              color: '#fff', fontWeight: '900', fontSize: '15px', letterSpacing: '1px',
+              cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
+            }}>
+              📋 SAO CHÉP ĐƠN HÀNG NGAY
+            </button>
+          </form>
 
-              <button onClick={handleSendMessenger} style={{
-                padding: '16px', border: 'none', borderRadius: '12px', background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
-                color: '#fff', fontWeight: '900', fontSize: '14px', cursor: 'pointer', letterSpacing: '1px', textTransform: 'uppercase'
-              }}>
-                🌐 GỬI QUA MESSENGER
-              </button>
+          {copied && (
+            <div style={{
+              marginTop: '20px', padding: '16px', borderRadius: '12px',
+              background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#34d399',
+              textAlign: 'center', fontSize: '14px', fontWeight: '700', lineHeight: '1.6'
+            }}>
+              🎉 ĐÃ SAO CHÉP THÀNH CÔNG!<br />
+              Mời bạn mở Zalo (SĐT: <strong style={{ color: '#fff' }}>0399641646</strong>) hoặc Messenger để Dán (Paste) nội dung gửi cho Novas Creative nhé!
             </div>
-          </div>
+          )}
         </div>
       </section>
 
