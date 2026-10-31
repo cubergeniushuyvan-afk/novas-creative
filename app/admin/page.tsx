@@ -34,7 +34,7 @@ export default async function AdminPage() {
                 <td className="p-4 font-mono font-bold text-[#C7F36B]">{o.orderCode}</td>
                 <td className="p-4 font-semibold">{o.fullName} ({o.age}t)</td>
                 <td className="p-4 font-mono">{o.phone}</td>
-                <td className="p-4">{o.serviceType}</td>
+                <td className="p-4">{o.service}</td>
                 <td className="p-4 text-gray-400">{o.requirements || '---'}</td>
                 <td className="p-4 text-xs text-gray-400">{new Date(o.createdAt).toLocaleString('vi-VN')}</td>
                 <td className="p-4 flex justify-center gap-2">
