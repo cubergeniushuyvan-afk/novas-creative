@@ -23,23 +23,19 @@ export default function Home() {
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
-    // Hiệu ứng lướt mượt mà sâu hơn, rõ rệt hơn, không bao giờ giật lag
+    // 100% mượt mà, không bao giờ giật lag khi giao nhau
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("section-active");
-            entry.target.classList.remove("section-inactive");
-          } else {
-            entry.target.classList.add("section-inactive");
-            entry.target.classList.remove("section-active");
+            entry.target.classList.add("visible");
           }
         });
       },
-      { threshold: 0.2, rootMargin: "-40px 0px -40px 0px" }
+      { threshold: 0.1 }
     );
 
-    const sections = document.querySelectorAll(".smooth-fade-section");
+    const sections = document.querySelectorAll(".fade-in-section");
     sections.forEach((sec) => observer.observe(sec));
 
     return () => observer.disconnect();
@@ -50,7 +46,7 @@ export default function Home() {
     setTimeout(() => {
       setLang((prev) => (prev === "vi" ? "en" : "vi"));
       setIsLangAnimating(false);
-    }, 300);
+    }, 250);
   };
 
   const toggleTheme = () => {
@@ -190,48 +186,63 @@ export default function Home() {
       transition: 'background-color 0.4s ease, color 0.4s ease'
     }}>
       <style>{`
-        /* Hiệu ứng bay lơ lửng phóng to biên độ lớn, có quay nhẹ 1 chút */
         @keyframes floatBigRotate {
           0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-          50% { transform: translateY(-28px) rotate(12deg) scale(1.08); }
+          50% { transform: translateY(-25px) rotate(10deg) scale(1.06); }
         }
 
-        .floating-deco-v2 {
+        /* Hiệu ứng ánh sáng chạy qua tiêu đề cực ngầu */
+        @keyframes shimmerText {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        /* Hiệu ứng mở trang website xuất hiện lần đầu mượt mà */
+        @keyframes pageIntro {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0px); }
+        }
+
+        .page-intro-anim {
+          animation: pageIntro 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .floating-deco-v3 {
           position: absolute;
           pointer-events: none;
           z-index: 0;
           animation: floatBigRotate 6s ease-in-out infinite;
-          opacity: 0.28;
+          opacity: 0.3;
         }
 
-        /* Hiệu ứng lướt cuộn trang mượt mà sâu hơn, mờ rõ hơn, scale rõ hơn */
-        .smooth-fade-section {
-          opacity: 0.15;
-          transform: translateY(45px) scale(0.97);
-          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Hiệu ứng cuộn trang không bao giờ giật lag */
+        .fade-in-section {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .smooth-fade-section.section-active {
+        .fade-in-section.visible {
           opacity: 1;
-          transform: translateY(0px) scale(1);
-        }
-        .smooth-fade-section.section-inactive {
-          opacity: 0.2;
-          transform: translateY(25px) scale(0.98);
+          transform: translateY(0px);
         }
 
-        /* Hiệu ứng chuyển đổi ngôn ngữ dịu dàng mượt mà */
         .lang-transition-wrap {
           opacity: ${isLangAnimating ? 0 : 1};
-          transform: translateY(${isLangAnimating ? '8px' : '0px'});
-          transition: opacity 0.3s ease, transform 0.3s ease;
+          transform: translateY(${isLangAnimating ? '6px' : '0px'});
+          transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
-        .hero-title-clean {
+        .hero-title-shimmer {
           font-size: 48px;
           font-weight: 800;
           line-height: 1.25;
           letter-spacing: -1px;
-          color: ${textMain};
+          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 20%, #2563eb 50%, #38bdf8 80%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmerText 5s ease infinite;
         }
 
         .clean-card {
@@ -239,12 +250,12 @@ export default function Home() {
           border: 1px solid ${cardBorder};
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
           border-radius: 24px;
-          transition: all 0.3s ease;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .clean-card:hover {
           border-color: #2563eb;
-          transform: translateY(-4px);
-          box-shadow: 0 15px 40px rgba(37, 99, 235, 0.1);
+          transform: translateY(-6px);
+          box-shadow: 0 20px 45px rgba(37, 99, 235, 0.15);
         }
 
         .btn-primary-clean {
@@ -295,16 +306,16 @@ export default function Home() {
         @media (max-width: 768px) {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
-          .hero-title-clean { font-size: 32px !important; }
+          .hero-title-shimmer { font-size: 32px !important; }
         }
       `}</style>
 
-      {/* Biểu tượng Mũ tốt nghiệp 🎓 và Bút chì ✏️ bự hơn, biên độ bay rộng hơn, có quay nhẹ */}
-      <div className="floating-deco-v2" style={{ top: '110px', left: '4%', fontSize: '50px', animationDelay: '0s' }}>🎓</div>
-      <div className="floating-deco-v2" style={{ top: '150px', right: '4%', fontSize: '50px', animationDelay: '1.2s' }}>✏️</div>
+      {/* Mũ tốt nghiệp 🎓 và Bút chì ✏️ lơ lửng hoành tráng */}
+      <div className="floating-deco-v3 page-intro-anim" style={{ top: '110px', left: '4%', fontSize: '48px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco-v3 page-intro-anim" style={{ top: '150px', right: '4%', fontSize: '48px', animationDelay: '1s' }}>✏️</div>
 
       {/* Header Cố Định Mượt Mà */}
-      <header style={{
+      <header className="page-intro-anim" style={{
         borderBottom: `1px solid ${cardBorder}`,
         background: isDark ? 'rgba(9, 13, 22, 0.9)' : 'rgba(253, 253, 253, 0.9)',
         backdropFilter: 'blur(12px)',
@@ -347,9 +358,9 @@ export default function Home() {
       <div className="lang-transition-wrap">
         
         {/* Hero Section */}
-        <section id="about" className="smooth-fade-section" style={{ padding: '90px 24px 60px', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+        <section id="about" className="page-intro-anim" style={{ padding: '90px 24px 60px', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
           
-          <h1 className="hero-title-clean" style={{ margin: '0 0 24px 0', whiteSpace: 'pre-line' }}>
+          <h1 className="hero-title-shimmer" style={{ margin: '0 0 24px 0', whiteSpace: 'pre-line' }}>
             {currentText.heroTitle}
           </h1>
 
@@ -368,7 +379,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="smooth-fade-section" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <section id="services" className="fade-in-section" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', color: textMain }}>
             {currentText.servicesTitle}
           </h2>
@@ -395,7 +406,7 @@ export default function Home() {
         </section>
 
         {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-        <section id="order" className="smooth-fade-section" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
+        <section id="order" className="fade-in-section" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
           <div className="clean-card" style={{ padding: '42px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', color: textMain }}>
               {currentText.orderTitle}
