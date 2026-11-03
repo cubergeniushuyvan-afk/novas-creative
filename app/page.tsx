@@ -13,8 +13,8 @@ export default function Home() {
     requirements: ""
   });
 
-  // 👇 VĂN NHỚ THAY LINK TRANG FACEBOOK CÁ NHÂN CỦA VĂN VÀO ĐÂY NHÉ
-  const MY_FB_LINK = "https://www.facebook.com/";
+  const MY_PHONE = "0399641646";
+  const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
     const saved = localStorage.getItem("novas_theme") || "theme-purple";
@@ -48,35 +48,35 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSendOrder = (e: React.FormEvent) => {
+  const handleCopyPhone = () => {
+    try {
+      navigator.clipboard.writeText(MY_PHONE);
+      setCopiedAlert(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSendEmail = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.phone) {
       alert("Vui lòng điền Họ tên và Số điện thoại!");
       return;
     }
 
-    const message = `✨ [ĐƠN ĐẶT HÀNG NOVAS CREATIVE] ✨\n- Họ tên: ${formData.fullName}\n- SĐT: ${formData.phone}\n- Độ tuổi: ${formData.age}\n- Dịch vụ: ${formData.service}\n- Yêu cầu: ${formData.requirements || "Không có"}`;
-    
-    try {
-      navigator.clipboard.writeText(message);
-      setCopiedAlert(true);
-    } catch (err) {
-      console.log(err);
-    }
+    const subject = encodeURIComponent(`[ĐƠN ĐẶT HÀNG NOVAS CREATIVE] từ ${formData.fullName}`);
+    const body = encodeURIComponent(
+      `✨ THÔNG TIN ĐƠN ĐẶT HÀNG NOVAS CREATIVE ✨\n\n` +
+      `- Họ và tên: ${formData.fullName}\n` +
+      `- Số điện thoại: ${formData.phone}\n` +
+      `- Độ tuổi: ${formData.age}\n` +
+      `- Dịch vụ yêu cầu: ${formData.service}\n` +
+      `- Mô tả chi tiết:\n${formData.requirements || "Không có yêu cầu thêm"}\n\n` +
+      `-----------------------------------------\n` +
+      `Gửi từ Landing Page Novas Creative Studio.`
+    );
 
-    setTimeout(() => {
-      window.open(MY_FB_LINK, "_blank", "noopener,noreferrer");
-    }, 600);
-  };
-
-  const handleDirectChat = () => {
-    const defaultMsg = "Xin chào Novas Creative! Mình muốn tư vấn thiết kế Slide.";
-    try {
-      navigator.clipboard.writeText(defaultMsg);
-    } catch (err) {
-      console.log(err);
-    }
-    window.open(MY_FB_LINK, "_blank", "noopener,noreferrer");
+    window.location.href = `mailto:${MY_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -113,16 +113,6 @@ export default function Home() {
         @keyframes floatOrb {
           0%, 100% { transform: translateY(0px) scale(1); }
           50% { transform: translateY(-40px) scale(1.18); }
-        }
-
-        @keyframes neonPulse {
-          0%, 100% { box-shadow: 0 0 20px var(--primary-glow), inset 0 0 15px var(--primary-glow); }
-          50% { box-shadow: 0 0 45px var(--secondary-glow), inset 0 0 25px var(--secondary-glow); }
-        }
-
-        @keyframes scanline {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(1000%); }
         }
 
         .cyber-grid-bg {
@@ -232,9 +222,9 @@ export default function Home() {
 
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '6px', background: 'rgba(255,255,255,0.05)', padding: '6px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.12)' }}>
-              <button onClick={() => changeTheme('theme-purple')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#8b5cf6', border: 'none', cursor: 'pointer', transition: 'transform 0.2s' }} title="Neon Purple"></button>
-              <button onClick={() => changeTheme('theme-green')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#10b981', border: 'none', cursor: 'pointer', transition: 'transform 0.2s' }} title="Matrix Green"></button>
-              <button onClick={() => changeTheme('theme-blue')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#3b82f6', border: 'none', cursor: 'pointer', transition: 'transform 0.2s' }} title="Cyber Blue"></button>
+              <button onClick={() => changeTheme('theme-purple')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#8b5cf6', border: 'none', cursor: 'pointer' }} title="Neon Purple"></button>
+              <button onClick={() => changeTheme('theme-green')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#10b981', border: 'none', cursor: 'pointer' }} title="Matrix Green"></button>
+              <button onClick={() => changeTheme('theme-blue')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#3b82f6', border: 'none', cursor: 'pointer' }} title="Cyber Blue"></button>
             </div>
 
             <nav className="header-nav" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
@@ -262,7 +252,7 @@ export default function Home() {
         </h1>
 
         <p style={{ color: '#94a3b8', fontSize: '18px', lineHeight: '1.7', maxWidth: '740px', margin: '0 auto 40px' }}>
-          Biến mọi bài thuyết trình thành kiệt tác đồ họa đỉnh cao. Cam kết phản hồi nhanh chóng, hỗ trợ tận tâm trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong> trở lại!
+          Biến mọi bài thuyết trình thành kiệt tác đồ họa đỉnh cao. Không lo đăng nhập rườm rà - Liên hệ trực tiếp qua Zalo hoặc Gmail, phản hồi nhanh chóng trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong>!
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -277,15 +267,15 @@ export default function Home() {
         <div className="card-cyber grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '36px', borderRadius: '24px', textAlign: 'center', gap: '20px' }}>
           <div>
             <div style={{ fontSize: '38px', fontWeight: '900', color: '#fff' }}>≤ 4 Giờ</div>
-            <div style={{ fontSize: '12px', color: 'var(--accent-color)', marginTop: '6px', fontWeight: '900', letterSpacing: '1px' }}>PHẢN HỒI NHANH CHÓNG</div>
+            <div style={{ fontSize: '12px', color: 'var(--accent-color)', marginTop: '6px', fontWeight: '900', letterSpacing: '1px' }}>PHẢN HỒI THẦN TỐC</div>
           </div>
           <div>
             <div style={{ fontSize: '38px', fontWeight: '900', color: '#fff' }}>48 Giờ</div>
             <div style={{ fontSize: '12px', color: 'var(--accent-color)', marginTop: '6px', fontWeight: '900', letterSpacing: '1px' }}>HOÀN THÀNH SIÊU TỐC</div>
           </div>
           <div>
-            <div style={{ fontSize: '38px', fontWeight: '900', color: '#fff' }}>Đỉnh Cao</div>
-            <div style={{ fontSize: '12px', color: 'var(--accent-color)', marginTop: '6px', fontWeight: '900', letterSpacing: '1px' }}>HIỆU ỨNG MORPH MƯỢT MÀ</div>
+            <div style={{ fontSize: '38px', fontWeight: '900', color: '#fff' }}>100% Không Lỗi</div>
+            <div style={{ fontSize: '12px', color: 'var(--accent-color)', marginTop: '6px', fontWeight: '900', letterSpacing: '1px' }}>KHÔNG BẮT ĐĂNG NHẬP</div>
           </div>
         </div>
       </section>
@@ -316,39 +306,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Detailed Guide Section (Hướng dẫn chat chi tiết, phản hồi trong 4 tiếng) */}
+      {/* Detailed Guide Section */}
       <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '34px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px' }}>
-          📖 HƯỚNG DẪN KẾT NỐI VỚI NOVAS STUDIO
+          📖 HƯỚNG DẪN LIÊN HỆ KHÔNG BỊ LỖI ĐĂNG NHẬP
         </h2>
-        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Cực kỳ đơn giản - Bạn muốn nói gì cũng được, chúng tôi sẽ phản hồi trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong> trở lại!</p>
+        <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '48px', fontSize: '15px' }}>Giao tiếp mượt mà, cam kết phản hồi trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong>:</p>
 
         <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' }}>
           <div className="card-cyber" style={{ padding: '36px', borderRadius: '26px' }}>
-            <div style={{ fontSize: '30px', marginBottom: '16px' }}>💬 Cách 1: Chat Trực Tiếp Không Cần Form</div>
+            <div style={{ fontSize: '30px', marginBottom: '16px' }}>📱 Cách 1: Liên Hệ Zalo Trực Tiếp</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.9', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
-              <li><strong>Bước 1:</strong> Bấm vào nút <strong style={{ color: '#fff' }}>"VÀO TRANG FACEBOOK CỦA VĂN"</strong> ở khung bên dưới.</li>
-              <li><strong>Bước 2:</strong> Nhắn bất cứ nội dung gì bạn muốn (Ví dụ: <em>"Ê Văn ơi làm giúp mình slide môn Sử chủ đề Quang Trung với!"</em>).</li>
-              <li><strong>Bước 3:</strong> Ngồi chờ một chút, Novas Studio sẽ đọc tin nhắn và <strong>phản hồi lại bạn trong vòng nhiều nhất 4 tiếng</strong> trở lại!</li>
+              <li><strong>Bước 1:</strong> Bấm nút sao chép số Zalo <strong style={{ color: 'var(--accent-color)' }}>0399.641.646</strong> ở khung bên dưới.</li>
+              <li><strong>Bước 2:</strong> Mở ứng dụng Zalo trên điện thoại hoặc máy tính, tìm kiếm số điện thoại để nhắn tin cho Văn.</li>
+              <li><strong>Bước 3:</strong> Nói gì cũng được (yêu cầu bài tập, slide...), Văn sẽ tiếp nhận và phản hồi trong vòng <strong style={{ color: '#fff' }}>≤ 4 giờ</strong>!</li>
             </ul>
           </div>
 
           <div className="card-cyber" style={{ padding: '36px', borderRadius: '26px' }}>
-            <div style={{ fontSize: '30px', marginBottom: '16px' }}>📋 Cách 2: Điền Đơn Nhanh (Khuyên Dùng)</div>
+            <div style={{ fontSize: '30px', marginBottom: '16px' }}>📧 Cách 2: Gửi Đơn Qua Gmail</div>
             <ul style={{ color: '#94a3b8', lineHeight: '1.9', fontSize: '14px', paddingLeft: '20px', margin: 0 }}>
-              <li><strong>Bước 1:</strong> Điền đầy đủ Họ tên, SĐT và yêu cầu cụ thể vào bảng đặt hàng bên dưới.</li>
-              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"SAO CHÉP & GỬI QUA FACEBOOK"</strong>. Đơn hàng đã được lưu vào bộ nhớ máy bạn.</li>
-              <li><strong>Bước 3:</strong> Facebook mở ra, chỉ cần bấm <strong>Dán (Paste)</strong> đoạn vừa copy vào khung chat và gửi. Novas Studio sẽ tiếp nhận và chốt đơn trong <strong>≤ 4 giờ</strong>!</li>
+              <li><strong>Bước 1:</strong> Điền thông tin yêu cầu vào form đặt hàng bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#fff' }}>"GỬI ĐƠN QUA GMAIL"</strong>. Ứng dụng email tự động mở ra với hòm thư <strong style={{ color: '#fff' }}>Cubergeniushuyvan@gmail.com</strong>.</li>
+              <li><strong>Bước 3:</strong> Bấm Gửi và chờ phản hồi qua email trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong>!</li>
             </ul>
           </div>
         </div>
       </section>
 
-      {/* Order Form & Direct Chat Section */}
+      {/* Order Form & Direct Contact Section */}
       <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px', maxWidth: '680px', margin: '0 auto' }}>
         <div className="card-cyber" style={{ padding: '40px', borderRadius: '30px', boxShadow: '0 25px 60px rgba(0,0,0,0.9)' }}>
           
-          {/* PHẦN CHAT TRỰC TIẾP NỔI BẬT IN ĐẬM */}
+          {/* PHẦN HIỂN THỊ SỐ ZALO VÀ GMAIL NỔI BẬT */}
           <div style={{
             background: 'rgba(192, 132, 252, 0.1)',
             border: '2px solid var(--accent-color)',
@@ -359,27 +349,39 @@ export default function Home() {
             boxShadow: '0 0 30px rgba(192,132,252,0.25)'
           }}>
             <h3 style={{ fontSize: '21px', fontWeight: '900', color: '#fff', margin: '0 0 8px 0', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              ⚡ NHẮN TIN TRỰC TIẾP QUA FACEBOOK
+              ⚡ LIÊN HỆ TRỰC TIẾP KHÔNG LO ĐĂNG NHẬP
             </h3>
-            <p style={{ color: '#cbd5e1', fontSize: '14px', margin: '0 0 18px 0', fontWeight: '600', lineHeight: '1.6' }}>
-              Nói gì cũng được - Hỗ trợ và phản hồi nhiệt tình trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong> trở lại!
+            <p style={{ color: '#cbd5e1', fontSize: '14px', margin: '0 0 16px 0', fontWeight: '600', lineHeight: '1.6' }}>
+              Zalo/SĐT: <strong style={{ color: 'var(--accent-color)', fontSize: '18px' }}>0399.641.646</strong><br />
+              Gmail: <strong style={{ color: 'var(--accent-color)' }}>Cubergeniushuyvan@gmail.com</strong><br />
+              Phản hồi cực nhanh trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong>!
             </p>
-            <button onClick={handleDirectChat} className="direct-chat-btn" style={{
-              width: '100%', padding: '18px', borderRadius: '14px',
-              color: '#fff', fontWeight: '900', fontSize: '16px', letterSpacing: '1px',
+            <button onClick={handleCopyPhone} className="direct-chat-btn" style={{
+              width: '100%', padding: '16px', borderRadius: '14px',
+              color: '#fff', fontWeight: '900', fontSize: '15px', letterSpacing: '1px',
               cursor: 'pointer', textTransform: 'uppercase'
             }}>
-              💬 VÀO TRANG FACEBOOK CỦA VĂN
+              📋 SAO CHÉP SỐ ZALO NHẮN TIN NGAY
             </button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', margin: '30px 0', gap: '16px' }}>
+          {copiedAlert && (
+            <div style={{
+              marginBottom: '25px', padding: '14px', borderRadius: '12px',
+              background: 'rgba(16, 185, 129, 0.2)', border: '1px solid #10b981', color: '#34d399',
+              textAlign: 'center', fontSize: '13px', fontWeight: '800'
+            }}>
+              🎉 ĐÃ SAO CHÉP SỐ ZALO: 0399641646! Hãy mở Zalo lên và dán vào ô tìm kiếm nhé!
+            </div>
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0 30px 0', gap: '16px' }}>
             <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-            <span style={{ fontSize: '12px', fontWeight: '900', color: '#64748b', letterSpacing: '1.5px' }}>HOẶC ĐIỀN ĐƠN ĐẶT HÀNG (48H)</span>
+            <span style={{ fontSize: '12px', fontWeight: '900', color: '#64748b', letterSpacing: '1.5px' }}>HOẶC ĐIỀN ĐƠN GỬI QUA GMAIL (48H)</span>
             <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
           </div>
 
-          <form onSubmit={handleSendOrder} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <form onSubmit={handleSendEmail} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>HỌ VÀ TÊN *</label>
               <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input" style={{ width: '100%', padding: '15px 18px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
@@ -415,21 +417,9 @@ export default function Home() {
               cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase',
               background: 'linear-gradient(135deg, #00c6ff, #0072ff)'
             }}>
-              📋 SAO CHÉP & GỬI ĐƠN QUA FACEBOOK
+              📧 GỬI ĐƠN QUA GMAIL
             </button>
           </form>
-
-          {copiedAlert && (
-            <div style={{
-              marginTop: '20px', padding: '18px', borderRadius: '14px',
-              background: 'rgba(16, 185, 129, 0.18)', border: '1px solid #10b981', color: '#34d399',
-              textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6',
-              boxShadow: '0 0 25px rgba(16,185,129,0.3)'
-            }}>
-              🎉 ĐÃ SAO CHÉP ĐƠN HÀNG THÀNH CÔNG!<br />
-              Trang Facebook của Văn đang mở lên, bạn chỉ cần Dán (Paste) đơn vào khung chat. Novas Studio sẽ phản hồi trong vòng <strong style={{ color: '#fff' }}>tối đa 4 tiếng</strong>!
-            </div>
-          )}
         </div>
       </section>
 
