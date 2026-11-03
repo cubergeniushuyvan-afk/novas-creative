@@ -90,12 +90,11 @@ export default function Home() {
       transition: 'all 0.5s ease',
       position: 'relative'
     }}>
-      <style jsx global>{`
+      <style>{`
         :root {
           --primary-glow: #a855f7;
           --secondary-glow: #ec4899;
           --accent-cyan: #06b6d4;
-          --bright-bg: rgba(255, 255, 255, 0.04);
         }
         .theme-purple {
           --primary-glow: #a855f7;
@@ -122,11 +121,6 @@ export default function Home() {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
-        }
-
-        @keyframes pulseBright {
-          0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 25px var(--primary-glow)); }
-          50% { opacity: 0.95; filter: drop-shadow(0 0 45px var(--secondary-glow)); }
         }
 
         .hero-title {
@@ -231,4 +225,215 @@ export default function Home() {
             fontSize: '22px', fontWeight: '900', letterSpacing: '2px',
             background: 'linear-gradient(90deg, #ffffff, var(--accent-cyan))',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            display: 'flex', alignItems: 'center', gap: '
+            display: 'flex', alignItems: 'center', gap: '10px'
+          }}>
+            <span style={{ fontSize: '24px' }}>⚡</span> NOVAS CREATIVE
+          </div>
+
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.06)', padding: '6px 10px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <button onClick={() => changeTheme('theme-purple')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'linear-gradient(135deg, #a855f7, #ec4899)', border: 'none', cursor: 'pointer' }} title="Neon Violet"></button>
+              <button onClick={() => changeTheme('theme-green')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'linear-gradient(135deg, #10b981, #06b6d4)', border: 'none', cursor: 'pointer' }} title="Cyber Emerald"></button>
+              <button onClick={() => changeTheme('theme-blue')} style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', border: 'none', cursor: 'pointer' }} title="Electric Sapphire"></button>
+            </div>
+
+            <nav className="header-nav" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+              <a href="#services" style={{ color: '#cbd5e1', textDecoration: 'none', fontSize: '13px', fontWeight: '800', letterSpacing: '1px' }}>DỊCH VỤ</a>
+              <a href="#guide" style={{ color: '#cbd5e1', textDecoration: 'none', fontSize: '13px', fontWeight: '800', letterSpacing: '1px' }}>HƯỚNG DẪN</a>
+              <a href="#order" style={{ color: '#cbd5e1', textDecoration: 'none', fontSize: '13px', fontWeight: '800', letterSpacing: '1px' }}>ĐẶT HÀNG</a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Showcase */}
+      <section className="reveal mobile-padding" style={{ padding: '110px 24px 70px', textAlign: 'center', maxWidth: '1050px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 24px', borderRadius: '30px',
+          background: 'rgba(255,255,255,0.06)', border: '1px solid var(--accent-cyan)',
+          color: 'var(--accent-cyan)', fontSize: '12px', fontWeight: '900', letterSpacing: '2px', marginBottom: '28px', textTransform: 'uppercase'
+        }}>
+          <span>🚀</span> THIẾT KẾ SLIDE & GIÁO ÁN ĐIỆN TỬ SỐ 1 VIỆT NAM
+        </div>
+
+        <h1 className="hero-title" style={{ fontSize: '64px', fontWeight: '900', lineHeight: '1.12', margin: '0 0 24px 0', letterSpacing: '-1.5px' }}>
+          Ý TƯỞNG HỌC ĐƯỜNG.<br />TRÌNH CHIẾU CỰC KÌ MẠNH MẼ.
+        </h1>
+
+        <p style={{ color: '#94a3b8', fontSize: '19px', lineHeight: '1.7', maxWidth: '750px', margin: '0 auto 40px' }}>
+          Biến các trang thuyết trình khô khan thành kiệt tác đồ họa sống động. Không lo lỗi đăng nhập – Phản hồi tận tâm trong vòng <strong style={{ color: '#ffffff' }}>tối đa 4 tiếng</strong> trở lại!
+        </p>
+
+        <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="#order" className="glow-btn-primary" style={{ color: '#ffffff', textDecoration: 'none', padding: '18px 42px', borderRadius: '16px', fontSize: '15px', fontWeight: '900', letterSpacing: '1px' }}>
+            ⚡ ĐẶT HÀNG SIÊU TỐC (HOÀN THÀNH 48H)
+          </a>
+        </div>
+      </section>
+
+      {/* Stats Counter Bar */}
+      <section className="reveal mobile-padding" style={{ padding: '10px 24px 60px', maxWidth: '1050px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div className="card-cyber-bright grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '36px', borderRadius: '28px', textAlign: 'center', gap: '24px' }}>
+          <div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#ffffff', letterSpacing: '-1px' }}>≤ 4 Giờ</div>
+            <div style={{ fontSize: '13px', color: 'var(--accent-cyan)', marginTop: '4px', fontWeight: '900', letterSpacing: '1px' }}>PHẢN HỒI THẦN TỐC</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#ffffff', letterSpacing: '-1px' }}>48 Giờ</div>
+            <div style={{ fontSize: '13px', color: 'var(--accent-cyan)', marginTop: '4px', fontWeight: '900', letterSpacing: '1px' }}>HOÀN THÀNH BÀI GIẢNG</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '42px', fontWeight: '900', color: '#ffffff', letterSpacing: '-1px' }}>100%</div>
+            <div style={{ fontSize: '13px', color: 'var(--accent-cyan)', marginTop: '4px', fontWeight: '900', letterSpacing: '1px' }}>HIỆU ỨNG MORPH MƯỢT MÀ</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section id="services" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <h2 style={{ fontSize: '36px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px', color: '#ffffff' }}>
+          ⚡ DỊCH VỤ THIẾT KẾ DẪN ĐẦU
+        </h2>
+        <p style={{ textAlign: 'center', color: '#94a3b8', marginBottom: '52px', fontSize: '16px' }}>Đột phá mọi giới hạn hình ảnh học đường & sư phạm chuyên nghiệp.</p>
+
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px' }}>
+          <div className="card-cyber-bright" style={{ padding: '42px', borderRadius: '28px' }}>
+            <div style={{ fontSize: '42px', marginBottom: '18px' }}>💻</div>
+            <h3 style={{ fontSize: '24px', fontWeight: '900', margin: '0 0 14px 0', color: '#ffffff' }}>Slide PowerPoint Học Đường</h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
+              Toán, Văn, Sử, Địa, Lý, Hóa, Sinh, Tiếng Anh... Tích hợp hiệu ứng chuyển động Morph hiện đại, đồ họa trực quan giúp bạn tỏa sáng mọi buổi thuyết trình.
+            </p>
+          </div>
+
+          <div className="card-cyber-bright" style={{ padding: '42px', borderRadius: '28px' }}>
+            <div style={{ fontSize: '42px', marginBottom: '18px' }}>📚</div>
+            <h3 style={{ fontSize: '24px', fontWeight: '900', margin: '0 0 14px 0', color: '#ffffff' }}>Giáo Án Điện Tử Sư Phạm</h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
+              Bài giảng trực quan sinh động dành riêng cho thầy cô dự giờ, thi giáo viên dạy giỏi. Bố cục logic, khoa học và cực kỳ ấn tượng.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Step-by-Step Guide */}
+      <section id="guide" className="reveal mobile-padding" style={{ padding: '60px 24px', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <h2 style={{ fontSize: '36px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', letterSpacing: '1px', color: '#ffffff' }}>
+          📖 LIÊN HỆ ĐƠN GIẢN - 100% KHÔNG LỖI
+        </h2>
+        <p style={{ textAlign: 'center', color: '#94a3b8', marginBottom: '52px', fontSize: '16px' }}>Chủ động kết nối nhịp nhàng, phản hồi trong vòng <strong style={{ color: '#ffffff' }}>tối đa 4 tiếng</strong>:</p>
+
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px' }}>
+          <div className="card-cyber-bright" style={{ padding: '38px', borderRadius: '28px' }}>
+            <div style={{ fontSize: '28px', marginBottom: '16px', fontWeight: '900', color: 'var(--accent-cyan)' }}>📱 Cách 1: Qua Zalo Trực Tiếp</div>
+            <ul style={{ color: '#cbd5e1', lineHeight: '1.9', fontSize: '15px', paddingLeft: '22px', margin: 0 }}>
+              <li><strong>Bước 1:</strong> Bấm nút sao chép số Zalo <strong style={{ color: 'var(--accent-cyan)' }}>0399.641.646</strong> bên dưới.</li>
+              <li><strong>Bước 2:</strong> Mở ứng dụng Zalo trên máy, tìm kiếm số để mở ô chat với Văn.</li>
+              <li><strong>Bước 3:</strong> Nhắn bất cứ điều gì bạn muốn, Văn sẽ tiếp nhận và chốt đơn trong <strong style={{ color: '#ffffff' }}>≤ 4 giờ</strong>!</li>
+            </ul>
+          </div>
+
+          <div className="card-cyber-bright" style={{ padding: '38px', borderRadius: '28px' }}>
+            <div style={{ fontSize: '28px', marginBottom: '16px', fontWeight: '900', color: 'var(--accent-cyan)' }}>📧 Cách 2: Gửi Đơn Tự Động Qua Gmail</div>
+            <ul style={{ color: '#cbd5e1', lineHeight: '1.9', fontSize: '15px', paddingLeft: '22px', margin: 0 }}>
+              <li><strong>Bước 1:</strong> Điền đầy đủ thông tin yêu cầu vào form bên dưới.</li>
+              <li><strong>Bước 2:</strong> Bấm nút <strong style={{ color: '#ffffff' }}>"GỬI ĐƠN QUA GMAIL"</strong>. Ứng dụng email tự động điền sẵn nội dung.</li>
+              <li><strong>Bước 3:</strong> Bấm Gửi thư và nhận phản hồi chu đáo qua email trong vòng <strong style={{ color: '#ffffff' }}>tối đa 4 tiếng</strong>!</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Direct Action & Form Area */}
+      <section id="order" className="reveal mobile-padding" style={{ padding: '80px 24px 100px', maxWidth: '720px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div className="gradient-border-box" style={{ padding: '44px', boxShadow: '0 30px 70px rgba(0,0,0,0.9)' }}>
+          
+          {/* Quick Contact Banner */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '28px',
+            borderRadius: '20px',
+            textAlign: 'center',
+            marginBottom: '38px'
+          }}>
+            <h3 style={{ fontSize: '22px', fontWeight: '900', color: '#ffffff', margin: '0 0 10px 0', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              ⚡ CHAT TRỰC TIẾP KHÔNG LO ĐĂNG NHẬP
+            </h3>
+            <p style={{ color: '#cbd5e1', fontSize: '14px', margin: '0 0 20px 0', fontWeight: '600', lineHeight: '1.6' }}>
+              Zalo/SĐT: <strong style={{ color: 'var(--accent-cyan)', fontSize: '18px' }}>0399.641.646</strong><br />
+              Gmail: <strong style={{ color: 'var(--accent-cyan)' }}>Cubergeniushuyvan@gmail.com</strong><br />
+              Phản hồi thần tốc trong vòng <strong style={{ color: '#ffffff' }}>tối đa 4 tiếng</strong>!
+            </p>
+            <button onClick={handleCopyPhone} className="glow-btn-primary" style={{
+              width: '100%', padding: '18px', borderRadius: '14px', border: 'none',
+              color: '#ffffff', fontWeight: '900', fontSize: '15px', letterSpacing: '1px',
+              cursor: 'pointer', textTransform: 'uppercase'
+            }}>
+              📋 SAO CHÉP SỐ ZALO NHẮN TIN NGAY
+            </button>
+          </div>
+
+          {copiedAlert && (
+            <div style={{
+              marginBottom: '26px', padding: '16px', borderRadius: '14px',
+              background: 'rgba(16, 185, 129, 0.2)', border: '1px solid #10b981', color: '#34d399',
+              textAlign: 'center', fontSize: '14px', fontWeight: '800'
+            }}>
+              🎉 ĐÃ SAO CHÉP SỐ ZALO: 0399641646! Hãy mở Zalo lên và dán vào ô tìm kiếm để chat với Văn nhé!
+            </div>
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', margin: '24px 0 32px 0', gap: '16px' }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.12)' }}></div>
+            <span style={{ fontSize: '12px', fontWeight: '900', color: '#64748b', letterSpacing: '1.5px' }}>HOẶC ĐIỀN ĐƠN GỬI QUA GMAIL (48H)</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.12)' }}></div>
+          </div>
+
+          <form onSubmit={handleSendEmail} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>HỌ VÀ TÊN *</label>
+              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Nhập họ tên của bạn" className="cyber-input-bright" style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box' }} />
+            </div>
+
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>SỐ ĐIỆN THOẠI *</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="cyber-input-bright" style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>ĐỘ TUỔI</label>
+                <input type="number" name="age" value={formData.age} onChange={handleChange} className="cyber-input-bright" style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box' }} />
+              </div>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>LOẠI DỊCH VỤ</label>
+              <select name="service" value={formData.service} onChange={handleChange} className="cyber-input-bright" style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box' }}>
+                <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
+                <option value="Giáo án điện tử">Giáo án điện tử</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#cbd5e1', marginBottom: '8px', letterSpacing: '0.5px' }}>MÔ TẢ CHI TIẾT YÊU CẦU</label>
+              <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Mô tả môn học, chủ đề, số lượng slide mong muốn..." className="cyber-input-bright" style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+            </div>
+
+            <button type="submit" className="glow-btn-primary" style={{
+              width: '100%', padding: '20px', border: 'none', borderRadius: '16px',
+              color: '#ffffff', fontWeight: '900', fontSize: '16px', letterSpacing: '1.5px',
+              cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
+            }}>
+              📧 GỬI ĐƠN QUA GMAIL
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '45px 24px', textAlign: 'center', color: '#64748b', fontSize: '13px', position: 'relative', zIndex: 1 }}>
+        <p>© 2026 NOVAS CREATIVE STUDIO. ALL RIGHTS RESERVED. DESIGNED FOR CEO VĂN.</p>
+      </footer>
+    </div>
+  );
+}
