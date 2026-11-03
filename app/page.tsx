@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -16,18 +16,46 @@ export default function Home() {
   const [lang, setLang] = useState<"vi" | "en">("vi");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isRotating, setIsRotating] = useState(false);
+  const [isLangFading, setIsLangFading] = useState(false);
 
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
+  useEffect(() => {
+    // Hiệu ứng lướt mượt mà không cà dật: Phần tới sáng dần, phần cũ mờ dịu đi
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("section-active");
+            entry.target.classList.remove("section-inactive");
+          } else {
+            entry.target.classList.add("section-inactive");
+            entry.target.classList.remove("section-active");
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: "-50px 0px -50px 0px" }
+    );
+
+    const sections = document.querySelectorAll(".smooth-fade-section");
+    sections.forEach((sec) => observer.observe(sec));
+
+    return () => observer.disconnect();
+  }, []);
+
   const toggleLanguage = () => {
-    setLang((prev) => (prev === "vi" ? "en" : "vi"));
+    setIsLangFading(true);
+    setTimeout(() => {
+      setLang((prev) => (prev === "vi" ? "en" : "vi"));
+      setIsLangFading(false);
+    }, 250);
   };
 
   const toggleTheme = () => {
     setIsRotating(true);
-    setTimeout(() => setIsRotating(false), 600);
+    setTimeout(() => setIsRotating(false), 550);
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
@@ -162,6 +190,39 @@ export default function Home() {
       transition: 'background-color 0.4s ease, color 0.4s ease'
     }}>
       <style>{`
+        @keyframes floatGentle {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .floating-deco {
+          position: absolute;
+          pointer-events: none;
+          z-index: 0;
+          animation: floatGentle 5s ease-in-out infinite;
+          opacity: 0.2;
+        }
+
+        /* Hiệu ứng lướt mượt mà: Lướt tới sáng rõ, lướt qua mờ dịu từ từ */
+        .smooth-fade-section {
+          opacity: 0.35;
+          transform: translateY(30px);
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .smooth-fade-section.section-active {
+          opacity: 1;
+          transform: translateY(0px);
+        }
+        .smooth-fade-section.section-inactive {
+          opacity: 0.4;
+          transform: translateY(15px);
+        }
+
+        .lang-transition-wrap {
+          opacity: ${isLangFading ? 0 : 1};
+          transition: opacity 0.25s ease-in-out;
+        }
+
         .hero-title-clean {
           font-size: 48px;
           font-weight: 800;
@@ -235,6 +296,10 @@ export default function Home() {
         }
       `}</style>
 
+      {/* Biểu tượng Mũ tốt nghiệp 🎓 và Bút chì ✏️ lơ lửng tinh tế hai bên */}
+      <div className="floating-deco" style={{ top: '120px', left: '5%', fontSize: '42px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco" style={{ top: '160px', right: '5%', fontSize: '42px', animationDelay: '1.5s' }}>✏️</div>
+
       {/* Header Cố Định Mượt Mà */}
       <header style={{
         borderBottom: `1px solid ${cardBorder}`,
@@ -257,7 +322,7 @@ export default function Home() {
             <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '13.5px', fontWeight: '700' }}>{currentText.navOrder}</a>
           </nav>
 
-          {/* Nút điều khiển gọn gàng: Mặt trời/Mặt trăng xoay 180 độ & Ngôn ngữ */}
+          {/* Nút điều khiển: Globe đổi ngôn ngữ & Mặt trời/Mặt trăng xoay 180 độ */}
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             
             <button onClick={toggleLanguage} className="control-icon-btn" title="Chuyển ngôn ngữ">
@@ -278,123 +343,127 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section: Tiêu đề lên trước, khẩu hiệu nằm thanh thoát ngay bên dưới không khung viền */}
-      <section id="about" style={{ padding: '80px 24px 50px', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+      {/* Nội dung toàn trang bọc trong lớp mượt mà lang-transition-wrap */}
+      <div className="lang-transition-wrap">
         
-        <h1 className="hero-title-clean" style={{ margin: '0 0 24px 0', whiteSpace: 'pre-line' }}>
-          {currentText.heroTitle}
-        </h1>
-
-        <p style={{
-          color: textSub, fontSize: '16px', lineHeight: '1.8', maxWidth: '750px', margin: '0 auto 40px',
-          fontStyle: 'italic', fontWeight: '500'
-        }}>
-          "{currentText.slogan}"
-        </p>
-
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <a href="#order" className="btn-primary-clean" style={{ textDecoration: 'none', padding: '16px 36px', borderRadius: '14px', fontSize: '15px', fontWeight: '800' }}>
-            {currentText.btnExplore}
-          </a>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" style={{ padding: '40px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', color: textMain }}>
-          {currentText.servicesTitle}
-        </h2>
-        <p style={{ textAlign: 'center', color: textSub, marginBottom: '35px', fontSize: '14.5px' }}>{currentText.servicesDesc}</p>
-
-        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
+        {/* Hero Section */}
+        <section id="about" className="smooth-fade-section" style={{ padding: '90px 24px 60px', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
           
-          <div className="clean-card" style={{ padding: '36px' }}>
-            <div style={{ fontSize: '36px', marginBottom: '14px' }}>💻</div>
-            <h3 style={{ fontSize: '19px', fontWeight: '900', margin: '0 0 10px 0', color: textMain }}>{currentText.service1Title}</h3>
-            <p style={{ color: textSub, lineHeight: '1.7', fontSize: '14px', margin: 0 }}>
-              {currentText.service1Desc}
-            </p>
-          </div>
+          <h1 className="hero-title-clean" style={{ margin: '0 0 24px 0', whiteSpace: 'pre-line' }}>
+            {currentText.heroTitle}
+          </h1>
 
-          <div className="clean-card" style={{ padding: '36px' }}>
-            <div style={{ fontSize: '36px', marginBottom: '14px' }}>📚</div>
-            <h3 style={{ fontSize: '19px', fontWeight: '900', margin: '0 0 10px 0', color: textMain }}>{currentText.service2Title}</h3>
-            <p style={{ color: textSub, lineHeight: '1.7', fontSize: '14px', margin: 0 }}>
-              {currentText.service2Desc}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-      <section id="order" style={{ padding: '40px 24px 90px', maxWidth: '760px', margin: '0 auto' }}>
-        <div className="clean-card" style={{ padding: '42px' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', color: textMain }}>
-            {currentText.orderTitle}
-          </h2>
-          <p style={{ color: textSub, fontSize: '14px', textAlign: 'center', marginBottom: '32px' }}>
-            {currentText.orderDesc}
+          <p style={{
+            color: textSub, fontSize: '16.5px', lineHeight: '1.85', maxWidth: '750px', margin: '0 auto 40px',
+            fontStyle: 'italic', fontWeight: '500'
+          }}>
+            "{currentText.slogan}"
           </p>
 
-          <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelName}</label>
-              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
-            </div>
-
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelPhone}</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelAge}</label>
-                <input type="number" name="age" value={formData.age} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
-              </div>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelService}</label>
-              <select name="service" value={formData.service} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }}>
-                <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
-                <option value="Giáo án điện tử">Giáo án điện tử</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelReq}</label>
-              <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
-            </div>
-
-            <button type="submit" disabled={loading} className="btn-primary-clean" style={{
-              width: '100%', padding: '16px', border: 'none', borderRadius: '12px',
-              fontWeight: '900', fontSize: '14px', cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
-            }}>
-              {loading ? currentText.btnSubmitting : currentText.btnSubmit}
-            </button>
-          </form>
-
-          {/* Dòng liên hệ trực tiếp Zalo */}
-          <div style={{
-            marginTop: '25px', padding: '16px', borderRadius: '12px',
-            background: isDark ? 'rgba(30, 41, 59, 0.5)' : '#f8fafc', border: `1px solid ${cardBorder}`,
-            textAlign: 'center', fontSize: '13px', color: textSub, lineHeight: '1.6'
-          }}>
-            💬 {currentText.zaloContactText} <strong style={{ color: '#2563eb', fontSize: '14.5px', fontWeight: '900' }}>{MY_PHONE}</strong> {currentText.zaloTime}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <a href="#order" className="btn-primary-clean" style={{ textDecoration: 'none', padding: '16px 36px', borderRadius: '14px', fontSize: '15px', fontWeight: '800' }}>
+              {currentText.btnExplore}
+            </a>
           </div>
+        </section>
 
-          {successMsg && (
-            <div style={{
-              marginTop: '20px', padding: '16px', borderRadius: '12px',
-              background: isDark ? 'rgba(22, 101, 52, 0.4)' : '#dcfce7', border: '1px solid #86efac', color: isDark ? '#4ade80' : '#166534',
-              textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6'
-            }}>
-              {currentText.successText}<br />
-              {currentText.successSub}
+        {/* Services Section */}
+        <section id="services" className="smooth-fade-section" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', color: textMain }}>
+            {currentText.servicesTitle}
+          </h2>
+          <p style={{ textAlign: 'center', color: textSub, marginBottom: '40px', fontSize: '14.5px' }}>{currentText.servicesDesc}</p>
+
+          <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
+            
+            <div className="clean-card" style={{ padding: '36px' }}>
+              <div style={{ fontSize: '36px', marginBottom: '14px' }}>💻</div>
+              <h3 style={{ fontSize: '19px', fontWeight: '900', margin: '0 0 10px 0', color: textMain }}>{currentText.service1Title}</h3>
+              <p style={{ color: textSub, lineHeight: '1.7', fontSize: '14px', margin: 0 }}>
+                {currentText.service1Desc}
+              </p>
             </div>
-          )}
-        </div>
-      </section>
+
+            <div className="clean-card" style={{ padding: '36px' }}>
+              <div style={{ fontSize: '36px', marginBottom: '14px' }}>📚</div>
+              <h3 style={{ fontSize: '19px', fontWeight: '900', margin: '0 0 10px 0', color: textMain }}>{currentText.service2Title}</h3>
+              <p style={{ color: textSub, lineHeight: '1.7', fontSize: '14px', margin: 0 }}>
+                {currentText.service2Desc}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
+        <section id="order" className="smooth-fade-section" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
+          <div className="clean-card" style={{ padding: '42px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', color: textMain }}>
+              {currentText.orderTitle}
+            </h2>
+            <p style={{ color: textSub, fontSize: '14px', textAlign: 'center', marginBottom: '32px' }}>
+              {currentText.orderDesc}
+            </p>
+
+            <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelName}</label>
+                <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
+              </div>
+
+              <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelPhone}</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelAge}</label>
+                  <input type="number" name="age" value={formData.age} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }} />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelService}</label>
+                <select name="service" value={formData.service} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', boxSizing: 'border-box' }}>
+                  <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
+                  <option value="Giáo án điện tử">Giáo án điện tử</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '6px' }}>{currentText.labelReq}</label>
+                <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="input-box-clean" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '14px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+              </div>
+
+              <button type="submit" disabled={loading} className="btn-primary-clean" style={{
+                width: '100%', padding: '16px', border: 'none', borderRadius: '12px',
+                fontWeight: '900', fontSize: '14px', cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase'
+              }}>
+                {loading ? currentText.btnSubmitting : currentText.btnSubmit}
+              </button>
+            </form>
+
+            <div style={{
+              marginTop: '25px', padding: '16px', borderRadius: '12px',
+              background: isDark ? 'rgba(30, 41, 59, 0.5)' : '#f8fafc', border: `1px solid ${cardBorder}`,
+              textAlign: 'center', fontSize: '13px', color: textSub, lineHeight: '1.6'
+            }}>
+              💬 {currentText.zaloContactText} <strong style={{ color: '#2563eb', fontSize: '14.5px', fontWeight: '900' }}>{MY_PHONE}</strong> {currentText.zaloTime}
+            </div>
+
+            {successMsg && (
+              <div style={{
+                marginTop: '20px', padding: '16px', borderRadius: '12px',
+                background: isDark ? 'rgba(22, 101, 52, 0.4)' : '#dcfce7', border: '1px solid #86efac', color: isDark ? '#4ade80' : '#166534',
+                textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6'
+              }}>
+                {currentText.successText}<br />
+                {currentText.successSub}
+              </div>
+            )}
+          </div>
+        </section>
+
+      </div>
 
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${cardBorder}`, padding: '35px 24px', textAlign: 'center', color: textSub, fontSize: '13px', background: bgMain, position: 'relative', zIndex: 1 }}>
