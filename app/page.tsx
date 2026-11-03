@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 
 export default function Home() {
-  // State quản lý form
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -14,7 +13,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false);
 
-  // State tính năng cao cấp: Đổi ngôn ngữ (VI / EN) & Chế độ Sáng / Tối
   const [lang, setLang] = useState<"vi" | "en">("vi");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isFading, setIsFading] = useState(false);
@@ -44,7 +42,6 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Hàm chuyển đổi ngôn ngữ mượt mà
   const toggleLanguage = () => {
     setIsFading(true);
     setTimeout(() => {
@@ -53,7 +50,6 @@ export default function Home() {
     }, 350);
   };
 
-  // Hàm đổi chế độ Sáng / Tối (Dark/Light mode)
   const toggleTheme = () => {
     setIsRotating(true);
     setTimeout(() => setIsRotating(false), 500);
@@ -110,11 +106,10 @@ export default function Home() {
     }, 1200);
   };
 
-  // Từ điển đa ngôn ngữ (Tiếng Việt & Tiếng Anh chuẩn xịn)
   const t = {
     vi: {
       brand: "NOVAS CREATIVE",
-      tagline: "ACADEMIC STUDIO",
+      tagline: "ACADEMIC LAB",
       navAbout: "GIỚI THIỆU",
       navServices: "DỊCH VỤ",
       navOrder: "ĐẶT ĐƠN",
@@ -144,7 +139,7 @@ export default function Home() {
     },
     en: {
       brand: "NOVAS CREATIVE",
-      tagline: "ACADEMIC STUDIO",
+      tagline: "ACADEMIC LAB",
       navAbout: "ABOUT",
       navServices: "SERVICES",
       navOrder: "ORDER",
@@ -176,15 +171,14 @@ export default function Home() {
 
   const currentText = t[lang];
 
-  // Cấu hình màu sắc theo chế độ Light / Dark
   const isDark = theme === "dark";
-  const bgMain = isDark ? "#0a0f1d" : "#f8fafc";
+  const bgMain = isDark ? "#060913" : "#f8fafc";
   const textMain = isDark ? "#f8fafc" : "#0f172a";
-  const cardBg = isDark ? "rgba(15, 23, 42, 0.85)" : "#ffffff";
-  const cardBorder = isDark ? "rgba(59, 130, 246, 0.25)" : "#e2e8f0";
-  const textSub = isDark ? "#94a3b8" : "#64748b";
-  const inputBg = isDark ? "rgba(30, 41, 59, 0.9)" : "#f8fafc";
-  const inputBorder = isDark ? "rgba(255, 255, 255, 0.12)" : "#cbd5e1";
+  const cardBg = isDark ? "rgba(15, 23, 42, 0.9)" : "#ffffff";
+  const cardBorder = isDark ? "rgba(59, 130, 246, 0.35)" : "#cbd5e1";
+  const textSub = isDark ? "#94a3b8" : "#475569";
+  const inputBg = isDark ? "rgba(30, 41, 59, 0.95)" : "#ffffff";
+  const inputBorder = isDark ? "rgba(255, 255, 255, 0.15)" : "#94a3b8";
 
   return (
     <div style={{
@@ -197,223 +191,226 @@ export default function Home() {
       transition: 'background-color 0.5s ease, color 0.5s ease'
     }}>
       <style>{`
-        @keyframes floatHuge {
+        @keyframes floatMega {
           0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-          50% { transform: translateY(-35px) rotate(15deg) scale(1.1); }
+          50% { transform: translateY(-45px) rotate(18deg) scale(1.15); }
         }
 
-        @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.2); }
-          50% { box-shadow: 0 0 50px rgba(37, 99, 235, 0.45); }
+        @keyframes pulseNeon {
+          0%, 100% { box-shadow: 0 0 35px rgba(37, 99, 235, 0.25); border-color: rgba(59, 130, 246, 0.4); }
+          50% { box-shadow: 0 0 60px rgba(59, 130, 246, 0.6); border-color: rgba(96, 165, 250, 0.8); }
         }
 
-        @keyframes titleGlow {
-          0%, 100% { filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.3)); }
-          50% { filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.7)); }
+        @keyframes titleHyperGlow {
+          0%, 100% { filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.4)); }
+          50% { filter: drop-shadow(0 0 45px rgba(59, 130, 246, 0.9)); }
         }
 
-        .floating-icon-xl {
+        .floating-icon-mega {
           position: absolute;
-          opacity: 0.14;
+          opacity: 0.18;
           pointer-events: none;
           z-index: 0;
-          animation: floatHuge 7s ease-in-out infinite;
+          animation: floatMega 6.5s ease-in-out infinite;
         }
 
-        .hero-title-main {
-          font-size: 52px;
+        .hero-title-hyper {
+          font-size: 56px;
           font-weight: 900;
-          line-height: 1.18;
-          letter-spacing: -1px;
-          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 20%, #3b82f6 70%, #2563eb 100%);
+          line-height: 1.15;
+          letter-spacing: -1.5px;
+          font-family: Georgia, serif;
+          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 15%, #3b82f6 60%, #1d4ed8 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: titleGlow 5s ease infinite;
+          animation: titleHyperGlow 4s ease infinite;
         }
 
-        .slogan-banner {
-          background: ${isDark ? 'rgba(30, 41, 59, 0.75)' : 'rgba(239, 246, 255, 0.9)'};
-          backdrop-filter: blur(16px);
-          border: 1.5px solid ${isDark ? 'rgba(59, 130, 246, 0.35)' : '#bfdbfe'};
-          box-shadow: 0 15px 35px rgba(37, 99, 235, 0.12);
-          animation: pulseGlow 4s infinite ease-in-out;
+        .slogan-box-hyper {
+          background: ${isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(239, 246, 255, 0.95)'};
+          backdrop-filter: blur(20px);
+          border: 2px solid ${isDark ? '#3b82f6' : '#93c5fd'};
+          box-shadow: 0 20px 45px rgba(37, 99, 235, 0.2);
+          animation: pulseNeon 3.5s infinite ease-in-out;
+          font-family: 'Times New Roman', Times, serif;
+          font-style: italic;
         }
 
         .reveal {
           opacity: ${isFading ? 0 : 1};
-          transform: translateY(${isFading ? '20px' : '0px'}) scale(${isFading ? '0.98' : '1'});
+          transform: translateY(${isFading ? '25px' : '0px'}) scale(${isFading ? '0.97' : '1'});
           transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
-        .modern-card {
+        .card-hyper {
           background: ${cardBg};
-          backdrop-filter: blur(20px);
-          border: 1px solid ${cardBorder};
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+          backdrop-filter: blur(25px);
+          border: 1.5px solid ${cardBorder};
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           position: relative;
           overflow: hidden;
         }
-        .modern-card:hover {
-          border-color: #3b82f6;
-          transform: translateY(-8px) scale(1.01);
-          box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2);
+        .card-hyper:hover {
+          border-color: #2563eb;
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 35px 70px rgba(37, 99, 235, 0.28);
         }
 
-        .btn-glow {
+        .btn-hyper-glow {
           background: linear-gradient(135deg, #2563eb, #1d4ed8);
           color: white;
-          box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5);
           transition: all 0.3s ease;
         }
-        .btn-glow:hover {
+        .btn-hyper-glow:hover {
           transform: translateY(-3px);
-          box-shadow: 0 12px 35px rgba(59, 130, 246, 0.6);
+          box-shadow: 0 15px 40px rgba(59, 130, 246, 0.75);
         }
 
-        .top-control-btn {
-          background: ${isDark ? 'rgba(30, 41, 59, 0.8)' : '#f1f5f9'};
-          border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.15)' : '#cbd5e1'};
+        .control-pill {
+          background: ${isDark ? 'rgba(30, 41, 59, 0.9)' : '#f1f5f9'};
+          border: 1.5px solid ${isDark ? 'rgba(59, 130, 246, 0.4)' : '#cbd5e1'};
           color: ${textMain};
           padding: 8px 14px;
-          border-radius: 10px;
+          border-radius: 12px;
           font-weight: 800;
           font-size: 13px;
           cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           transition: all 0.25s ease;
         }
-        .top-control-btn:hover {
-          border-color: #3b82f6;
-          transform: translateY(-1px);
+        .control-pill:hover {
+          border-color: #2563eb;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
         }
 
-        .form-input-box {
+        .form-box-hyper {
           background: ${inputBg};
           border: 1.5px solid ${inputBorder};
           color: ${textMain};
           transition: all 0.3s ease;
         }
-        .form-input-box:focus {
+        .form-box-hyper:focus {
           outline: none;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+          border-color: #2563eb;
+          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
         }
 
         @media (max-width: 768px) {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
-          .hero-title-main { font-size: 34px !important; }
+          .hero-title-hyper { font-size: 38px !important; }
         }
       `}</style>
 
-      {/* Floating Icons Hoành Tráng */}
-      <div className="floating-icon-xl" style={{ top: '6%', left: '3%', fontSize: '90px', animationDelay: '0s' }}>📚</div>
-      <div className="floating-icon-xl" style={{ top: '15%', right: '4%', fontSize: '100px', animationDelay: '1.2s' }}>🎓</div>
-      <div className="floating-icon-xl" style={{ top: '40%', left: '2%', fontSize: '80px', animationDelay: '2.5s' }}>📐</div>
-      <div className="floating-icon-xl" style={{ top: '68%', right: '3%', fontSize: '95px', animationDelay: '1.8s' }}>💡</div>
-      <div className="floating-icon-xl" style={{ top: '85%', left: '5%', fontSize: '85px', animationDelay: '3.2s' }}>⚡</div>
+      {/* Floating Icon Khổng Lồ Khắp Màn Hình (Bút chì, Món tốt nghiệp, PowerPoint, Sách, Thước...) */}
+      <div className="floating-icon-mega" style={{ top: '5%', left: '2%', fontSize: '110px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-icon-mega" style={{ top: '12%', right: '3%', fontSize: '120px', animationDelay: '1.5s' }}>📊</div>
+      <div className="floating-icon-mega" style={{ top: '32%', left: '1%', fontSize: '100px', animationDelay: '3s' }}>✏️</div>
+      <div className="floating-icon-mega" style={{ top: '55%', right: '2%', fontSize: '115px', animationDelay: '2s' }}>📚</div>
+      <div className="floating-icon-mega" style={{ top: '78%', left: '4%', fontSize: '105px', animationDelay: '4s' }}>📐</div>
+      <div className="floating-icon-mega" style={{ top: '90%', right: '5%', fontSize: '110px', animationDelay: '1s' }}>💡</div>
 
-      {/* Header Uy Tín + Các nút điều khiển xịn xò (Ngôn ngữ & Dark/Light mode) */}
+      {/* Header Uy Tín + Nút điều khiển có ghi chú rõ ràng */}
       <header style={{
         borderBottom: `1px solid ${cardBorder}`,
-        background: isDark ? 'rgba(10, 15, 29, 0.88)' : 'rgba(255, 255, 255, 0.9)',
+        background: isDark ? 'rgba(6, 9, 19, 0.9)' : 'rgba(255, 255, 255, 0.92)',
         backdropFilter: 'blur(16px)',
         position: 'sticky', top: 0, zIndex: 100, padding: '0 24px',
         transition: 'background-color 0.5s ease, border-color 0.5s ease'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '76px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1250px', margin: '0 auto', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           
-          <div style={{ fontSize: '20px', fontWeight: '900', color: '#2563eb', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '26px' }}>🎓</span> {currentText.brand} 
-            <span style={{ fontSize: '10px', background: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', padding: '3px 8px', borderRadius: '6px', fontWeight: '800' }}>
+          <div style={{ fontSize: '22px', fontWeight: '900', color: '#2563eb', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '30px' }}>🎓</span> {currentText.brand} 
+            <span style={{ fontSize: '11px', background: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', padding: '4px 10px', borderRadius: '8px', fontWeight: '800' }}>
               {currentText.tagline}
             </span>
           </div>
 
-          <nav className="header-nav" style={{ display: 'flex', gap: '26px', alignItems: 'center' }}>
-            <a href="#about" style={{ color: textSub, textDecoration: 'none', fontSize: '13px', fontWeight: '800', transition: 'color 0.2s' }}>{currentText.navAbout}</a>
-            <a href="#services" style={{ color: textSub, textDecoration: 'none', fontSize: '13px', fontWeight: '800', transition: 'color 0.2s' }}>{currentText.navServices}</a>
-            <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '13px', fontWeight: '800', transition: 'color 0.2s' }}>{currentText.navOrder}</a>
+          <nav className="header-nav" style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+            <a href="#about" style={{ color: textSub, textDecoration: 'none', fontSize: '14px', fontWeight: '800' }}>{currentText.navAbout}</a>
+            <a href="#services" style={{ color: textSub, textDecoration: 'none', fontSize: '14px', fontWeight: '800' }}>{currentText.navServices}</a>
+            <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '14px', fontWeight: '800' }}>{currentText.navOrder}</a>
           </nav>
 
-          {/* Cụm nút đổi Ngôn Ngữ & Đổi Sáng/Tối */}
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          {/* Các nút chuyển đổi có chú thích cực rõ */}
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
             
             {/* Nút ngôn ngữ */}
-            <button onClick={toggleLanguage} className="top-control-btn" title="Chuyển ngôn ngữ / Change language">
-              🌐 {lang === "vi" ? "Tiếng Việt 🇻🇳" : "English 🇬🇧"}
-            </button>
+            <div style={{ textAlign: 'right' }}>
+              <button onClick={toggleLanguage} className="control-pill" title="Chuyển đổi ngôn ngữ">
+                🌐 {lang === "vi" ? "Tiếng Việt 🇻🇳" : "English 🇬🇧"}
+              </button>
+              <span style={{ fontSize: '10px', color: '#3b82f6', fontWeight: '700' }}>Chuyển ngôn ngữ</span>
+            </div>
 
-            {/* Nút đổi màu nền Sáng/Tối với hiệu ứng xoay mặt trời */}
-            <button 
-              onClick={toggleTheme} 
-              className="top-control-btn" 
-              style={{ padding: '8px 12px' }}
-              title="Chuyển đổi giao diện Sáng / Tối"
-            >
-              <span style={{ 
-                display: 'inline-block', 
-                transition: 'transform 0.5s ease', 
-                transform: isRotating ? 'rotate(180deg)' : 'rotate(0deg)' 
-              }}>
-                {isDark ? "🌙" : "☀️"}
-              </span>
-            </button>
+            {/* Nút đổi Sáng/Tối */}
+            <div style={{ textAlign: 'right' }}>
+              <button onClick={toggleTheme} className="control-pill" style={{ padding: '8px 14px' }} title="Chuyển đổi giao diện">
+                <span style={{ display: 'inline-block', transition: 'transform 0.5s ease', transform: isRotating ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  {isDark ? "🌙" : "☀️"}
+                </span>
+                <span>{isDark ? "Tối" : "Sáng"}</span>
+              </button>
+              <span style={{ fontSize: '10px', color: '#3b82f6', fontWeight: '700' }}>Chuyển đổi giao diện</span>
+            </div>
 
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section id="about" className="reveal" style={{ padding: '85px 24px 50px', textAlign: 'center', maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <section id="about" className="reveal" style={{ padding: '90px 24px 50px', textAlign: 'center', maxWidth: '950px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         
-        {/* Khẩu hiệu chuẩn xác nằm ngay dưới hoặc trên tiêu đề */}
-        <div className="slogan-banner" style={{
-          padding: '18px 28px', borderRadius: '22px', marginBottom: '32px',
-          color: isDark ? '#cbd5e1' : '#1e40af', fontSize: '15px', fontWeight: '700', lineHeight: '1.7', display: 'inline-block',
-          maxWidth: '820px'
+        {/* Khẩu hiệu độc quyền với font nghệ thuật, trọn vẹn ý nghĩa */}
+        <div className="slogan-box-hyper" style={{
+          padding: '22px 34px', borderRadius: '26px', marginBottom: '38px',
+          color: isDark ? '#e2e8f0' : '#1e3a8a', fontSize: '17px', fontWeight: '700', lineHeight: '1.8', display: 'inline-block',
+          maxWidth: '850px'
         }}>
-          💡 {currentText.slogan}
+          ✒️ "{currentText.slogan}"
         </div>
 
-        <h1 className="hero-title-main" style={{ margin: '0 0 22px 0', whiteSpace: 'pre-line' }}>
+        <h1 className="hero-title-hyper" style={{ margin: '0 0 24px 0', whiteSpace: 'pre-line' }}>
           {currentText.heroTitle}
         </h1>
 
-        <p style={{ color: textSub, fontSize: '17px', lineHeight: '1.8', maxWidth: '720px', margin: '0 auto 40px' }}>
+        <p style={{ color: textSub, fontSize: '18px', lineHeight: '1.85', maxWidth: '780px', margin: '0 auto 42px', fontFamily: 'serif' }}>
           {currentText.heroDesc}
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-          <a href="#order" className="btn-glow" style={{ textDecoration: 'none', padding: '16px 34px', borderRadius: '14px', fontSize: '15px', fontWeight: '900', letterSpacing: '0.5px' }}>
+          <a href="#order" className="btn-hyper-glow" style={{ textDecoration: 'none', padding: '18px 38px', borderRadius: '16px', fontSize: '16px', fontWeight: '900', letterSpacing: '0.5px' }}>
             {currentText.btnExplore}
           </a>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="reveal" style={{ padding: '50px 24px', maxWidth: '1150px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', color: textMain, letterSpacing: '-0.5px' }}>
+      <section id="services" className="reveal" style={{ padding: '55px 24px', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <h2 style={{ fontSize: '36px', fontWeight: '900', textAlign: 'center', marginBottom: '14px', color: textMain, letterSpacing: '-0.5px' }}>
           {currentText.servicesTitle}
         </h2>
-        <p style={{ textAlign: 'center', color: textSub, marginBottom: '45px', fontSize: '16px' }}>{currentText.servicesDesc}</p>
+        <p style={{ textAlign: 'center', color: textSub, marginBottom: '50px', fontSize: '17px' }}>{currentText.servicesDesc}</p>
 
-        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px' }}>
-          <div className="modern-card" style={{ padding: '42px', borderRadius: '30px' }}>
-            <div style={{ fontSize: '46px', marginBottom: '16px' }}>💻</div>
-            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: textMain }}>{currentText.service1Title}</h3>
-            <p style={{ color: textSub, lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
+        <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '38px' }}>
+          <div className="card-hyper" style={{ padding: '48px', borderRadius: '34px' }}>
+            <div style={{ fontSize: '52px', marginBottom: '18px' }}>📊</div>
+            <h3 style={{ fontSize: '24px', fontWeight: '900', margin: '0 0 16px 0', color: textMain }}>{currentText.service1Title}</h3>
+            <p style={{ color: textSub, lineHeight: '1.85', fontSize: '16px', margin: 0, fontFamily: 'serif' }}>
               {currentText.service1Desc}
             </p>
           </div>
 
-          <div className="modern-card" style={{ padding: '42px', borderRadius: '30px' }}>
-            <div style={{ fontSize: '46px', marginBottom: '16px' }}>📚</div>
-            <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: textMain }}>{currentText.service2Title}</h3>
-            <p style={{ color: textSub, lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
+          <div className="card-hyper" style={{ padding: '48px', borderRadius: '34px' }}>
+            <div style={{ fontSize: '52px', marginBottom: '18px' }}>🎓</div>
+            <h3 style={{ fontSize: '24px', fontWeight: '900', margin: '0 0 16px 0', color: textMain }}>{currentText.service2Title}</h3>
+            <p style={{ color: textSub, lineHeight: '1.85', fontSize: '16px', margin: 0, fontFamily: 'serif' }}>
               {currentText.service2Desc}
             </p>
           </div>
@@ -421,67 +418,67 @@ export default function Home() {
       </section>
 
       {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-      <section id="order" className="reveal" style={{ padding: '50px 24px 90px', maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div className="modern-card" style={{ padding: '48px', borderRadius: '34px' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '900', textAlign: 'center', margin: '0 0 10px 0', color: textMain }}>
+      <section id="order" className="reveal" style={{ padding: '55px 24px 95px', maxWidth: '840px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div className="card-hyper" style={{ padding: '52px', borderRadius: '38px' }}>
+          <h2 style={{ fontSize: '30px', fontWeight: '900', textAlign: 'center', margin: '0 0 12px 0', color: textMain }}>
             {currentText.orderTitle}
           </h2>
-          <p style={{ color: textSub, fontSize: '15px', textAlign: 'center', marginBottom: '35px' }}>
+          <p style={{ color: textSub, fontSize: '16px', textAlign: 'center', marginBottom: '40px' }}>
             {currentText.orderDesc}
           </p>
 
-          <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+          <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelName}</label>
-              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="form-input-box" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelName}</label>
+              <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="form-box-hyper" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '16px', boxSizing: 'border-box' }} />
             </div>
 
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '22px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelPhone}</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="form-input-box" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelPhone}</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="form-box-hyper" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '16px', boxSizing: 'border-box' }} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelAge}</label>
-                <input type="number" name="age" value={formData.age} onChange={handleChange} className="form-input-box" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelAge}</label>
+                <input type="number" name="age" value={formData.age} onChange={handleChange} className="form-box-hyper" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '16px', boxSizing: 'border-box' }} />
               </div>
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelService}</label>
-              <select name="service" value={formData.service} onChange={handleChange} className="form-input-box" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelService}</label>
+              <select name="service" value={formData.service} onChange={handleChange} className="form-box-hyper" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '16px', boxSizing: 'border-box' }}>
                 <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
                 <option value="Giáo án điện tử">Giáo án điện tử</option>
               </select>
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelReq}</label>
-              <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="form-input-box" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelReq}</label>
+              <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="form-box-hyper" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '16px', resize: 'none', boxSizing: 'border-box' }}></textarea>
             </div>
 
-            <button type="submit" disabled={loading} className="btn-glow" style={{
-              width: '100%', padding: '18px', border: 'none', borderRadius: '14px',
-              fontWeight: '900', fontSize: '15px', cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase', letterSpacing: '1px'
+            <button type="submit" disabled={loading} className="btn-hyper-glow" style={{
+              width: '100%', padding: '20px', border: 'none', borderRadius: '16px',
+              fontWeight: '900', fontSize: '16px', cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase', letterSpacing: '1px'
             }}>
               {loading ? currentText.btnSubmitting : currentText.btnSubmit}
             </button>
           </form>
 
-          {/* Dòng liên hệ trực tiếp Zalo theo đúng yêu cầu của Văn */}
+          {/* Dòng liên hệ trực tiếp Zalo */}
           <div style={{
-            marginTop: '30px', padding: '16px 20px', borderRadius: '14px',
-            background: isDark ? 'rgba(30, 41, 59, 0.6)' : '#f1f5f9', border: `1px solid ${cardBorder}`,
-            textAlign: 'center', fontSize: '13.5px', color: textSub, lineHeight: '1.6'
+            marginTop: '32px', padding: '18px 22px', borderRadius: '16px',
+            background: isDark ? 'rgba(30, 41, 59, 0.7)' : '#f1f5f9', border: `1.5px solid ${cardBorder}`,
+            textAlign: 'center', fontSize: '14px', color: textSub, lineHeight: '1.7', fontFamily: 'serif'
           }}>
-            💬 {currentText.zaloContactText} <strong style={{ color: '#2563eb', fontSize: '15px' }}>{MY_PHONE}</strong> {currentText.zaloTime}
+            💬 {currentText.zaloContactText} <strong style={{ color: '#2563eb', fontSize: '16px', fontWeight: '900' }}>{MY_PHONE}</strong> {currentText.zaloTime}
           </div>
 
           {successMsg && (
             <div style={{
-              marginTop: '22px', padding: '18px', borderRadius: '14px',
+              marginTop: '25px', padding: '20px', borderRadius: '16px',
               background: isDark ? 'rgba(22, 101, 52, 0.4)' : '#dcfce7', border: '1px solid #86efac', color: isDark ? '#4ade80' : '#166534',
-              textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6'
+              textAlign: 'center', fontSize: '15px', fontWeight: '800', lineHeight: '1.6'
             }}>
               {currentText.successText}<br />
               {currentText.successSub}
@@ -491,7 +488,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${cardBorder}`, padding: '38px 24px', textAlign: 'center', color: textSub, fontSize: '13px', background: bgMain, position: 'relative', zIndex: 1 }}>
+      <footer style={{ borderTop: `1px solid ${cardBorder}`, padding: '42px 24px', textAlign: 'center', color: textSub, fontSize: '13.5px', background: bgMain, position: 'relative', zIndex: 1 }}>
         <p>© 2026 NOVAS CREATIVE ACADEMIC STUDIO. PHÁT TRIỂN BỞI HUỲNH HUY VĂN. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
