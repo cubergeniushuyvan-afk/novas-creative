@@ -15,7 +15,6 @@ export default function Home() {
 
   const [lang, setLang] = useState<"vi" | "en">("vi");
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [isFading, setIsFading] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
 
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
@@ -23,7 +22,6 @@ export default function Home() {
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
-    // Hiệu ứng lướt tới giữa màn hình tự động bừng sáng, lướt đi mờ dần
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -34,7 +32,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.18 }
     );
 
     const elements = document.querySelectorAll(".scroll-light-effect");
@@ -44,11 +42,7 @@ export default function Home() {
   }, []);
 
   const toggleLanguage = () => {
-    setIsFading(true);
-    setTimeout(() => {
-      setLang((prev) => (prev === "vi" ? "en" : "vi"));
-      setIsFading(false);
-    }, 350);
+    setLang((prev) => (prev === "vi" ? "en" : "vi"));
   };
 
   const toggleTheme = () => {
@@ -114,10 +108,8 @@ export default function Home() {
       navAbout: "GIỚI THIỆU",
       navServices: "DỊCH VỤ",
       navOrder: "ĐẶT ĐƠN",
-      statusText: "🟢 CEO Huỳnh Huy Văn đang sẵn sàng phản hồi trong < 4 giờ",
       slogan: "Dự án sáng tạo bởi Huỳnh Huy Văn: Nỗ lực hỗ trợ học sinh, sinh viên nâng cao hiệu quả thuyết trình học đường mà không bị lạm dụng AI.",
       heroTitle: "Thiết Kế Slide & Giáo Án\nĐỉnh Cao Tri Thức • Chuẩn Mực Học Đường",
-      heroDesc: "Giải pháp trình chiếu đỉnh cao với tư duy bố cục logic và đồ họa chuyên sâu. Xây dựng sự tự tin tuyệt đối trước mọi hội đồng.",
       btnExplore: "🚀 ĐẶT ĐƠN NGAY",
       servicesTitle: "🎯 HỆ THỐNG DỊCH VỤ CHUYÊN SÂU",
       servicesDesc: "Đồ họa học thuật hiện đại nâng tầm mọi nội dung học tập và giảng dạy.",
@@ -145,10 +137,9 @@ export default function Home() {
       navAbout: "ABOUT",
       navServices: "SERVICES",
       navOrder: "ORDER",
-      statusText: "🟢 CEO Huỳnh Huy Văn is ready to reply in < 4 hours",
       slogan: "Creative project by Huỳnh Huy Văn: Supporting students to elevate academic presentations without AI over-reliance.",
       heroTitle: "Elite Slide & Lesson Design\nAcademic Excellence • Educational Standards",
-      heroDesc: "Top-tier presentation solutions with logical layouts and specialized graphics. Build absolute confidence before any council.",
+      heroDesc: "Top-tier presentation solutions with logical layouts and specialized graphics.",
       btnExplore: "🚀 ORDER NOW",
       servicesTitle: "🎯 SPECIALIZED SERVICE SYSTEM",
       servicesDesc: "Modern academic graphics elevating all learning and teaching materials.",
@@ -196,7 +187,7 @@ export default function Home() {
       <style>{`
         @keyframes floatInfinite {
           0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-          50% { transform: translateY(-35px) rotate(12deg) scale(1.05); }
+          50% { transform: translateY(-30px) rotate(8deg) scale(1.05); }
         }
 
         @keyframes pulseGlowLoop {
@@ -210,16 +201,16 @@ export default function Home() {
           100% { background-position: 0% 50%; }
         }
 
-        /* Hiệu ứng lướt tới giữa tầm nhìn tự bừng sáng */
+        /* Hiệu ứng lướt tới giữa tầm nhìn tự bừng sáng rực rỡ, lướt đi dịu lại từ từ */
         .scroll-light-effect {
-          opacity: 0.3;
-          transform: translateY(50px) scale(0.96);
-          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s ease;
+          opacity: 0.25;
+          transform: translateY(60px) scale(0.95);
+          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.9s ease;
         }
         .scroll-light-effect.in-view {
           opacity: 1;
           transform: translateY(0px) scale(1);
-          box-shadow: 0 25px 60px rgba(37, 99, 235, 0.18);
+          box-shadow: 0 30px 70px rgba(37, 99, 235, 0.22);
         }
 
         .floating-art-safe {
@@ -246,10 +237,13 @@ export default function Home() {
           backdrop-filter: blur(20px);
           border: 2px solid ${isDark ? '#3b82f6' : '#93c5fd'};
           animation: pulseGlowLoop 4s infinite ease-in-out;
+          font-family: 'Playfair Display', Georgia, serif;
+          font-style: italic;
+          letter-spacing: 0.3px;
         }
 
         .card-pro {
-          background: ${cardBg};
+          background: cardBg;
           backdrop-filter: blur(25px);
           border: 1.5px solid ${cardBorder};
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -271,28 +265,29 @@ export default function Home() {
           box-shadow: 0 15px 40px rgba(37, 99, 235, 0.7);
         }
 
-        .pill-btn-pro {
+        .pure-icon-btn {
           background: ${isDark ? 'rgba(30, 41, 59, 0.9)' : '#ffffff'};
           border: 1.5px solid ${isDark ? 'rgba(59, 130, 246, 0.4)' : '#cbd5e1'};
           color: ${textMain};
-          padding: 8px 16px;
+          padding: 10px 16px;
           border-radius: 14px;
           cursor: pointer;
           display: flex;
-          flex-direction: column;
           align-items: center;
-          justify-content: center;
+          gap: 8px;
+          font-weight: 800;
+          font-size: 14px;
           transition: all 0.25s ease;
           box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
         }
-        .pill-btn-pro:hover {
+        .pure-icon-btn:hover {
           border-color: #2563eb;
           transform: translateY(-2px);
           box-shadow: 0 8px 22px rgba(37, 99, 235, 0.25);
         }
 
         .form-input-pro {
-          background: inputBg;
+          background: ${inputBg};
           border: 1.5px solid ${inputBorder};
           color: ${textMain};
           transition: all 0.3s ease;
@@ -311,22 +306,30 @@ export default function Home() {
         }
       `}</style>
 
-      {/* 🌟 Biểu tượng PowerPoint chuẩn ngả màu Đỏ - Cam theo đúng yêu cầu của Văn */}
-      <div className="floating-art-safe" style={{ top: '12%', left: '3%', animationDelay: '0s' }}>
+      {/* 🌟 2 Icon PowerPoint chuẩn màu đỏ-cam ở 2 bên trái/phải với độ cao lệch nhau nghệ thuật */}
+      <div className="floating-art-safe" style={{ top: '14%', left: '3%', animationDelay: '0s' }}>
         <div style={{
-          width: '75px', height: '75px',
+          width: '70px', height: '70px',
           background: 'radial-gradient(circle at 30% 30%, #f97316 0%, #dc2626 65%, #991b1b 100%)',
-          borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'white', fontSize: '42px', fontWeight: '900',
+          borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontSize: '38px', fontWeight: '900',
           boxShadow: '0 15px 35px rgba(220, 38, 38, 0.4)'
         }}>
           P
         </div>
       </div>
 
-      <div className="floating-art-safe" style={{ top: '22%', right: '4%', opacity: 0.16, fontSize: '95px', animationDelay: '1.5s' }}>🎓</div>
-      <div className="floating-art-safe" style={{ top: '50%', left: '2%', opacity: 0.16, fontSize: '85px', animationDelay: '3s' }}>✏️</div>
-      <div className="floating-art-safe" style={{ top: '75%', right: '3%', opacity: 0.16, fontSize: '90px', animationDelay: '2s' }}>📚</div>
+      <div className="floating-art-safe" style={{ top: '22%', right: '3%', animationDelay: '1.5st' }}>
+        <div style={{
+          width: '85px', height: '85px',
+          background: 'radial-gradient(circle at 30% 30%, #f97316 0%, #dc2626 65%, #991b1b 100%)',
+          borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontSize: '46px', fontWeight: '900',
+          boxShadow: '0 18px 40px rgba(220, 38, 38, 0.45)'
+        }}>
+          P
+        </div>
+      </div>
 
       {/* Header Sticky Mượt Mà Theo Từng Nhịp Lướt */}
       <header style={{
@@ -359,31 +362,22 @@ export default function Home() {
             <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '14.5px', fontWeight: '800' }}>{currentText.navOrder}</a>
           </nav>
 
-          {/* Cụm nút điều khiển tích hợp chú thích gọn gàng bên trong */}
+          {/* Cụm nút điều khiển thuần túy, có hiệu ứng xoay 180 độ cho mặt trời/mặt trăng */}
           <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
             
             {/* Nút Ngôn Ngữ */}
-            <button onClick={toggleLanguage} className="pill-btn-pro" title="Chuyển ngôn ngữ">
-              <span style={{ fontSize: '13.5px', fontWeight: '900', color: '#2563eb' }}>
-                🌐 {lang === "vi" ? "Tiếng Việt 🇻🇳" : "English 🇬🇧"}
-              </span>
-              <span style={{ fontSize: '9.5px', color: textSub, marginTop: '2px' }}>
-                {lang === "vi" ? "Chuyển ngôn ngữ" : "Switch Language"}
-              </span>
+            <button onClick={toggleLanguage} className="pure-icon-btn" title="Chuyển ngôn ngữ">
+              🌐 {lang === "vi" ? "Tiếng Việt 🇻🇳" : "English 🇬🇧"}
             </button>
 
-            {/* Nút Đổi Sáng/Tối kèm hiệu ứng quay 180 độ mặt trời/mặt trăng */}
-            <button onClick={toggleTheme} className="pill-btn-pro" title="Chuyển đổi giao diện Sáng / Tối">
+            {/* Nút Đổi Sáng/Tối kèm hiệu ứng quay 180 độ */}
+            <button onClick={toggleTheme} className="pure-icon-btn" title="Chuyển đổi giao diện Sáng / Tối">
               <span style={{ 
-                fontSize: '13.5px', fontWeight: '900', color: '#eab308',
-                display: 'inline-block',
+                display: 'inline-block', 
                 transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
                 transform: isRotating ? 'rotate(180deg)' : 'rotate(0deg)'
               }}>
                 {isDark ? "🌙 Tối" : "☀️ Sáng"}
-              </span>
-              <span style={{ fontSize: '9.5px', color: textSub, marginTop: '2px' }}>
-                {lang === "vi" ? "Chuyển giao diện" : "Switch Theme"}
               </span>
             </button>
 
@@ -391,30 +385,21 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Thanh thông báo trực tuyến độc quyền */}
-      <div style={{ background: 'linear-gradient(90deg, #2563eb, #3b82f6)', color: 'white', textAlign: 'center', padding: '10px 20px', fontSize: '13.5px', fontWeight: '800', letterSpacing: '0.3px' }}>
-        {currentText.statusText}
-      </div>
-
       {/* Hero Section: Kéo dài trang web phân bố đều chữ, thoáng đãng */}
-      <section id="about" className="scroll-light-effect" style={{ padding: '130px 24px 90px', textAlign: 'center', maxWidth: '1050px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <section id="about" className="scroll-light-effect" style={{ padding: '140px 24px 100px', textAlign: 'center', maxWidth: '1050px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         
-        {/* Khẩu hiệu chuẩn xác lặp hiệu ứng phát sáng */}
+        {/* Khẩu hiệu chuẩn xác với font nghệ thuật, bỏ icon bút chì */}
         <div className="slogan-box-pro" style={{
-          padding: '24px 40px', borderRadius: '30px', marginBottom: '50px',
-          color: isDark ? '#e2e8f0' : '#1e40af', fontSize: '17.5px', fontWeight: '700', lineHeight: '1.85', display: 'inline-block',
-          maxWidth: '900px'
+          padding: '26px 42px', borderRadius: '32px', marginBottom: '55px',
+          color: isDark ? '#e2e8f0' : '#1e40af', fontSize: '18.5px', fontWeight: '700', lineHeight: '1.9', display: 'inline-block',
+          maxWidth: '920px'
         }}>
-          ✒️ "{currentText.slogan}"
+          "{currentText.slogan}"
         </div>
 
-        <h1 className="hero-title-pro" style={{ margin: '0 0 35px 0', whiteSpace: 'pre-line' }}>
+        <h1 className="hero-title-pro" style={{ margin: '0 0 40px 0', whiteSpace: 'pre-line' }}>
           {currentText.heroTitle}
         </h1>
-
-        <p style={{ color: textSub, fontSize: '20px', lineHeight: '1.9', maxWidth: '860px', margin: '0 auto 60px' }}>
-          {currentText.heroDesc}
-        </p>
 
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
           <a href="#order" className="btn-glow-pro" style={{ textDecoration: 'none', padding: '22px 46px', borderRadius: '20px', fontSize: '18px', fontWeight: '900', letterSpacing: '0.5px' }}>
@@ -424,7 +409,7 @@ export default function Home() {
       </section>
 
       {/* Services Section: Kéo dài khoảng cách, bừng sáng khi lướt tới */}
-      <section id="services" className="scroll-light-effect" style={{ padding: '100px 24px', maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <section id="services" className="scroll-light-effect" style={{ padding: '110px 24px', maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <h2 style={{ fontSize: '40px', fontWeight: '900', textAlign: 'center', marginBottom: '18px', color: textMain, letterSpacing: '-0.5px' }}>
           {currentText.servicesTitle}
         </h2>
@@ -432,7 +417,7 @@ export default function Home() {
 
         <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '48px' }}>
           
-          {/* Card 1: Slide PowerPoint kèm Icon chuẩn ngả màu đỏ cam */}
+          {/* Card 1: Slide PowerPoint */}
           <div className="card-pro" style={{ padding: '58px', borderRadius: '40px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '25px' }}>
               <div style={{
@@ -465,7 +450,7 @@ export default function Home() {
       </section>
 
       {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-      <section id="order" className="scroll-light-effect" style={{ padding: '100px 24px 140px', maxWidth: '920px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <section id="order" className="scroll-light-effect" style={{ padding: '110px 24px 150px', maxWidth: '920px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="card-pro" style={{ padding: '64px', borderRadius: '44px' }}>
           <h2 style={{ fontSize: '34px', fontWeight: '900', textAlign: 'center', margin: '0 0 16px 0', color: textMain }}>
             {currentText.orderTitle}
