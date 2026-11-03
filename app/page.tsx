@@ -24,7 +24,6 @@ export default function Home() {
 
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
-  const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   // Màn hình Intro khởi động lần đầu
   useEffect(() => {
@@ -114,6 +113,7 @@ export default function Home() {
       console.log("Lỗi:", err);
     }
 
+    // Hoàn tất gửi đơn, tắt intro, hiện thông báo thành công
     setTimeout(() => {
       setLoadingIntro(false);
       setSuccessMsg(true);
@@ -122,17 +122,6 @@ export default function Home() {
       setTimeout(() => {
         setSuccessMsg(false);
       }, 3000);
-
-      const subject = encodeURIComponent(`[ĐƠN ĐẶT HÀNG MỚI] ${formData.fullName} - Novas Creative`);
-      const body = encodeURIComponent(
-        `✨ CÓ ĐƠN HÀNG MỚI TỪ WEBSITE ✨\n\n` +
-        `- Họ tên: ${formData.fullName}\n` +
-        `- SĐT/Zalo: ${formData.phone}\n` +
-        `- Độ tuổi: ${formData.age}\n` +
-        `- Dịch vụ: ${formData.service}\n` +
-        `- Yêu cầu: ${formData.requirements || "Không có"}`
-      );
-      window.location.href = `mailto:${MY_EMAIL}?subject=${subject}&body=${body}`;
     }, 2600);
   };
 
@@ -215,7 +204,6 @@ export default function Home() {
       transition: 'background-color 0.4s ease, color 0.4s ease'
     }}>
       <style>{`
-        /* Màn hình Intro điện ảnh siêu ngầu */
         .intro-loader-screen {
           position: fixed;
           inset: 0;
@@ -375,13 +363,13 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Màn hình Intro điện ảnh ngầu lòi (Cả khi vào web lẫn khi gửi đơn) */}
+      {/* Màn hình Intro điện ảnh ngầu lòi */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
         <div className={`intro-title ${introStep >= 1 ? 'show' : ''}`}>
           {introMode === "startup" ? "NOVAS CREATIVE STUDIO" : "PROCESSING ORDER..."}
         </div>
         <div className={`intro-subtitle ${introStep >= 2 ? 'show' : ''}`}>
-          {introMode === "startup" ? "Created by Huỳnh Huy Văn" : "Syncing to Google Sheets & Sending..."}
+          {introMode === "startup" ? "Created by Huỳnh Huy Văn" : "Syncing to Google Sheets Successfully!"}
         </div>
       </div>
 
@@ -431,7 +419,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Nội dung toàn trang bọc trong hiệu ứng chuyển ngôn ngữ mượt mà */}
+      {/* Nội dung toàn trang */}
       <div className="lang-transition-wrap">
         
         {/* Hero Section */}
