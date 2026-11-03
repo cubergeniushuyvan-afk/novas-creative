@@ -16,14 +16,14 @@ export default function Home() {
   const [lang, setLang] = useState<"vi" | "en">("vi");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isRotating, setIsRotating] = useState(false);
-  const [isLangFading, setIsLangFading] = useState(false);
+  const [isLangAnimating, setIsLangAnimating] = useState(false);
 
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
-    // Hiệu ứng lướt mượt mà không cà dật: Phần tới sáng dần, phần cũ mờ dịu đi
+    // Hiệu ứng lướt mượt mà sâu hơn, rõ rệt hơn, không bao giờ giật lag
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -36,7 +36,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.25, rootMargin: "-50px 0px -50px 0px" }
+      { threshold: 0.2, rootMargin: "-40px 0px -40px 0px" }
     );
 
     const sections = document.querySelectorAll(".smooth-fade-section");
@@ -46,11 +46,11 @@ export default function Home() {
   }, []);
 
   const toggleLanguage = () => {
-    setIsLangFading(true);
+    setIsLangAnimating(true);
     setTimeout(() => {
       setLang((prev) => (prev === "vi" ? "en" : "vi"));
-      setIsLangFading(false);
-    }, 250);
+      setIsLangAnimating(false);
+    }, 300);
   };
 
   const toggleTheme = () => {
@@ -190,37 +190,40 @@ export default function Home() {
       transition: 'background-color 0.4s ease, color 0.4s ease'
     }}>
       <style>{`
-        @keyframes floatGentle {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(5deg); }
+        /* Hiệu ứng bay lơ lửng phóng to biên độ lớn, có quay nhẹ 1 chút */
+        @keyframes floatBigRotate {
+          0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+          50% { transform: translateY(-28px) rotate(12deg) scale(1.08); }
         }
 
-        .floating-deco {
+        .floating-deco-v2 {
           position: absolute;
           pointer-events: none;
           z-index: 0;
-          animation: floatGentle 5s ease-in-out infinite;
-          opacity: 0.2;
+          animation: floatBigRotate 6s ease-in-out infinite;
+          opacity: 0.28;
         }
 
-        /* Hiệu ứng lướt mượt mà: Lướt tới sáng rõ, lướt qua mờ dịu từ từ */
+        /* Hiệu ứng lướt cuộn trang mượt mà sâu hơn, mờ rõ hơn, scale rõ hơn */
         .smooth-fade-section {
-          opacity: 0.35;
-          transform: translateY(30px);
-          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          opacity: 0.15;
+          transform: translateY(45px) scale(0.97);
+          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .smooth-fade-section.section-active {
           opacity: 1;
-          transform: translateY(0px);
+          transform: translateY(0px) scale(1);
         }
         .smooth-fade-section.section-inactive {
-          opacity: 0.4;
-          transform: translateY(15px);
+          opacity: 0.2;
+          transform: translateY(25px) scale(0.98);
         }
 
+        /* Hiệu ứng chuyển đổi ngôn ngữ dịu dàng mượt mà */
         .lang-transition-wrap {
-          opacity: ${isLangFading ? 0 : 1};
-          transition: opacity 0.25s ease-in-out;
+          opacity: ${isLangAnimating ? 0 : 1};
+          transform: translateY(${isLangAnimating ? '8px' : '0px'});
+          transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .hero-title-clean {
@@ -296,9 +299,9 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Biểu tượng Mũ tốt nghiệp 🎓 và Bút chì ✏️ lơ lửng tinh tế hai bên */}
-      <div className="floating-deco" style={{ top: '120px', left: '5%', fontSize: '42px', animationDelay: '0s' }}>🎓</div>
-      <div className="floating-deco" style={{ top: '160px', right: '5%', fontSize: '42px', animationDelay: '1.5s' }}>✏️</div>
+      {/* Biểu tượng Mũ tốt nghiệp 🎓 và Bút chì ✏️ bự hơn, biên độ bay rộng hơn, có quay nhẹ */}
+      <div className="floating-deco-v2" style={{ top: '110px', left: '4%', fontSize: '50px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco-v2" style={{ top: '150px', right: '4%', fontSize: '50px', animationDelay: '1.2s' }}>✏️</div>
 
       {/* Header Cố Định Mượt Mà */}
       <header style={{
@@ -322,9 +325,7 @@ export default function Home() {
             <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '13.5px', fontWeight: '700' }}>{currentText.navOrder}</a>
           </nav>
 
-          {/* Nút điều khiển: Globe đổi ngôn ngữ & Mặt trời/Mặt trăng xoay 180 độ */}
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            
             <button onClick={toggleLanguage} className="control-icon-btn" title="Chuyển ngôn ngữ">
               🌐
             </button>
@@ -338,12 +339,11 @@ export default function Home() {
                 {isDark ? "🌙" : "☀️"}
               </span>
             </button>
-
           </div>
         </div>
       </header>
 
-      {/* Nội dung toàn trang bọc trong lớp mượt mà lang-transition-wrap */}
+      {/* Nội dung toàn trang bọc trong hiệu ứng chuyển ngôn ngữ mượt mà */}
       <div className="lang-transition-wrap">
         
         {/* Hero Section */}
