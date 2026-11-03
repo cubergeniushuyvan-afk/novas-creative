@@ -23,21 +23,19 @@ export default function Home() {
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
-    // Hiệu ứng lướt cuộn: Bay từ trái/phải vào khi tới, bay ra khi qua - Không giật lag
+    // Hiệu ứng lướt cuộn: Kích hoạt ngay khi vừa chạm màn hình, không trễ nải, mượt tuyệt đối
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-          } else {
-            entry.target.classList.remove("in-view");
+            entry.target.classList.add("slide-in-active");
           }
         });
       },
-      { threshold: 0.15, rootMargin: "-30px 0px -30px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
-    const slideElements = document.querySelectorAll(".slide-scroll-anim");
+    const slideElements = document.querySelectorAll(".slide-scroll-trigger");
     slideElements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -190,7 +188,7 @@ export default function Home() {
       <style>{`
         @keyframes floatBigRotate {
           0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-          50% { transform: translateY(-25px) rotate(10deg) scale(1.06); }
+          50% { transform: translateY(-30px) rotate(14deg) scale(1.1); }
         }
 
         @keyframes shimmerText {
@@ -208,24 +206,24 @@ export default function Home() {
           animation: pageIntro 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .floating-deco-v3 {
+        .floating-deco-v4 {
           position: absolute;
           pointer-events: none;
           z-index: 0;
-          animation: floatBigRotate 6s ease-in-out infinite;
-          opacity: 0.3;
+          animation: floatBigRotate 5.5s ease-in-out infinite;
+          opacity: 0.35;
         }
 
-        {/* Hiệu ứng lướt cuộn: Bay từ trái / phải vào mượt mà, bay ra biến mất êm ái */}
-        .slide-scroll-anim {
+        {/* Hiệu ứng trượt bay vào từ hai bên cực kỳ mượt mà khi lướt tới */}
+        .slide-scroll-trigger {
           opacity: 0;
-          transform: translateX(-60px);
+          transform: translateX(-70px);
           transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .slide-scroll-anim.right-side {
-          transform: translateX(60px);
+        .slide-scroll-trigger.right-dir {
+          transform: translateX(70px);
         }
-        .slide-scroll-anim.in-view {
+        .slide-scroll-trigger.slide-in-active {
           opacity: 1;
           transform: translateX(0px);
         }
@@ -313,9 +311,11 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Mũ tốt nghiệp 🎓 và Bút chì ✏️ lơ lửng hoành tráng */}
-      <div className="floating-deco-v3 page-intro-anim" style={{ top: '110px', left: '4%', fontSize: '48px', animationDelay: '0s' }}>🎓</div>
-      <div className="floating-deco-v3 page-intro-anim" style={{ top: '150px', right: '4%', fontSize: '48px', animationDelay: '1s' }}>✏️</div>
+      {/* 🎓 Nhân bản & Phóng to Mũ tốt nghiệp & Bút chì ở 2 bên */}
+      <div className="floating-deco-v4 page-intro-anim" style={{ top: '100px', left: '3%', fontSize: '58px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco-v4 page-intro-anim" style={{ top: '220px', left: '6%', fontSize: '46px', animationDelay: '1.5s' }}>✏️</div>
+      <div className="floating-deco-v4 page-intro-anim" style={{ top: '120px', right: '3%', fontSize: '58px', animationDelay: '0.8s' }}>🎓</div>
+      <div className="floating-deco-v4 page-intro-anim" style={{ top: '240px', right: '6%', fontSize: '46px', animationDelay: '2s' }}>✏️</div>
 
       {/* Header Cố Định Mượt Mà */}
       <header className="page-intro-anim" style={{
@@ -382,7 +382,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="slide-scroll-anim" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <section id="services" className="slide-scroll-trigger" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', color: textMain }}>
             {currentText.servicesTitle}
           </h2>
@@ -409,7 +409,7 @@ export default function Home() {
         </section>
 
         {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-        <section id="order" className="slide-scroll-anim right-side" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
+        <section id="order" className="slide-scroll-trigger right-dir" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
           <div className="clean-card" style={{ padding: '42px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', color: textMain }}>
               {currentText.orderTitle}
