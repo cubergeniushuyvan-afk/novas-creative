@@ -23,20 +23,22 @@ export default function Home() {
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
   useEffect(() => {
-    // 100% mượt mà, không bao giờ giật lag khi giao nhau
+    // Hiệu ứng lướt cuộn: Bay từ trái/phải vào khi tới, bay ra khi qua - Không giật lag
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("in-view");
+          } else {
+            entry.target.classList.remove("in-view");
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.15, rootMargin: "-30px 0px -30px 0px" }
     );
 
-    const sections = document.querySelectorAll(".fade-in-section");
-    sections.forEach((sec) => observer.observe(sec));
+    const slideElements = document.querySelectorAll(".slide-scroll-anim");
+    slideElements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
   }, []);
@@ -191,14 +193,12 @@ export default function Home() {
           50% { transform: translateY(-25px) rotate(10deg) scale(1.06); }
         }
 
-        /* Hiệu ứng ánh sáng chạy qua tiêu đề cực ngầu */
         @keyframes shimmerText {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
 
-        /* Hiệu ứng mở trang website xuất hiện lần đầu mượt mà */
         @keyframes pageIntro {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0px); }
@@ -216,15 +216,18 @@ export default function Home() {
           opacity: 0.3;
         }
 
-        /* Hiệu ứng cuộn trang không bao giờ giật lag */
-        .fade-in-section {
+        {/* Hiệu ứng lướt cuộn: Bay từ trái / phải vào mượt mà, bay ra biến mất êm ái */}
+        .slide-scroll-anim {
           opacity: 0;
-          transform: translateY(30px);
+          transform: translateX(-60px);
           transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .fade-in-section.visible {
+        .slide-scroll-anim.right-side {
+          transform: translateX(60px);
+        }
+        .slide-scroll-anim.in-view {
           opacity: 1;
-          transform: translateY(0px);
+          transform: translateX(0px);
         }
 
         .lang-transition-wrap {
@@ -379,7 +382,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="fade-in-section" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <section id="services" className="slide-scroll-anim" style={{ padding: '60px 24px', maxWidth: '1100px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', color: textMain }}>
             {currentText.servicesTitle}
           </h2>
@@ -406,7 +409,7 @@ export default function Home() {
         </section>
 
         {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-        <section id="order" className="fade-in-section" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
+        <section id="order" className="slide-scroll-anim right-side" style={{ padding: '60px 24px 100px', maxWidth: '760px', margin: '0 auto' }}>
           <div className="clean-card" style={{ padding: '42px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: '900', textAlign: 'center', margin: '0 0 8px 0', color: textMain }}>
               {currentText.orderTitle}
