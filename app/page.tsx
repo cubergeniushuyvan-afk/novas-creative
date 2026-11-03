@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 export default function Home() {
   const [loadingIntro, setLoadingIntro] = useState(true);
   const [introStep, setIntroStep] = useState(1);
+  const [introMode, setIntroMode] = useState<"startup" | "submitting">("startup");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -25,12 +26,12 @@ export default function Home() {
   const MY_PHONE = "0399641646";
   const MY_EMAIL = "Cubergeniushuyvan@gmail.com";
 
-  // Hiệu ứng màn hình Intro khởi động siêu ngầu
+  // Màn hình Intro khởi động lần đầu
   useEffect(() => {
-    const timer1 = setTimeout(() => setIntroStep(2), 1200);
+    const timer1 = setTimeout(() => setIntroStep(2), 1400);
     const timer2 = setTimeout(() => {
       setLoadingIntro(false);
-    }, 2600);
+    }, 2800);
 
     return () => {
       clearTimeout(timer1);
@@ -41,7 +42,6 @@ export default function Home() {
   useEffect(() => {
     if (loadingIntro) return;
 
-    // Hiệu ứng lướt tới phóng to rõ - Lướt qua mờ dần cực mượt
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -88,7 +88,12 @@ export default function Home() {
       return;
     }
 
-    setLoading(true);
+    // Kích hoạt Intro ngầu lúc gửi đơn
+    setIntroMode("submitting");
+    setLoadingIntro(true);
+    setIntroStep(1);
+
+    setTimeout(() => setIntroStep(2), 1200);
 
     const orderData = {
       "Ngay": new Date().toLocaleString("vi-VN"),
@@ -109,22 +114,26 @@ export default function Home() {
       console.log("Lỗi:", err);
     }
 
-    const subject = encodeURIComponent(`[ĐƠN ĐẶT HÀNG MỚI] ${formData.fullName} - Novas Creative`);
-    const body = encodeURIComponent(
-      `✨ CÓ ĐƠN HÀNG MỚI TỪ WEBSITE ✨\n\n` +
-      `- Họ tên: ${formData.fullName}\n` +
-      `- SĐT/Zalo: ${formData.phone}\n` +
-      `- Độ tuổi: ${formData.age}\n` +
-      `- Dịch vụ: ${formData.service}\n` +
-      `- Yêu cầu: ${formData.requirements || "Không có"}`
-    );
-
-    setLoading(false);
-    setSuccessMsg(true);
-
     setTimeout(() => {
+      setLoadingIntro(false);
+      setSuccessMsg(true);
+
+      // Tự động ẩn dòng thông báo thành công sau 3 giây
+      setTimeout(() => {
+        setSuccessMsg(false);
+      }, 3000);
+
+      const subject = encodeURIComponent(`[ĐƠN ĐẶT HÀNG MỚI] ${formData.fullName} - Novas Creative`);
+      const body = encodeURIComponent(
+        `✨ CÓ ĐƠN HÀNG MỚI TỪ WEBSITE ✨\n\n` +
+        `- Họ tên: ${formData.fullName}\n` +
+        `- SĐT/Zalo: ${formData.phone}\n` +
+        `- Độ tuổi: ${formData.age}\n` +
+        `- Dịch vụ: ${formData.service}\n` +
+        `- Yêu cầu: ${formData.requirements || "Không có"}`
+      );
       window.location.href = `mailto:${MY_EMAIL}?subject=${subject}&body=${body}`;
-    }, 1200);
+    }, 2600);
   };
 
   const t = {
@@ -152,8 +161,7 @@ export default function Home() {
       labelReq: "MÔ TẢ CHI TIẾT YÊU CẦU",
       btnSubmit: "🚀 XÁC NHẬN GỬI ĐƠN HÀNG",
       btnSubmitting: "ĐANG ĐỒNG BỘ DỮ LIỆU...",
-      successText: "🎉 ĐƠN HÀNG ĐÃ ĐƯỢC LƯU VÀO GOOGLE SHEETS THÀNH CÔNG!",
-      successSub: "Văn sẽ tiếp nhận và phản hồi lại bạn trong vòng tối đa 4 tiếng!",
+      successBanner: "🎉 ĐƠN THÀNH CÔNG! Cảm ơn quý khách đã tin tưởng và sẽ được liên lạc lại sớm nhất.",
       zaloContactText: "Hoặc liên hệ trực tiếp qua Zalo Huỳnh Huy Văn số điện thoại",
       zaloTime: "để được tư vấn (được hồi đáp trong nhiều nhất chỉ 4 tiếng)."
     },
@@ -181,8 +189,7 @@ export default function Home() {
       labelReq: "DETAILED REQUIREMENTS",
       btnSubmit: "🚀 CONFIRM & SEND ORDER",
       btnSubmitting: "SYNCING DATA...",
-      successText: "🎉 ORDER SUCCESSFULLY SAVED TO GOOGLE SHEETS!",
-      successSub: "Van will receive and respond to you within a maximum of 4 hours!",
+      successBanner: "🎉 ORDER SUCCESSFUL! Thank you for trusting us, we will contact you back soon.",
       zaloContactText: "Or contact directly via Zalo Huỳnh Huy Văn at phone number",
       zaloTime: "for consultation (replied within a maximum of just 4 hours)."
     }
@@ -208,7 +215,7 @@ export default function Home() {
       transition: 'background-color 0.4s ease, color 0.4s ease'
     }}>
       <style>{`
-        /* Màn hình Intro khởi động */
+        /* Màn hình Intro điện ảnh siêu ngầu */
         .intro-loader-screen {
           position: fixed;
           inset: 0;
@@ -218,29 +225,33 @@ export default function Home() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          transition: opacity 0.7s ease, visibility 0.7s ease;
+          transition: opacity 0.8s ease, visibility 0.8s ease;
         }
         .intro-title {
-          font-size: 42px;
+          font-size: 46px;
           font-weight: 900;
-          color: #ffffff;
+          background: linear-gradient(135deg, #ffffff 20%, #38bdf8 70%, #2563eb 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
           letter-spacing: -1px;
           opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(30px) scale(0.95);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+          text-align: center;
         }
         .intro-title.show {
           opacity: 1;
-          transform: translateY(0px);
+          transform: translateY(0px) scale(1);
         }
         .intro-subtitle {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 700;
           color: #38bdf8;
-          margin-top: 12px;
+          margin-top: 15px;
           opacity: 0;
-          transform: translateY(15px);
-          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(20px);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+          letter-spacing: 1px;
         }
         .intro-subtitle.show {
           opacity: 1;
@@ -258,7 +269,7 @@ export default function Home() {
           100% { background-position: 0% 50%; }
         }
 
-        .floating-deco-v5 {
+        .floating-deco-v6 {
           position: absolute;
           pointer-events: none;
           z-index: 0;
@@ -266,7 +277,6 @@ export default function Home() {
           opacity: 0.35;
         }
 
-        /* Hiệu ứng lướt tới: Phóng to rõ, lướt qua: Mờ dần thu nhỏ */
         .scale-fade-trigger {
           opacity: 0.2;
           transform: scale(0.92) translateY(30px);
@@ -361,25 +371,25 @@ export default function Home() {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
           .hero-title-shimmer { font-size: 32px !important; }
-          .intro-title { font-size: 28px !important; text-align: center; padding: 0 20px; }
+          .intro-title { font-size: 28px !important; padding: 0 20px; }
         }
       `}</style>
 
-      {/* Màn hình Intro khởi động ngầu lòi */}
+      {/* Màn hình Intro điện ảnh ngầu lòi (Cả khi vào web lẫn khi gửi đơn) */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
         <div className={`intro-title ${introStep >= 1 ? 'show' : ''}`}>
-          NOVAS CREATIVE STUDIO
+          {introMode === "startup" ? "NOVAS CREATIVE STUDIO" : "PROCESSING ORDER..."}
         </div>
         <div className={`intro-subtitle ${introStep >= 2 ? 'show' : ''}`}>
-          Created by Huỳnh Huy Văn
+          {introMode === "startup" ? "Created by Huỳnh Huy Văn" : "Syncing to Google Sheets & Sending..."}
         </div>
       </div>
 
       {/* 🎓 Mũ tốt nghiệp & Bút chì lơ lửng phóng to hai bên */}
-      <div className="floating-deco-v5" style={{ top: '100px', left: '3%', fontSize: '58px', animationDelay: '0s' }}>🎓</div>
-      <div className="floating-deco-v5" style={{ top: '220px', left: '6%', fontSize: '46px', animationDelay: '1.5s' }}>✏️</div>
-      <div className="floating-deco-v5" style={{ top: '120px', right: '3%', fontSize: '58px', animationDelay: '0.8s' }}>🎓</div>
-      <div className="floating-deco-v5" style={{ top: '240px', right: '6%', fontSize: '46px', animationDelay: '2s' }}>✏️</div>
+      <div className="floating-deco-v6" style={{ top: '100px', left: '3%', fontSize: '58px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco-v6" style={{ top: '220px', left: '6%', fontSize: '46px', animationDelay: '1.5s' }}>✏️</div>
+      <div className="floating-deco-v6" style={{ top: '120px', right: '3%', fontSize: '58px', animationDelay: '0.8s' }}>🎓</div>
+      <div className="floating-deco-v6" style={{ top: '240px', right: '6%', fontSize: '46px', animationDelay: '2s' }}>✏️</div>
 
       {/* Header Cố Định Mượt Mà */}
       <header style={{
@@ -532,10 +542,9 @@ export default function Home() {
               <div style={{
                 marginTop: '20px', padding: '16px', borderRadius: '12px',
                 background: isDark ? 'rgba(22, 101, 52, 0.4)' : '#dcfce7', border: '1px solid #86efac', color: isDark ? '#4ade80' : '#166534',
-                textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6'
+                textAlign: 'center', fontSize: '14px', fontWeight: '800', lineHeight: '1.6', animation: 'pageIntro 0.5s ease'
               }}>
-                {currentText.successText}<br />
-                {currentText.successSub}
+                {currentText.successBanner}
               </div>
             )}
           </div>
