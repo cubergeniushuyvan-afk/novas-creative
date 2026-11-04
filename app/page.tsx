@@ -18,7 +18,7 @@ export default function Home() {
   const [successMsg, setSuccessMsg] = useState(false);
 
   const [lang, setLang] = useState<"vi" | "en">("vi");
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [theme, setTheme] = useState<"light" | "dark">("light"); // Mặc định GIAO DIỆN SÁNG chuẩn FlashSlide
   const [isRotating, setIsRotating] = useState(false);
   const [isLangAnimating, setIsLangAnimating] = useState(false);
 
@@ -26,10 +26,10 @@ export default function Home() {
   const MY_PHONE = "0399641646";
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setIntroStep(2), 1600);
+    const timer1 = setTimeout(() => setIntroStep(2), 1500);
     const timer2 = setTimeout(() => {
       setLoadingIntro(false);
-    }, 3200);
+    }, 3000);
 
     return () => {
       clearTimeout(timer1);
@@ -44,18 +44,18 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("max-anim-active");
-            entry.target.classList.remove("max-anim-inactive");
+            entry.target.classList.add("flash-anim-active");
+            entry.target.classList.remove("flash-anim-inactive");
           } else {
-            entry.target.classList.add("max-anim-inactive");
-            entry.target.classList.remove("max-anim-active");
+            entry.target.classList.add("flash-anim-inactive");
+            entry.target.classList.remove("flash-anim-active");
           }
         });
       },
-      { threshold: 0.15, rootMargin: "-30px 0px -30px 0px" }
+      { threshold: 0.12, rootMargin: "-20px 0px -20px 0px" }
     );
 
-    const elements = document.querySelectorAll(".max-anim-trigger");
+    const elements = document.querySelectorAll(".flash-anim-trigger");
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -90,7 +90,7 @@ export default function Home() {
     setLoadingIntro(true);
     setIntroStep(1);
 
-    setTimeout(() => setIntroStep(2), 1400);
+    setTimeout(() => setIntroStep(2), 1300);
 
     const orderData = {
       "Ngay": new Date().toLocaleString("vi-VN"),
@@ -118,7 +118,7 @@ export default function Home() {
       setTimeout(() => {
         setSuccessMsg(false);
       }, 3500);
-    }, 2900);
+    }, 2800);
   };
 
   const t = {
@@ -185,8 +185,8 @@ export default function Home() {
   const isDark = theme === "dark";
   const bgMain = isDark ? "#020617" : "#f8fafc";
   const textMain = isDark ? "#f8fafc" : "#0f172a";
-  const cardBg = isDark ? "rgba(15, 23, 42, 0.82)" : "rgba(255, 255, 255, 0.9)";
-  const cardBorder = isDark ? "rgba(56, 189, 248, 0.4)" : "rgba(37, 99, 235, 0.25)";
+  const cardBg = isDark ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.9)";
+  const cardBorder = isDark ? "rgba(56, 189, 248, 0.35)" : "rgba(37, 99, 235, 0.22)";
   const textSub = isDark ? "#94a3b8" : "#475569";
 
   return (
@@ -200,76 +200,75 @@ export default function Home() {
       transition: 'background-color 0.5s ease, color 0.5s ease'
     }}>
       <style>{`
-        /* Lưới không gian 3D quét sáng nền (Cyberpunk Grid Background) */
-        .cyber-grid {
+        /* Nền họa tiết lưới mềm mại phong cách FlashSlide Sang Trọng */
+        .flash-grid-bg {
           position: fixed;
           inset: 0;
           background-image: 
-            linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
-          background-size: 45px 45px;
+            radial-gradient(${isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(37, 99, 235, 0.08)'} 1px, transparent 1px);
+          background-size: 32px 32px;
           z-index: 0;
           pointer-events: none;
         }
 
-        .ambient-orb-1 {
+        /* Khối tỏa sáng không gian mềm mại */
+        .ambient-orb-light-1 {
           position: fixed;
-          top: -15vh;
-          left: -10vw;
-          width: 55vw;
-          height: 55vw;
-          background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, rgba(56,189,248,0.08) 60%, transparent 100%);
+          top: -200px;
+          left: -150px;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, ${isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(186, 230, 253, 0.65)'} 0%, transparent 70%);
           border-radius: 50%;
           z-index: 0;
           pointer-events: none;
-          animation: orbFloat1 10s ease-in-out infinite alternate;
+          animation: orbSmooth1 14s ease-in-out infinite alternate;
         }
-        .ambient-orb-2 {
+        .ambient-orb-light-2 {
           position: fixed;
-          bottom: -15vh;
-          right: -10vw;
-          width: 55vw;
-          height: 55vw;
-          background: radial-gradient(circle, rgba(147,51,234,0.22) 0%, rgba(59,130,246,0.08) 60%, transparent 100%);
+          bottom: -200px;
+          right: -150px;
+          width: 650px;
+          height: 650px;
+          background: radial-gradient(circle, ${isDark ? 'rgba(99, 102, 241, 0.18)' : 'rgba(191, 219, 254, 0.65)'} 0%, transparent 70%);
           border-radius: 50%;
           z-index: 0;
           pointer-events: none;
-          animation: orbFloat2 13s ease-in-out infinite alternate;
+          animation: orbSmooth2 16s ease-in-out infinite alternate;
         }
 
-        @keyframes orbFloat1 {
+        @keyframes orbSmooth1 {
           0% { transform: translate(0px, 0px) scale(1); }
-          100% { transform: translate(80px, 60px) scale(1.2); }
+          100% { transform: translate(90px, 70px) scale(1.2); }
         }
-        @keyframes orbFloat2 {
+        @keyframes orbSmooth2 {
           0% { transform: translate(0px, 0px) scale(1); }
-          100% { transform: translate(-90px, -70px) scale(1.25); }
+          100% { transform: translate(-100px, -80px) scale(1.25); }
         }
 
-        /* Màn hình Intro Điện Ảnh Rầm Rộ 200% */
+        /* Intro Khởi Động Rầm Rộ Sang Trọng */
         .intro-loader-screen {
           position: fixed;
           inset: 0;
-          background: #020617;
+          background: ${isDark ? '#020617' : '#ffffff'};
           z-index: 9999;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .intro-title {
-          font-size: 56px;
+          font-size: 54px;
           font-weight: 900;
-          background: linear-gradient(135deg, #ffffff 15%, #38bdf8 55%, #818cf8 90%);
+          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 0%, #2563eb 50%, #0284c7 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           letter-spacing: -2px;
           opacity: 0;
-          transform: translateY(40px) scale(0.9);
-          transition: all 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(35px) scale(0.92);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: center;
-          filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.4));
         }
         .intro-title.show {
           opacity: 1;
@@ -278,146 +277,144 @@ export default function Home() {
         .intro-subtitle {
           font-size: 20px;
           font-weight: 800;
-          color: #38bdf8;
-          margin-top: 18px;
+          color: #0284c7;
+          margin-top: 16px;
           opacity: 0;
-          transform: translateY(25px);
-          transition: all 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(20px);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
           letter-spacing: 2px;
           text-transform: uppercase;
-          text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
         }
         .intro-subtitle.show {
           opacity: 1;
           transform: translateY(0px);
         }
 
-        @keyframes floatBigRotateMax {
-          0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-          50% { transform: translateY(-40px) rotate(18deg) scale(1.15); }
+        /* Chuyển động lơ lửng vô cực hình số 8 của Bút chì & Mũ tốt nghiệp */
+        @keyframes infinityFloat {
+          0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          25% { transform: translate(12px, -25px) rotate(8deg) scale(1.08); }
+          50% { transform: translate(-10px, -40px) rotate(-6deg) scale(1.12); }
+          75% { transform: translate(-15px, -18px) rotate(6deg) scale(1.05); }
         }
 
-        @keyframes shimmerText {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .floating-deco-max200 {
+        .floating-deco-flash {
           position: absolute;
           pointer-events: none;
           z-index: 1;
-          animation: floatBigRotateMax 4.5s ease-in-out infinite;
-          opacity: 0.5;
-          filter: drop-shadow(0 15px 25px rgba(56, 189, 248, 0.4));
+          animation: infinityFloat 6s ease-in-out infinite;
+          opacity: ${isDark ? 0.45 : 0.85};
+          filter: drop-shadow(0 12px 20px rgba(37, 99, 235, 0.2));
         }
 
-        .max-anim-trigger {
-          opacity: 0.1;
-          transform: scale(0.85) translateY(55px);
-          transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Hiệu ứng Lướt tới Nổi Khối Bừng Sáng - Lướt qua Mờ Nhẹ */
+        .flash-anim-trigger {
+          opacity: 0.15;
+          transform: scale(0.88) translateY(45px);
+          transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .max-anim-trigger.max-anim-active {
+        .flash-anim-trigger.flash-anim-active {
           opacity: 1;
           transform: scale(1) translateY(0px);
         }
-        .max-anim-trigger.max-anim-inactive {
-          opacity: 0.15;
-          transform: scale(0.9) translateY(30px);
+        .flash-anim-trigger.flash-anim-inactive {
+          opacity: 0.2;
+          transform: scale(0.92) translateY(25px);
         }
 
         .lang-transition-wrap {
           opacity: ${isLangAnimating ? 0 : 1};
-          transform: translateY(${isLangAnimating ? '10px' : '0px'});
-          transition: opacity 0.3s ease, transform 0.3s ease;
+          transform: translateY(${isLangAnimating ? '8px' : '0px'});
+          transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
-        .hero-title-shimmer {
-          font-size: 56px;
+        .hero-title-flash {
+          font-size: 54px;
           font-weight: 900;
-          line-height: 1.2;
+          line-height: 1.22;
           letter-spacing: -2px;
-          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 10%, #2563eb 45%, #38bdf8 80%);
+          background: linear-gradient(135deg, ${isDark ? '#ffffff' : '#0f172a'} 20%, #2563eb 60%, #0284c7 90%);
           background-size: 200% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmerText 4.5s ease infinite;
         }
 
+        /* Thẻ Kính Sang Trọng Chuẩn FlashSlide */
         .clean-card {
           background: ${cardBg};
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border: 2px solid ${cardBorder};
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
-          border-radius: 32px;
-          transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1.5px solid ${cardBorder};
+          box-shadow: ${isDark ? '0 25px 60px rgba(0, 0, 0, 0.3)' : '0 20px 50px rgba(37, 99, 235, 0.08)'};
+          border-radius: 30px;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .clean-card:hover {
-          border-color: #38bdf8;
-          transform: translateY(-10px) scale(1.015);
-          box-shadow: 0 35px 90px rgba(56, 189, 248, 0.3);
+          border-color: #2563eb;
+          transform: translateY(-8px) scale(1.01);
+          box-shadow: ${isDark ? '0 30px 80px rgba(56, 189, 248, 0.25)' : '0 30px 70px rgba(37, 99, 235, 0.18)'};
         }
 
         .btn-primary-clean {
-          background: linear-gradient(135deg, #2563eb, #38bdf8);
+          background: linear-gradient(135deg, #2563eb, #0284c7);
           color: white;
-          box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5);
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-primary-clean:hover {
-          transform: translateY(-4px) scale(1.03);
-          box-shadow: 0 20px 50px rgba(56, 189, 248, 0.7);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 16px 40px rgba(37, 99, 235, 0.5);
         }
 
         .control-icon-btn {
-          background: ${isDark ? 'rgba(30, 41, 59, 0.85)' : '#f8fafc'};
-          border: 2px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : '#cbd5e1'};
+          background: ${isDark ? 'rgba(30, 41, 59, 0.85)' : '#ffffff'};
+          border: 1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : '#cbd5e1'};
           color: ${textMain};
-          width: 48px;
-          height: 48px;
-          border-radius: 16px;
+          width: 46px;
+          height: 46px;
+          border-radius: 14px;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 20px;
+          font-size: 19px;
           font-weight: 700;
           transition: all 0.25s ease;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
         .control-icon-btn:hover {
-          border-color: #38bdf8;
-          transform: translateY(-3px) scale(1.08);
-          box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+          border-color: #2563eb;
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
         }
 
         .input-box-clean {
-          background: ${isDark ? 'rgba(30, 41, 59, 0.7)' : '#f8fafc'};
-          border: 2px solid ${isDark ? 'rgba(255, 255, 255, 0.15)' : '#cbd5e1'};
+          background: ${isDark ? 'rgba(30, 41, 59, 0.7)' : '#ffffff'};
+          border: 1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.15)' : '#cbd5e1'};
           color: ${textMain};
           transition: all 0.25s ease;
         }
         .input-box-clean:focus {
           outline: none;
-          border-color: #38bdf8;
+          border-color: #2563eb;
           background: ${isDark ? '#0f172a' : '#ffffff'};
-          box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.25);
+          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
         }
 
         @media (max-width: 768px) {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
-          .hero-title-shimmer { font-size: 36px !important; }
-          .intro-title { font-size: 32px !important; padding: 0 20px; }
+          .hero-title-flash { font-size: 34px !important; }
+          .intro-title { font-size: 30px !important; padding: 0 20px; }
         }
       `}</style>
 
-      {/* Lưới không gian Cyber Grid & Orbs */}
-      <div className="cyber-grid"></div>
-      <div className="ambient-orb-1"></div>
-      <div className="ambient-orb-2"></div>
+      {/* Lưới họa tiết nền & Quả cầu tỏa sáng FlashSlide */}
+      <div className="flash-grid-bg"></div>
+      <div className="ambient-orb-light-1"></div>
+      <div className="ambient-orb-light-2"></div>
 
-      {/* Màn hình Intro Điện Ảnh Rầm Rộ 200% */}
+      {/* Màn hình Intro Điện Ảnh Rầm Rộ */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
         <div className={`intro-title ${introStep >= 1 ? 'show' : ''}`}>
           {introMode === "startup" ? "NOVAS CREATIVE STUDIO" : "PROCESSING ORDER..."}
@@ -427,24 +424,24 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 🎓 Mũ tốt nghiệp & Bút chì lơ lửng phóng to rầm rộ hai bên */}
-      <div className="floating-deco-max200" style={{ top: '80px', left: '2.5%', fontSize: '68px', animationDelay: '0s' }}>🎓</div>
-      <div className="floating-deco-max200" style={{ top: '210px', left: '5.5%', fontSize: '52px', animationDelay: '1s' }}>✏️</div>
-      <div className="floating-deco-max200" style={{ top: '100px', right: '2.5%', fontSize: '68px', animationDelay: '0.5s' }}>🎓</div>
-      <div className="floating-deco-max200" style={{ top: '230px', right: '5.5%', fontSize: '52px', animationDelay: '1.5s' }}>✏️</div>
+      {/* 🎓 Mũ tốt nghiệp & Bút chì lơ lửng vô cực phóng to sang xịn ở hai bên */}
+      <div className="floating-deco-flash" style={{ top: '80px', left: '3%', fontSize: '64px', animationDelay: '0s' }}>🎓</div>
+      <div className="floating-deco-flash" style={{ top: '210px', left: '6%', fontSize: '48px', animationDelay: '1.2s' }}>✏️</div>
+      <div className="floating-deco-flash" style={{ top: '95px', right: '3%', fontSize: '64px', animationDelay: '0.6s' }}>🎓</div>
+      <div className="floating-deco-flash" style={{ top: '225px', right: '6%', fontSize: '48px', animationDelay: '1.8s' }}>✏️</div>
 
-      {/* Header Cố Định Mượt Mà */}
+      {/* Header Cố Định Sang Trọng */}
       <header style={{
-        borderBottom: `2px solid ${cardBorder}`,
-        background: isDark ? 'rgba(2, 6, 23, 0.88)' : 'rgba(248, 250, 252, 0.88)',
+        borderBottom: `1.5px solid ${cardBorder}`,
+        background: isDark ? 'rgba(2, 6, 23, 0.88)' : 'rgba(255, 255, 255, 0.88)',
         backdropFilter: 'blur(20px)',
         position: 'sticky', top: 0, zIndex: 1000, padding: '0 32px'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '84px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '82px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           
-          <div style={{ fontSize: '20px', fontWeight: '900', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '10px', filter: 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.3))' }}>
+          <div style={{ fontSize: '20px', fontWeight: '900', color: '#2563eb', display: 'flex', alignItems: 'center', gap: '10px' }}>
             ⚡ {currentText.brand} 
-            <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '4px 10px', borderRadius: '10px', fontWeight: '900' }}>
+            <span style={{ fontSize: '11px', background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', padding: '4px 10px', borderRadius: '10px', fontWeight: '900' }}>
               {currentText.tagline}
             </span>
           </div>
@@ -455,12 +452,12 @@ export default function Home() {
             <a href="#order" style={{ color: textSub, textDecoration: 'none', fontSize: '14.5px', fontWeight: '800', transition: 'color 0.2s' }}>{currentText.navOrder}</a>
           </nav>
 
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button onClick={toggleLanguage} className="control-icon-btn" title="Chuyển ngôn ngữ">
               🌐
             </button>
 
-            <button onClick={toggleTheme} className="control-icon-btn" title="Chuyển đổi giao diện">
+            <button onClick={toggleTheme} className="control-icon-btn" title="Chuyển đổi giao diện Sáng / Tối">
               <span style={{ 
                 display: 'inline-block', 
                 transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -477,46 +474,46 @@ export default function Home() {
       <div className="lang-transition-wrap" style={{ position: 'relative', zIndex: 2 }}>
         
         {/* Hero Section */}
-        <section id="about" style={{ padding: '110px 24px 80px', textAlign: 'center', maxWidth: '980px', margin: '0 auto' }}>
+        <section id="about" style={{ padding: '100px 24px 75px', textAlign: 'center', maxWidth: '960px', margin: '0 auto' }}>
           
-          <h1 className="hero-title-shimmer" style={{ margin: '0 0 30px 0', whiteSpace: 'pre-line' }}>
+          <h1 className="hero-title-flash" style={{ margin: '0 0 28px 0', whiteSpace: 'pre-line' }}>
             {currentText.heroTitle}
           </h1>
 
           <p style={{
-            color: textSub, fontSize: '18.5px', lineHeight: '1.95', maxWidth: '820px', margin: '0 auto 50px',
+            color: textSub, fontSize: '18px', lineHeight: '1.9', maxWidth: '800px', margin: '0 auto 48px',
             fontStyle: 'italic', fontWeight: '600'
           }}>
             "{currentText.slogan}"
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <a href="#order" className="btn-primary-clean" style={{ textDecoration: 'none', padding: '20px 45px', borderRadius: '18px', fontSize: '17px', fontWeight: '900', letterSpacing: '1px' }}>
+            <a href="#order" className="btn-primary-clean" style={{ textDecoration: 'none', padding: '18px 42px', borderRadius: '18px', fontSize: '16.5px', fontWeight: '900', letterSpacing: '0.5px' }}>
               {currentText.btnExplore}
             </a>
           </div>
         </section>
 
         {/* Services Section */}
-        <section id="services" className="max-anim-trigger" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '30px', fontWeight: '900', textAlign: 'center', marginBottom: '12px', color: textMain }}>
+        <section id="services" className="flash-anim-trigger" style={{ padding: '75px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: '900', textAlign: 'center', marginBottom: '10px', color: textMain }}>
             {currentText.servicesTitle}
           </h2>
-          <p style={{ textAlign: 'center', color: textSub, marginBottom: '50px', fontSize: '16px' }}>{currentText.servicesDesc}</p>
+          <p style={{ textAlign: 'center', color: textSub, marginBottom: '48px', fontSize: '15.5px' }}>{currentText.servicesDesc}</p>
 
-          <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px' }}>
+          <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px' }}>
             
-            <div className="clean-card" style={{ padding: '45px' }}>
-              <div style={{ fontSize: '44px', marginBottom: '18px' }}>💻</div>
-              <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: textMain }}>{currentText.service1Title}</h3>
+            <div className="clean-card" style={{ padding: '42px' }}>
+              <div style={{ fontSize: '42px', marginBottom: '16px' }}>💻</div>
+              <h3 style={{ fontSize: '21px', fontWeight: '900', margin: '0 0 12px 0', color: textMain }}>{currentText.service1Title}</h3>
               <p style={{ color: textSub, lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
                 {currentText.service1Desc}
               </p>
             </div>
 
-            <div className="clean-card" style={{ padding: '45px' }}>
-              <div style={{ fontSize: '44px', marginBottom: '18px' }}>📚</div>
-              <h3 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 14px 0', color: textMain }}>{currentText.service2Title}</h3>
+            <div className="clean-card" style={{ padding: '42px' }}>
+              <div style={{ fontSize: '42px', marginBottom: '16px' }}>📚</div>
+              <h3 style={{ fontSize: '21px', fontWeight: '900', margin: '0 0 12px 0', color: textMain }}>{currentText.service2Title}</h3>
               <p style={{ color: textSub, lineHeight: '1.8', fontSize: '15px', margin: 0 }}>
                 {currentText.service2Desc}
               </p>
@@ -525,66 +522,66 @@ export default function Home() {
         </section>
 
         {/* Form Đặt Hàng Tự Động Lưu Google Sheets */}
-        <section id="order" className="max-anim-trigger" style={{ padding: '80px 24px 120px', maxWidth: '800px', margin: '0 auto' }}>
-          <div className="clean-card" style={{ padding: '52px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: '900', textAlign: 'center', margin: '0 0 12px 0', color: textMain }}>
+        <section id="order" className="flash-anim-trigger" style={{ padding: '75px 24px 115px', maxWidth: '780px', margin: '0 auto' }}>
+          <div className="clean-card" style={{ padding: '48px' }}>
+            <h2 style={{ fontSize: '26px', fontWeight: '900', textAlign: 'center', margin: '0 0 10px 0', color: textMain }}>
               {currentText.orderTitle}
             </h2>
-            <p style={{ color: textSub, fontSize: '15px', textAlign: 'center', marginBottom: '40px' }}>
+            <p style={{ color: textSub, fontSize: '14.5px', textAlign: 'center', marginBottom: '36px' }}>
               {currentText.orderDesc}
             </p>
 
-            <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+            <form onSubmit={handleSubmitOrder} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#38bdf8', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelName}</label>
-                <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="input-box-clean" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '15.5px', boxSizing: 'border-box' }} />
+                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelName}</label>
+                <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required placeholder="Ví dụ: Nguyễn Văn A..." className="input-box-clean" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
               </div>
 
-              <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#38bdf8', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelPhone}</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="input-box-clean" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '15.5px', boxSizing: 'border-box' }} />
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelPhone}</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="039xxxxxxx" className="input-box-clean" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#38bdf8', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelAge}</label>
-                  <input type="number" name="age" value={formData.age} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '15.5px', boxSizing: 'border-box' }} />
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelAge}</label>
+                  <input type="number" name="age" value={formData.age} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }} />
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#38bdf8', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelService}</label>
-                <select name="service" value={formData.service} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '15.5px', boxSizing: 'border-box' }}>
+                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelService}</label>
+                <select name="service" value={formData.service} onChange={handleChange} className="input-box-clean" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', boxSizing: 'border-box' }}>
                   <option value="Slide PowerPoint học đường">Slide PowerPoint học đường</option>
                   <option value="Giáo án điện tử">Giáo án điện tử</option>
                 </select>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '900', color: '#38bdf8', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelReq}</label>
-                <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="input-box-clean" style={{ width: '100%', padding: '18px 20px', borderRadius: '16px', fontSize: '15.5px', resize: 'none', boxSizing: 'border-box' }}></textarea>
+                <label style={{ display: 'block', fontSize: '12.5px', fontWeight: '900', color: '#2563eb', marginBottom: '8px', letterSpacing: '0.5px' }}>{currentText.labelReq}</label>
+                <textarea name="requirements" value={formData.requirements} onChange={handleChange} rows={4} placeholder="Nhập môn học, chủ đề, số lượng slide..." className="input-box-clean" style={{ width: '100%', padding: '16px 18px', borderRadius: '14px', fontSize: '15px', resize: 'none', boxSizing: 'border-box' }}></textarea>
               </div>
 
               <button type="submit" disabled={loading} className="btn-primary-clean" style={{
-                width: '100%', padding: '20px', border: 'none', borderRadius: '16px',
-                fontWeight: '900', fontSize: '16px', cursor: 'pointer', marginTop: '14px', textTransform: 'uppercase', letterSpacing: '1px'
+                width: '100%', padding: '18px', border: 'none', borderRadius: '14px',
+                fontWeight: '900', fontSize: '15.5px', cursor: 'pointer', marginTop: '10px', textTransform: 'uppercase', letterSpacing: '1px'
               }}>
                 {loading ? currentText.btnSubmitting : currentText.btnSubmit}
               </button>
             </form>
 
             <div style={{
-              marginTop: '32px', padding: '20px', borderRadius: '16px',
-              background: isDark ? 'rgba(30, 41, 59, 0.5)' : '#f1f5f9', border: `2px solid ${cardBorder}`,
-              textAlign: 'center', fontSize: '14px', color: textSub, lineHeight: '1.75'
+              marginTop: '30px', padding: '18px', borderRadius: '14px',
+              background: isDark ? 'rgba(30, 41, 59, 0.4)' : '#f1f5f9', border: `1.5px solid ${cardBorder}`,
+              textAlign: 'center', fontSize: '13.5px', color: textSub, lineHeight: '1.7'
             }}>
-              💬 {currentText.zaloContactText} <strong style={{ color: '#38bdf8', fontSize: '15.5px', fontWeight: '900' }}>{MY_PHONE}</strong> {currentText.zaloTime}
+              💬 {currentText.zaloContactText} <strong style={{ color: '#2563eb', fontSize: '15px', fontWeight: '900' }}>{MY_PHONE}</strong> {currentText.zaloTime}
             </div>
 
             {successMsg && (
               <div style={{
-                marginTop: '25px', padding: '20px', borderRadius: '16px',
-                background: isDark ? 'rgba(22, 101, 52, 0.45)' : '#dcfce7', border: '2px solid #86efac', color: isDark ? '#4ade80' : '#166534',
-                textAlign: 'center', fontSize: '15px', fontWeight: '900', lineHeight: '1.6', animation: 'pageIntro 0.5s ease'
+                marginTop: '22px', padding: '18px', borderRadius: '14px',
+                background: isDark ? 'rgba(22, 101, 52, 0.45)' : '#dcfce7', border: '1.5px solid #86efac', color: isDark ? '#4ade80' : '#166534',
+                textAlign: 'center', fontSize: '15px', fontWeight: '900', lineHeight: '1.6'
               }}>
                 {currentText.successBanner}
               </div>
@@ -595,7 +592,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer style={{ borderTop: `2px solid ${cardBorder}`, padding: '45px 24px', textAlign: 'center', color: textSub, fontSize: '14px', background: bgMain, position: 'relative', zIndex: 2 }}>
+      <footer style={{ borderTop: `1.5px solid ${cardBorder}`, padding: '42px 24px', textAlign: 'center', color: textSub, fontSize: '13.5px', background: bgMain, position: 'relative', zIndex: 2 }}>
         <p>© 2026 NOVAS CREATIVE STUDIO. PHÁT TRIỂN BỞI HUỲNH HUY VĂN. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
