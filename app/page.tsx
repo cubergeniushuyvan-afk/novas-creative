@@ -26,30 +26,30 @@ export default function Home() {
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
 
-  // Hiệu ứng thanh trượt tải màu + Icon bùng nổ
+  // Bộ máy tính toán tiến trình Intro điện ảnh + Shockwave Blast
   useEffect(() => {
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 12) + 8;
+      currentProgress += Math.floor(Math.random() * 8) + 4;
       if (currentProgress >= 100) {
         currentProgress = 100;
         setProgress(100);
         clearInterval(interval);
 
-        // Kích hoạt bùng nổ icon khi tải xong
+        // Kích hoạt sóng xung kích & bùng nổ icon
         setTimeout(() => {
           setIsExploding(true);
-        }, 300);
+        }, 200);
 
-        // Ẩn hẳn Intro để hiển thị web
+        // Ẩn Intro mở màn hình web
         setTimeout(() => {
           setLoadingIntro(false);
           setIsExploding(false);
-        }, 1200);
+        }, 1300);
       } else {
         setProgress(currentProgress);
       }
-    }, 120);
+    }, 90);
 
     return () => clearInterval(interval);
   }, []);
@@ -109,21 +109,21 @@ export default function Home() {
 
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += 15;
+      currentProgress += 20;
       if (currentProgress >= 100) {
         setProgress(100);
         clearInterval(interval);
-        setTimeout(() => setIsExploding(true), 200);
+        setTimeout(() => setIsExploding(true), 150);
         setTimeout(() => {
           setLoadingIntro(false);
           setIsExploding(false);
           setSuccessMsg(true);
           setTimeout(() => setSuccessMsg(false), 3500);
-        }, 1000);
+        }, 1100);
       } else {
         setProgress(currentProgress);
       }
-    }, 100);
+    }, 80);
 
     const orderData = {
       "Ngay": new Date().toLocaleString("vi-VN"),
@@ -250,54 +250,79 @@ export default function Home() {
         @keyframes orbSmooth1 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(90px, 70px) scale(1.2); } }
         @keyframes orbSmooth2 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(-100px, -80px) scale(1.25); } }
 
-        /* INTRO HIGH-TECH: THANH TRƯỢT MÀU + ICON BÙNG NỔ */
+        /* MÀN HÌNH INTRO SIÊU CÔNG NGHỆ: LASER COUNTER & RUBIK 3D BLAST */
         .intro-loader-screen {
-          position: fixed; inset: 0; background: #020617; z-index: 9999;
+          position: fixed; inset: 0; background: #01040d; z-index: 9999;
           display: flex; flex-direction: column; align-items: center; justify-content: center;
           transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* Vòng xoay laser công nghệ cao */
+        .quantum-ring-box {
+          position: relative; width: 220px; height: 220px;
+          display: flex; align-items: center; justify-content: center; margin-bottom: 30px;
+        }
+
+        @keyframes laserRotate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .laser-ring {
+          position: absolute; inset: 0; border-radius: 50%;
+          border: 3px solid transparent;
+          border-top-color: #38bdf8; border-right-color: #2563eb;
+          filter: drop-shadow(0 0 15px #38bdf8);
+          animation: laserRotate 2.5s linear infinite;
+        }
+
+        /* Khối Rubik 3D trung tâm xoay không gian */
+        @keyframes rubik3DRotate {
+          0% { transform: rotateX(0deg) rotateY(0deg); }
+          100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .rubik-center-3d {
+          font-size: 65px;
+          animation: rubik3DRotate 8s linear infinite;
+          filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.7));
+        }
+
         .cyber-logo-text {
-          font-size: 42px; font-weight: 900;
-          background: linear-gradient(135deg, #ffffff 20%, #38bdf8 60%, #2563eb 100%);
+          font-size: 46px; font-weight: 900;
+          background: linear-gradient(135deg, #ffffff 15%, #38bdf8 55%, #818cf8 90%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-          letter-spacing: -1.5px; margin-bottom: 25px; text-align: center;
+          letter-spacing: -1.5px; margin-bottom: 8px; text-align: center;
+          filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.35));
         }
 
-        /* Thanh trượt tải màu 3D */
-        .progress-bar-container {
-          width: 320px; height: 12px; background: rgba(255, 255, 255, 0.08);
-          border-radius: 20px; overflow: hidden; border: 1.5px solid rgba(56, 189, 248, 0.3);
-          box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); position: relative;
+        .cyber-sub-text {
+          font-size: 17px; font-weight: 800; color: #38bdf8;
+          letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;
         }
 
-        .progress-bar-fill {
-          height: 100%; width: ${progress}%;
-          background: linear-gradient(90deg, #2563eb, #38bdf8, #818cf8);
-          border-radius: 20px; transition: width 0.15s linear;
-          box-shadow: 0 0 15px #38bdf8;
+        /* Chỉ số đếm ngược % năng lượng */
+        .counter-display {
+          font-size: 32px; font-weight: 900; color: #ffffff;
+          font-family: monospace; letter-spacing: 2px;
+          text-shadow: 0 0 15px #38bdf8;
         }
 
-        .progress-percent {
-          font-size: 16px; font-weight: 800; color: #38bdf8; margin-top: 14px;
-          letter-spacing: 2px;
+        /* Hiệu ứng bùng nổ Shockwave & Icon bay vọt */
+        .shockwave-flash {
+          position: absolute; inset: 0; background: radial-gradient(circle, rgba(56,189,248,0.8) 0%, transparent 70%);
+          opacity: ${isExploding ? 1 : 0}; pointer-events: none;
+          transition: opacity 0.4s ease; z-index: 10;
         }
 
-        /* Vùng Icon xoay quanh rồi bùng nổ bay ra ngoài */
-        .orbit-icons-wrapper {
-          position: relative; width: 180px; height: 180px; margin-bottom: 20px;
-          display: flex; align-items: center; justify-content: center;
-        }
-
-        .exploding-icon {
-          position: absolute; font-size: 38px;
+        .blast-icon {
+          position: absolute; font-size: 45px;
           transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
         }
-
-        .icon-top { transform: ${isExploding ? 'translateY(-350px) scale(2)' : 'translateY(-60px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .icon-right { transform: ${isExploding ? 'translateX(350px) scale(2)' : 'translateX(60px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .icon-bottom { transform: ${isExploding ? 'translateY(350px) scale(2)' : 'translateY(60px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .icon-left { transform: ${isExploding ? 'translateX(-350px) scale(2)' : 'translateX(-60px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .b-top-left { transform: ${isExploding ? 'translate(-450px, -450px) scale(2.5)' : 'translate(-65px, -65px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .b-top-right { transform: ${isExploding ? 'translate(450px, -450px) scale(2.5)' : 'translate(65px, -65px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .b-bottom-left { transform: ${isExploding ? 'translate(-450px, 450px) scale(2.5)' : 'translate(-65px, 65px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .b-bottom-right { transform: ${isExploding ? 'translate(450px, 450px) scale(2.5)' : 'translate(65px, 65px)'}; opacity: ${isExploding ? 0 : 1}; }
 
         @keyframes infinityFloat {
           0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
@@ -394,27 +419,29 @@ export default function Home() {
       <div className="ambient-orb-light-1"></div>
       <div className="ambient-orb-light-2"></div>
 
-      {/* INTRO HIGH-TECH: THANH TRƯỢT TẢI MÀU + ICON BÙNG NỔ */}
+      {/* MÀN HÌNH INTRO SIÊU CÔNG NGHỆ (Vòng xoay laser + Rubik 3D + Blast) */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
-        
-        <div className="orbit-icons-wrapper">
-          <div className="exploding-icon icon-top">🎓</div>
-          <div className="exploding-icon icon-right">✏️</div>
-          <div className="exploding-icon icon-bottom">🧩</div>
-          <div className="exploding-icon icon-left">📊</div>
+        <div className="shockwave-flash"></div>
+
+        <div className="quantum-ring-box">
+          <div className="laser-ring"></div>
+          <div className="rubik-center-3d">🧩</div>
+
+          <div className="blast-icon b-top-left">🎓</div>
+          <div className="blast-icon b-top-right">✏️</div>
+          <div className="blast-icon b-bottom-left">📚</div>
+          <div className="blast-icon b-bottom-right">📊</div>
         </div>
 
         <div className="cyber-logo-text">
           {introMode === "startup" ? "NOVAS CREATIVE STUDIO" : "PROCESSING ORDER..."}
         </div>
-
-        {/* Thanh trượt chạy màu */}
-        <div className="progress-bar-container">
-          <div className="progress-bar-fill"></div>
+        <div className="cyber-sub-text">
+          {introMode === "startup" ? "Created by Huỳnh Huy Văn" : "Syncing to Google Sheets..."}
         </div>
 
-        <div className="progress-percent">
-          {progress}%
+        <div className="counter-display">
+          [{progress}%]
         </div>
       </div>
 
