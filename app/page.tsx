@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [loadingIntro, setLoadingIntro] = useState(true);
-  const [introStep, setIntroStep] = useState(1);
+  const [progress, setProgress] = useState(0);
+  const [isExploding, setIsExploding] = useState(false);
   const [introMode, setIntroMode] = useState<"startup" | "submitting">("startup");
 
   const [formData, setFormData] = useState({
@@ -25,16 +26,32 @@ export default function Home() {
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
 
+  // Hiệu ứng thanh trượt tải màu + Icon bùng nổ
   useEffect(() => {
-    const timer1 = setTimeout(() => setIntroStep(2), 1800);
-    const timer2 = setTimeout(() => {
-      setLoadingIntro(false);
-    }, 3800);
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += Math.floor(Math.random() * 12) + 8;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        setProgress(100);
+        clearInterval(interval);
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
+        // Kích hoạt bùng nổ icon khi tải xong
+        setTimeout(() => {
+          setIsExploding(true);
+        }, 300);
+
+        // Ẩn hẳn Intro để hiển thị web
+        setTimeout(() => {
+          setLoadingIntro(false);
+          setIsExploding(false);
+        }, 1200);
+      } else {
+        setProgress(currentProgress);
+      }
+    }, 120);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -88,9 +105,25 @@ export default function Home() {
 
     setIntroMode("submitting");
     setLoadingIntro(true);
-    setIntroStep(1);
+    setProgress(0);
 
-    setTimeout(() => setIntroStep(2), 1500);
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += 15;
+      if (currentProgress >= 100) {
+        setProgress(100);
+        clearInterval(interval);
+        setTimeout(() => setIsExploding(true), 200);
+        setTimeout(() => {
+          setLoadingIntro(false);
+          setIsExploding(false);
+          setSuccessMsg(true);
+          setTimeout(() => setSuccessMsg(false), 3500);
+        }, 1000);
+      } else {
+        setProgress(currentProgress);
+      }
+    }, 100);
 
     const orderData = {
       "Ngay": new Date().toLocaleString("vi-VN"),
@@ -110,15 +143,6 @@ export default function Home() {
     } catch (err) {
       console.log("Lỗi:", err);
     }
-
-    setTimeout(() => {
-      setLoadingIntro(false);
-      setSuccessMsg(true);
-
-      setTimeout(() => {
-        setSuccessMsg(false);
-      }, 3500);
-    }, 3200);
   };
 
   const t = {
@@ -207,12 +231,9 @@ export default function Home() {
     }}>
       <style>{`
         .flash-grid-bg {
-          position: fixed;
-          inset: 0;
+          position: fixed; inset: 0;
           background-image: radial-gradient(${isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(37, 99, 235, 0.08)'} 1px, transparent 1px);
-          background-size: 32px 32px;
-          z-index: 0;
-          pointer-events: none;
+          background-size: 32px 32px; z-index: 0; pointer-events: none;
         }
 
         .ambient-orb-light-1 {
@@ -226,76 +247,58 @@ export default function Home() {
           border-radius: 50%; z-index: 0; pointer-events: none; animation: orbSmooth2 16s ease-in-out infinite alternate;
         }
 
-        @keyframes orbSmooth1 {
-          0% { transform: translate(0px, 0px) scale(1); }
-          100% { transform: translate(90px, 70px) scale(1.2); }
-        }
-        @keyframes orbSmooth2 {
-          0% { transform: translate(0px, 0px) scale(1); }
-          100% { transform: translate(-100px, -80px) scale(1.25); }
-        }
+        @keyframes orbSmooth1 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(90px, 70px) scale(1.2); } }
+        @keyframes orbSmooth2 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(-100px, -80px) scale(1.25); } }
 
-        /* INTRO ĐIỆN ẢNH ĐỈNH CAO: Cục Rubik 3D & Icon PPT 2D quay quanh tâm */
+        /* INTRO HIGH-TECH: THANH TRƯỢT MÀU + ICON BÙNG NỔ */
         .intro-loader-screen {
           position: fixed; inset: 0; background: #020617; z-index: 9999;
           display: flex; flex-direction: column; align-items: center; justify-content: center;
-          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .orbit-container {
-          position: relative; width: 240px; height: 240px;
-          display: flex; align-items: center; justify-content: center;
-          margin-bottom: 25px;
-        }
-
-        /* Quỹ đạo quay vòng tròn 360 độ */
-        @keyframes orbitRotate {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-
-        .orbit-ring {
-          position: absolute; inset: 0;
-          border: 2px dashed rgba(56, 189, 248, 0.3);
-          border-radius: 50%;
-          animation: orbitRotate 4s linear infinite;
-        }
-
-        .orbit-item-1 {
-          position: absolute; top: -20px; font-size: 45px;
-          animation: spinItem 4s linear infinite;
-        }
-        .orbit-item-2 {
-          position: absolute; bottom: -20px; font-size: 45px;
-          animation: spinItem 4s linear infinite;
-        }
-
-        @keyframes spinItem {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(-360deg); }
-        }
-
-        .center-logo-box {
-          font-size: 55px; filter: drop-shadow(0 0 20px rgba(56,189,248,0.6));
-        }
-
-        .intro-title {
-          font-size: 48px; font-weight: 900;
-          background: linear-gradient(135deg, #ffffff 10%, #38bdf8 60%, #2563eb 100%);
+        .cyber-logo-text {
+          font-size: 42px; font-weight: 900;
+          background: linear-gradient(135deg, #ffffff 20%, #38bdf8 60%, #2563eb 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-          letter-spacing: -1.5px; opacity: 0; transform: translateY(30px) scale(0.95);
-          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); text-align: center;
+          letter-spacing: -1.5px; margin-bottom: 25px; text-align: center;
         }
-        .intro-title.show { opacity: 1; transform: translateY(0px) scale(1); }
 
-        .intro-subtitle {
-          font-size: 18px; font-weight: 800; color: #38bdf8; margin-top: 15px;
-          opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-          letter-spacing: 2px; text-transform: uppercase;
+        /* Thanh trượt tải màu 3D */
+        .progress-bar-container {
+          width: 320px; height: 12px; background: rgba(255, 255, 255, 0.08);
+          border-radius: 20px; overflow: hidden; border: 1.5px solid rgba(56, 189, 248, 0.3);
+          box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); position: relative;
         }
-        .intro-subtitle.show { opacity: 1; transform: translateY(0px); }
 
-        /* Hiệu ứng lơ lửng vô cực hình số 8 của các icon web */
+        .progress-bar-fill {
+          height: 100%; width: ${progress}%;
+          background: linear-gradient(90deg, #2563eb, #38bdf8, #818cf8);
+          border-radius: 20px; transition: width 0.15s linear;
+          box-shadow: 0 0 15px #38bdf8;
+        }
+
+        .progress-percent {
+          font-size: 16px; font-weight: 800; color: #38bdf8; margin-top: 14px;
+          letter-spacing: 2px;
+        }
+
+        /* Vùng Icon xoay quanh rồi bùng nổ bay ra ngoài */
+        .orbit-icons-wrapper {
+          position: relative; width: 180px; height: 180px; margin-bottom: 20px;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        .exploding-icon {
+          position: absolute; font-size: 38px;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .icon-top { transform: ${isExploding ? 'translateY(-350px) scale(2)' : 'translateY(-60px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .icon-right { transform: ${isExploding ? 'translateX(350px) scale(2)' : 'translateX(60px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .icon-bottom { transform: ${isExploding ? 'translateY(350px) scale(2)' : 'translateY(60px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .icon-left { transform: ${isExploding ? 'translateX(-350px) scale(2)' : 'translateX(-60px)'}; opacity: ${isExploding ? 0 : 1}; }
+
         @keyframes infinityFloat {
           0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
           25% { transform: translate(15px, -28px) rotate(10deg) scale(1.1); }
@@ -314,12 +317,8 @@ export default function Home() {
           opacity: 0.15; transform: scale(0.88) translateY(45px);
           transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .flash-anim-trigger.flash-anim-active {
-          opacity: 1; transform: scale(1) translateY(0px);
-        }
-        .flash-anim-trigger.flash-anim-inactive {
-          opacity: 0.2; transform: scale(0.92) translateY(25px);
-        }
+        .flash-anim-trigger.flash-anim-active { opacity: 1; transform: scale(1) translateY(0px); }
+        .flash-anim-trigger.flash-anim-inactive { opacity: 0.2; transform: scale(0.92) translateY(25px); }
 
         .lang-transition-wrap {
           opacity: ${isLangAnimating ? 0 : 1};
@@ -333,7 +332,6 @@ export default function Home() {
           background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* Thang đo hiệu ứng chất lừ (Metric Badges) */
         .metrics-grid {
           display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
           max-width: 850px; margin: 40px auto 0;
@@ -341,8 +339,7 @@ export default function Home() {
         .metric-card {
           background: ${cardBg}; border: 1.5px solid ${cardBorder};
           border-radius: 20px; padding: 20px; text-align: center;
-          box-shadow: 0 10px 30px rgba(37,99,235,0.06);
-          transition: transform 0.3s ease;
+          box-shadow: 0 10px 30px rgba(37,99,235,0.06); transition: transform 0.3s ease;
         }
         .metric-card:hover { transform: translateY(-5px); border-color: #2563eb; }
         .metric-num { font-size: 28px; font-weight: 900; color: #2563eb; margin-bottom: 5px; }
@@ -360,12 +357,9 @@ export default function Home() {
 
         .btn-primary-clean {
           background: linear-gradient(135deg, #2563eb, #0284c7); color: white;
-          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .btn-primary-clean:hover {
-          transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 40px rgba(37, 99, 235, 0.5);
-        }
+        .btn-primary-clean:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 40px rgba(37, 99, 235, 0.5); }
 
         .control-icon-btn {
           background: ${isDark ? 'rgba(30, 41, 59, 0.85)' : '#ffffff'};
@@ -374,9 +368,7 @@ export default function Home() {
           cursor: pointer; display: flex; align-items: center; justify-content: center;
           font-size: 19px; font-weight: 700; transition: all 0.25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
-        .control-icon-btn:hover {
-          border-color: #2563eb; transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
-        }
+        .control-icon-btn:hover { border-color: #2563eb; transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25); }
 
         .input-box-clean {
           background: ${isDark ? 'rgba(30, 41, 59, 0.7)' : '#ffffff'};
@@ -392,7 +384,7 @@ export default function Home() {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
           .hero-title-flash { font-size: 34px !important; }
-          .intro-title { font-size: 28px !important; padding: 0 20px; }
+          .cyber-logo-text { font-size: 28px !important; padding: 0 15px; }
           .metrics-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -402,25 +394,31 @@ export default function Home() {
       <div className="ambient-orb-light-1"></div>
       <div className="ambient-orb-light-2"></div>
 
-      {/* INTRO ĐIỆN ẢNH 3D XỊN XÒ (Rubik 3D & Icon PPT quay quanh tâm) */}
+      {/* INTRO HIGH-TECH: THANH TRƯỢT TẢI MÀU + ICON BÙNG NỔ */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
-        <div className="orbit-container">
-          <div className="orbit-ring">
-            <div className="orbit-item-1">🧩</div>
-            <div className="orbit-item-2">📊</div>
-          </div>
-          <div className="center-logo-box">⚡</div>
+        
+        <div className="orbit-icons-wrapper">
+          <div className="exploding-icon icon-top">🎓</div>
+          <div className="exploding-icon icon-right">✏️</div>
+          <div className="exploding-icon icon-bottom">🧩</div>
+          <div className="exploding-icon icon-left">📊</div>
         </div>
 
-        <div className={`intro-title ${introStep >= 1 ? 'show' : ''}`}>
+        <div className="cyber-logo-text">
           {introMode === "startup" ? "NOVAS CREATIVE STUDIO" : "PROCESSING ORDER..."}
         </div>
-        <div className={`intro-subtitle ${introStep >= 2 ? 'show' : ''}`}>
-          {introMode === "startup" ? "Created by Huỳnh Huy Văn" : "Syncing to Google Sheets Successfully!"}
+
+        {/* Thanh trượt chạy màu */}
+        <div className="progress-bar-container">
+          <div className="progress-bar-fill"></div>
+        </div>
+
+        <div className="progress-percent">
+          {progress}%
         </div>
       </div>
 
-      {/* 🎓 Icon học đường bay lơ lửng vô cực quanh web */}
+      {/* 🎓 Icon học đường bay lơ lửng vô cực */}
       <div className="floating-deco-flash" style={{ top: '80px', left: '3%', fontSize: '64px', animationDelay: '0s' }}>🎓</div>
       <div className="floating-deco-flash" style={{ top: '210px', left: '6%', fontSize: '48px', animationDelay: '1.2s' }}>✏️</div>
       <div className="floating-deco-flash" style={{ top: '380px', left: '2.5%', fontSize: '52px', animationDelay: '2.4s' }}>📚</div>
@@ -483,7 +481,6 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Thang đo hiệu ứng đồ họa xịn xò (Performance Metrics) */}
           <div className="metrics-grid">
             <div className="metric-card">
               <div className="metric-num">99.9%</div>
