@@ -26,30 +26,30 @@ export default function Home() {
   const SHEETDB_API = "https://sheetdb.io/api/v1/qc91smq6sdwnd"; 
   const MY_PHONE = "0399641646";
 
-  // Bộ máy tính toán tiến trình Intro điện ảnh + Shockwave Blast
+  // Bộ máy mô phỏng tiến trình không gian 3D
   useEffect(() => {
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 8) + 4;
+      currentProgress += Math.floor(Math.random() * 7) + 5;
       if (currentProgress >= 100) {
         currentProgress = 100;
         setProgress(100);
         clearInterval(interval);
 
-        // Kích hoạt sóng xung kích & bùng nổ icon
+        // Kích hoạt hiệu ứng bùng nổ siêu tân tinh (Supernova)
         setTimeout(() => {
           setIsExploding(true);
-        }, 200);
+        }, 180);
 
-        // Ẩn Intro mở màn hình web
+        // Tắt intro mở giao diện web
         setTimeout(() => {
           setLoadingIntro(false);
           setIsExploding(false);
-        }, 1300);
+        }, 1200);
       } else {
         setProgress(currentProgress);
       }
-    }, 90);
+    }, 80);
 
     return () => clearInterval(interval);
   }, []);
@@ -109,7 +109,7 @@ export default function Home() {
 
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += 20;
+      currentProgress += 25;
       if (currentProgress >= 100) {
         setProgress(100);
         clearInterval(interval);
@@ -119,11 +119,11 @@ export default function Home() {
           setIsExploding(false);
           setSuccessMsg(true);
           setTimeout(() => setSuccessMsg(false), 3500);
-        }, 1100);
+        }, 1000);
       } else {
         setProgress(currentProgress);
       }
-    }, 80);
+    }, 70);
 
     const orderData = {
       "Ngay": new Date().toLocaleString("vi-VN"),
@@ -250,42 +250,43 @@ export default function Home() {
         @keyframes orbSmooth1 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(90px, 70px) scale(1.2); } }
         @keyframes orbSmooth2 { 0% { transform: translate(0px, 0px) scale(1); } 100% { transform: translate(-100px, -80px) scale(1.25); } }
 
-        /* MÀN HÌNH INTRO SIÊU CÔNG NGHỆ: LASER COUNTER & RUBIK 3D BLAST */
+        /* MÀN HÌNH INTRO VŨ TRỤ 3D (QUANTUM WORMHOLE & SUPERNOVA BLAST) */
         .intro-loader-screen {
-          position: fixed; inset: 0; background: #01040d; z-index: 9999;
+          position: fixed; inset: 0; background: #000208; z-index: 9999;
           display: flex; flex-direction: column; align-items: center; justify-content: center;
           transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Vòng xoay laser công nghệ cao */
-        .quantum-ring-box {
-          position: relative; width: 220px; height: 220px;
-          display: flex; align-items: center; justify-content: center; margin-bottom: 30px;
+        .quantum-wormhole {
+          position: relative; width: 240px; height: 240px;
+          display: flex; align-items: center; justify-content: center; margin-bottom: 25px;
         }
 
-        @keyframes laserRotate {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes wormholeSpin {
+          0% { transform: rotate(0deg) scale(1); }
+          50% { transform: rotate(180deg) scale(1.05); }
+          100% { transform: rotate(360deg) scale(1); }
         }
 
-        .laser-ring {
+        .wormhole-ring-1 {
           position: absolute; inset: 0; border-radius: 50%;
-          border: 3px solid transparent;
-          border-top-color: #38bdf8; border-right-color: #2563eb;
-          filter: drop-shadow(0 0 15px #38bdf8);
-          animation: laserRotate 2.5s linear infinite;
+          border: 3px dashed rgba(56, 189, 248, 0.6);
+          animation: wormholeSpin 3s linear infinite;
+        }
+        .wormhole-ring-2 {
+          position: absolute; inset: -15px; border-radius: 50%;
+          border: 2px solid rgba(37, 99, 235, 0.4);
+          animation: wormholeSpin 5s linear infinite reverse;
         }
 
-        /* Khối Rubik 3D trung tâm xoay không gian */
-        @keyframes rubik3DRotate {
-          0% { transform: rotateX(0deg) rotateY(0deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg); }
+        .quantum-core-symbol {
+          font-size: 60px; filter: drop-shadow(0 0 30px #38bdf8);
+          animation: corePulse 2s ease-in-out infinite alternate;
         }
 
-        .rubik-center-3d {
-          font-size: 65px;
-          animation: rubik3DRotate 8s linear infinite;
-          filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.7));
+        @keyframes corePulse {
+          0% { transform: scale(0.95); filter: drop-shadow(0 0 15px #38bdf8); }
+          100% { transform: scale(1.1); filter: drop-shadow(0 0 35px #818cf8); }
         }
 
         .cyber-logo-text {
@@ -293,36 +294,35 @@ export default function Home() {
           background: linear-gradient(135deg, #ffffff 15%, #38bdf8 55%, #818cf8 90%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
           letter-spacing: -1.5px; margin-bottom: 8px; text-align: center;
-          filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.35));
+          filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4));
         }
 
         .cyber-sub-text {
           font-size: 17px; font-weight: 800; color: #38bdf8;
-          letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;
+          letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px;
         }
 
-        /* Chỉ số đếm ngược % năng lượng */
         .counter-display {
-          font-size: 32px; font-weight: 900; color: #ffffff;
-          font-family: monospace; letter-spacing: 2px;
-          text-shadow: 0 0 15px #38bdf8;
+          font-size: 34px; font-weight: 900; color: #ffffff;
+          font-family: monospace; letter-spacing: 3px;
+          text-shadow: 0 0 20px #38bdf8;
         }
 
-        /* Hiệu ứng bùng nổ Shockwave & Icon bay vọt */
-        .shockwave-flash {
-          position: absolute; inset: 0; background: radial-gradient(circle, rgba(56,189,248,0.8) 0%, transparent 70%);
+        /* Hiệu ứng bùng nổ Supernova Blast */
+        .supernova-flash {
+          position: absolute; inset: 0; background: #ffffff;
           opacity: ${isExploding ? 1 : 0}; pointer-events: none;
-          transition: opacity 0.4s ease; z-index: 10;
+          transition: opacity 0.3s ease; z-index: 100;
         }
 
-        .blast-icon {
-          position: absolute; font-size: 45px;
+        .space-particle {
+          position: absolute; font-size: 42px;
           transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
         }
-        .b-top-left { transform: ${isExploding ? 'translate(-450px, -450px) scale(2.5)' : 'translate(-65px, -65px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .b-top-right { transform: ${isExploding ? 'translate(450px, -450px) scale(2.5)' : 'translate(65px, -65px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .b-bottom-left { transform: ${isExploding ? 'translate(-450px, 450px) scale(2.5)' : 'translate(-65px, 65px)'}; opacity: ${isExploding ? 0 : 1}; }
-        .b-bottom-right { transform: ${isExploding ? 'translate(450px, 450px) scale(2.5)' : 'translate(65px, 65px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .p-1 { transform: ${isExploding ? 'translate(-500px, -500px) scale(3)' : 'translate(-50px, -50px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .p-2 { transform: ${isExploding ? 'translate(500px, -500px) scale(3)' : 'translate(50px, -50px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .p-3 { transform: ${isExploding ? 'translate(-500px, 500px) scale(3)' : 'translate(-50px, 50px)'}; opacity: ${isExploding ? 0 : 1}; }
+        .p-4 { transform: ${isExploding ? 'translate(500px, 500px) scale(3)' : 'translate(50px, 50px)'}; opacity: ${isExploding ? 0 : 1}; }
 
         @keyframes infinityFloat {
           0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
@@ -409,7 +409,7 @@ export default function Home() {
           .grid-responsive { grid-template-columns: 1fr !important; }
           .header-nav { display: none !important; }
           .hero-title-flash { font-size: 34px !important; }
-          .cyber-logo-text { font-size: 28px !important; padding: 0 15px; }
+          .cyber-logo-text { font-size: 26px !important; padding: 0 15px; }
           .metrics-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -419,18 +419,19 @@ export default function Home() {
       <div className="ambient-orb-light-1"></div>
       <div className="ambient-orb-light-2"></div>
 
-      {/* MÀN HÌNH INTRO SIÊU CÔNG NGHỆ (Vòng xoay laser + Rubik 3D + Blast) */}
+      {/* MÀN HÌNH INTRO VŨ TRỤ 3D (Quantum Wormhole + Supernova Blast) */}
       <div className="intro-loader-screen" style={{ opacity: loadingIntro ? 1 : 0, visibility: loadingIntro ? 'visible' : 'hidden' }}>
-        <div className="shockwave-flash"></div>
+        <div className="supernova-flash"></div>
 
-        <div className="quantum-ring-box">
-          <div className="laser-ring"></div>
-          <div className="rubik-center-3d">🧩</div>
+        <div className="quantum-wormhole">
+          <div className="wormhole-ring-1"></div>
+          <div className="wormhole-ring-2"></div>
+          <div className="quantum-core-symbol">🌌</div>
 
-          <div className="blast-icon b-top-left">🎓</div>
-          <div className="blast-icon b-top-right">✏️</div>
-          <div className="blast-icon b-bottom-left">📚</div>
-          <div className="blast-icon b-bottom-right">📊</div>
+          <div className="space-particle p-1">🎓</div>
+          <div className="space-particle p-2">⚡</div>
+          <div className="space-particle p-3">📚</div>
+          <div className="space-particle p-4">📊</div>
         </div>
 
         <div className="cyber-logo-text">
